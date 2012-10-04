@@ -174,14 +174,14 @@ class Inv_model extends CI_Model {
 	
 	function get_detail_stock($nm_barang){
 		$sql="select batch, sum(stock) as stock, sum(blokstok) as blokstok,
-			   expired,nm_satuan from inv_material_stok where nm_barang='$nm_barang'
+			   expired,nm_satuan,harga_beli from inv_material_stok where nm_barang='$nm_barang'
 			   and stock <>'0' group by batch order by batch";
 		$data=$this->db->query($sql);
 		return $data->result();
 	}
 	function get_detail_stocked($nm_barang,$limit='limit 1'){
 		$sql="select batch, sum(stock) as stock, sum(blokstok) as blokstok,
-			   expired,nm_satuan from inv_material_stok where id_barang='$nm_barang'
+			   expired,nm_satuan,harga_beli from inv_material_stok where id_barang='$nm_barang'
 			   and stock <>'0' group by batch order by batch desc $limit";
 		$data=$this->db->query($sql);
 		return $data->result();

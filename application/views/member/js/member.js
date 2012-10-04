@@ -3,8 +3,8 @@ $(document).ready(function(e) {
 	var path=$('#path').val();
 	var prs=$('#prs').val();
 	if(prs==''){
-		$('#anggotabaru').removeClass('tab_button');
-		$('#anggotabaru').addClass('tab_select');
+		$('#pelangganbaru').removeClass('tab_button');
+		$('#pelangganbaru').addClass('tab_select');
 		$('span#v_anggotabaru').show();
 	}else{
 		$('#uploadphoto').removeClass('tab_button');
@@ -37,7 +37,7 @@ $(document).ready(function(e) {
 			case 'saved-registrasi':
 				$('#frm1').attr('action','set_anggota');
 				var No_Agt		=$('#frm1 #No_Agt').val();
-				var ID_Dept		=$('#frm1 #ID_Dept').val();
+				var ID_Dept		=$('#frm1 #Catatan').val();//nama perusahaan
 				var NIP			=$('#frm1 #NIP').val();
 				var Nama		=$('#frm1 #Nama').val();
 				var ID_Kelamin	=$('#frm1 #ID_Kelamin').val();
@@ -48,17 +48,20 @@ $(document).ready(function(e) {
 				var Faksimili	=$('#frm1 #Faksimili').val();
 				var ID_Aktif	=$('#frm1 #ID_Aktif').val();
 				$.post('set_anggota',{
-					'No_Agt'	:No_Agt,
-					'ID_Dept'	:ID_Dept,
-					'NIP'		:NIP,
-					'Nama'		:Nama,
-					'ID_Kelamin':ID_Kelamin,
-					'Alamat'	:Alamat,
-					'Kota'		:Kota,
-					'Propinsi'	:Propinsi,
-					'Telepon'	:Telepon,
-					'Faksimili'	:Faksimili,
-					'ID_Aktif'	:ID_Aktif},
+						'No_Agt'	:No_Agt,
+						'Catatan'	:ID_Dept,
+						'ID_Dept'	:'1',
+						'NIP'		:NIP,
+						'Nama'		:Nama,
+						'ID_Kelamin':ID_Kelamin,
+						'Alamat'	:Alamat,
+						'Kota'		:Kota,
+						'Propinsi'	:Propinsi,
+						'Telepon'	:Telepon,
+						'Faksimili'	:Faksimili,
+						'ID_Aktif'	:ID_Aktif,
+						'Status'	:$('#Status').val()
+					},
 					function(result){
 						$(':reset').click();
 						document.location.reload();
@@ -84,6 +87,18 @@ $(document).ready(function(e) {
 			
 		}
 	})
+ $('#Status')
+ 	.keyup(function(){
+		kekata(this);
+	})
+	.focusout(function(){
+		kekata_hide();	
+	})
+	.keypress(function(e){
+	  (e.which==13)?$(this).focusout():''
+	})
+/*	not used in this version
+    manage photo member
 	$('#frm1 #Nama').coolautosuggest({url:'get_anggota?limit=10&str='})
 	$('#frm1 #Kota').coolautosuggest({url:'get_kota?str='})
 	$('#frm1 #Propinsi').coolautosuggest({url:'get_propinsi?str='})
@@ -121,14 +136,16 @@ $(document).ready(function(e) {
 			}
 		}
 		})
-	//tombol reset ditekan akan menghapus isi field
+*/	//tombol reset ditekan akan menghapus isi field
 	//dan generate nomor lagi
 	$(':reset').click(function(){
 		_generate_nomor('#No_Agt');
 	})
 	
 })
+
 function upload_img(){
+	
 }
 function _generate_nomor(fld){
 	$.post('get_nomor_anggota',{'id':'id'},
@@ -136,4 +153,5 @@ function _generate_nomor(fld){
 			$(fld).val(result);
 		})
 }
+
 	

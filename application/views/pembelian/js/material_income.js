@@ -51,6 +51,19 @@ $(document).ready(function(e) {
 				$('#frm2').show();
 			}
 		})
+	//add data produsen
+	$('#add-nm_produsen').click(function(){
+		document.location.href=path+'master/vendor'
+	})
+	$('#nm_vendor')
+		.coolautosuggest({
+			url		:'get_pemasok?limit=10&str=',
+			width	:350,
+			showDescription	:true,
+			onSelected		:function(result){
+				$('#id_vendor').val(result.id_pemasok);
+			}
+		})
 	//event untuk input textbox di table#listTable
 	//kode barang
 	$('#1__id_barang')
@@ -159,7 +172,7 @@ function _simpan_header_pembelian(){
 		'faktur'	:$('#frm1 #faktur_transaksi').val(),
 		'pemasok'	:$('#frm1 #nm_produsen').val(),
 		'cbayar'	:$('#frm1 #cara_bayar').val(),
-		'id_pemasok':$('#id_pemasok').val(),
+		'id_pemasok':$('#id_pemasoke').val(),
 		'total'		:$('#total_beli').val()
 	},function(result){
 		
@@ -229,7 +242,9 @@ function _show_list(){
 		$.post('show_list',{
 			'no_transaksi'	: $('#no_transaksi').val(),
 			'jtran'			:'GR',
-			'tanggal'		:$('#tgl_transaksi').val()},			
+			'tanggal'		:$('#tgl_transaksi').val(),
+			'nm_vendor'		:$('#id_vendor').val()
+			},			
 				function(result){
 					$('#frm2 table#ListTable tbody').html(result);
 					//lock tanggal jika user bukan level adminstrator /superuser

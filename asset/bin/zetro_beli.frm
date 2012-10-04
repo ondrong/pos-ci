@@ -8,15 +8,15 @@
 2|Tanggal,input,date t,tgl_transaksi,w35,,8%
 3|No.Faktur,input,text n,faktur_transaksi,w70 upper,,12%
 4|Vendor Name,input,text n,nm_produsen,w70 upper,,15%,,,AB,
-5|Cara Bayar,select,text n,cara_bayar,S25,,5%,RS,Carabeli
+5|Cara Bayar,select,text n,cara_bayar,S25,,5%,RD,inv_pembelian_jenis-ID-Jenis_Beli-
 
 [pembelianlist]
 1|Nama Barang,input,text n,nm_barang,w100 upper,,25%
 2|Satuan,select,text n,nm_satuan,S100 upper,,10%
 3|Jumlah,input,text d,jml_transaksi,w100 angka,,12%
-4|Expired,input,text t,expired,w100,,15%
-5|Harga Beli,input,text d,harga_beli,100 angka,,12%
-6|Keterangan,input,text n,ket_transaksi,w100,,20%
+;4|Expired,input,text t,expired,w100,,15%
+4|Harga Beli,input,text d,harga_beli,100 angka,,12%
+5|Keterangan,input,text n,ket_transaksi,w100,,20%
 
 [jualan]
 1|No. ID,input,text n,no_transaksi,w50 upper,,10%
@@ -96,8 +96,8 @@
 3|Satuan,input,text n,nm_satuan,w100 upper,,10%,,,18
 4|Jumlah,input,text d,jml_transaksi,w100 angka,,12%,,,25
 5|Harga Beli,input,text d,harga_beli,100 angka,,12%,,,30
-6|Vendor,input,text n,nm_produsen,w100,,20%,,,60
-7|Keterangan,input,text n,faktur_transaksi,,,20%,,,40
+;6|Vendor,input,text n,nm_produsen,w100,,20%,,,60
+6|Total harga,input,text n,faktur_transaksi,,,20%,,,40
 
 [lapjual]
 1|Tanggal Penjualan,,,,,

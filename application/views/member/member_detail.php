@@ -3,6 +3,7 @@ $zfm=new zetro_frmBuilder('asset/bin/zetro_member.frm');
 $zlb=new zetro_buildlist();
 $zlb->config_file('asset/bin/zetro_member.frm');
 link_js('jquery.fixedheader.js,zetro_number.js','asset/js,asset/js');
+link_js('jquery_terbilang.js','asset/js');
 tab_head('Member Detail',"style='background:#333'");
 panel_multi('datapelanggan','block',false);
 echo "<table width='100%' border='0'>
@@ -65,7 +66,7 @@ addText(array('No. Anggota','Nama Lengkap','Department'),
 		<input type='hidden' id='kunci_cetak' value='' /></div>";
 panel_multi_end();
 tab_head_end();
-
+terbilang();
 ?>
 <script language="javascript">
 $(document).ready(function(e) {
@@ -102,6 +103,10 @@ $(document).ready(function(e) {
 	$('#update_b').click(function(){
 		update();
 	})
+	$('#Status')
+		.keyup(function(){ kekata(this)})
+		.focusout(function(){kekata_hide()})
+		.keypress(function(e){ (e.which==13)? kekata_hide():''})
 });
 function get_biodata(){
 	$.post('member_biodata',{'no_anggota':$('#kunci').val()},
@@ -110,7 +115,7 @@ function get_biodata(){
 				$('#frm1 #No_Agt')
 					.val(obj.No_Agt)
 					.attr('readonly','readonly')
-							//$('#frm1 #ID_Dept').val(obj.ID_Dept).select();
+				$('#frm1 #Catatan').val(obj.Catatan).select();
 							//$('#frm1 #NIP').val(obj.NIP);
 				$('#frm1 #Nama').val(obj.Nama);
 							//$('#frm1 #ID_Kelamin').val(obj.ID_Kelamin).select();
@@ -119,7 +124,7 @@ function get_biodata(){
 				$('#frm1 #Propinsi').val(obj.Propinsi);
 				$('#frm1 #Telepon').val(obj.Telepon);
 				$('#frm1 #Faksimili').val(obj.Faksimili);
-				$('#frm1 #ID_Aktif').val(obj.ID_Aktif).select();
+				$('#frm1 #Status').val(obj.Status);
 			})
 	
 }
@@ -146,9 +151,9 @@ function(result){
 }
 	function update(){
 				var No_Agt		=$('#frm1 #No_Agt').val();
-/*				var ID_Dept		=$('#frm1 #ID_Dept').val();
-				var NIP			=$('#frm1 #NIP').val();
-*/				var Nama		=$('#frm1 #Nama').val();
+				var ID_Dept		=$('#frm1 #Catatan').val();//nama perusahaan
+				var NIP			=$('#frm1 #Status').val();//limit kredit
+/**/			var Nama		=$('#frm1 #Nama').val();
 /*				var ID_Kelamin	=$('#frm1 #ID_Kelamin').val();
 */				var Alamat		=$('#frm1 #Alamat').val();
 				var Kota		=$('#frm1 #Kota').val();
@@ -158,18 +163,21 @@ function(result){
 				var ID_Aktif	=$('#frm1 #ID_Aktif').val();
 				$.post('set_anggota',{
 					'No_Agt'	:No_Agt,
-/*					'ID_Dept'	:ID_Dept,
-					'NIP'		:NIP,
-*/					'Nama'		:Nama,
+					'Catatan'	:ID_Dept,
+					'Status'	:NIP,
+/**/				'Nama'		:Nama,
 /*					'ID_Kelamin':ID_Kelamin,
 */					'Alamat'	:Alamat,
 					'Kota'		:Kota,
 					'Propinsi'	:Propinsi,
 					'Telepon'	:Telepon,
 					'Faksimili'	:Faksimili,
-					'ID_Aktif'	:ID_Aktif},
+					'ID_Aktif'	:ID_Aktif
+					},
 					function(result){
 						get_biodata();
+						document.location.reload();
+						$('#keluar').click();
 					})
 	}
 </script>

@@ -376,6 +376,13 @@
 		month[11]="December";
 		return month[d.getMonth()];
 	}
+	function kekata(field){
+		$(field).terbilang({'output_div':'terbilang'})//menampikan data terbilang 
+		pos_info(field,'terbilang');
+	}
+	function kekata_hide(){
+		$('#terbilang').hide();	
+	}
 	function pos_info(parent,id){
 		var offst=$(parent).offset();
 		var t=offst.top+33;

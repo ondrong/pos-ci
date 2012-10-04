@@ -9,24 +9,27 @@
 4|Hutang,input,text d,hutang_pelanggan,w35 angka,0,10%
 
 [produsen]
-1|ID Vendor,input,text n,id_produsen,w50 upper,,10%
-2|Nama Vendor,input,text n,nm_produsen,w70 upper,,20%
-3|Alamat,input,text n,alm_produsen,w70,,25%
-4|Contact Person,input,text n,cp_produsen,w90,,25%
-5|No. Telp,input,text n,telp_produsen,w50,,10%
-6|Hutang,input,text d,hutang_produsen,w35 angka,0,10%
+1|ID Vendor,input,text n,ID,w50 upper,,10%
+2|Nama Vendor,input,text n,Pemasok,w70 upper,,15%
+3|Alamat,input,text n,Alamat,w70,,25%
+4|Kota,input,text n,Kota,w70,,10%
+5|Propinsi,input,text n,Propinsi,w50,,10%
+6|Contact Person,input,text n,cp_nama,w90,,12%
+7|No. Telp,input,text n,Telepon,w50,,10%
+;6|Hutang,input,text d,hutang_produsen,w35 angka,0,10%
 
 [Kas]
-1|ID Kas,input,text n,id_kas,w35 upper,,10%
-2|Nama Kas,input,text n,nm_kas,w70 upper,,20%
+1|ID Akun,input,text n,id_kas,w35 upper,,10%
+2|Nama Akun,input,text n,nm_kas,w70 upper,,20%
 3|Saldo Awal,input,text d,sa_kas,w35 angka,0,10%
-4|Saldo,input,text d,sl_kas,w35 angka,0,10%
+;4|Saldo,input,text d,sl_kas,w35 angka,0,10%
 
 [kasharian]
-1|Tanggal,input,text t,tgl_kas,w35,,10%
-2|ID Kas,input,text n,id_kas,w35 upper,,10%
-3|Nama Kas,input,text n,nm_kas,w70 upper,,20%
-4|Saldo Awal,input,text d,sa_kas,w35 angka,0,10%
+1|ID Trans,input,text n,no_trans,w50,,10%
+2|Tanggal,input,text t,tgl_kas,w35,,10%
+3|ID Kas,input,text n,id_kas,w35 upper,,10%
+4|Nama Kas,input,text n,nm_kas,w70 upper,,20%
+5|Saldo Awal,input,text d,sa_kas,w35 angka,0,10%
 
 [kaskeluar]
 1|ID Trans,input,text n,no_transaksi,w50,,10%

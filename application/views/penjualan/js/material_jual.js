@@ -88,13 +88,14 @@ $(document).ready(function(e) {
 												}else{
 												$('table#inform tr td#ist').html(jm.stock+'  '+jm.satuan)
 												}
-											})
-										$.post(path+'stock/get_bacth',{
-											'id_barang':result.id_barang},
-											function(res){
-												//alert(res);
-												var bt=$.parseJSON(res)
-												$('#'+id[0]+'__expired').val(bt.batch);
+												$.post(path+'stock/get_bacth',{
+													'id_barang':result.id_barang},
+													function(res){
+														//alert(res);
+														var bt=$.parseJSON(res)
+														$('#'+id[0]+'__expired').val(bt.batch);
+														$('table#inform tr td#mdl').html(format_number(bt.harga_beli))
+													})
 											})
 										}
 									}

@@ -44,6 +44,16 @@ class Master extends CI_Controller {
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('master/master_kas_harian');
 	}
+	function vendor(){
+		$this->zetro_auth->menu_id(array('addvendor','listvendor'));
+		$this->list_data($this->zetro_auth->auth());
+		$this->View('master/master_vendor');
+	}
+	function general(){
+		$this->zetro_auth->menu_id(array('kas'));
+		$this->list_data($this->zetro_auth->auth());
+		$this->View('master/master_general');
+	}
 	
 	function set_config_file($filename){
 		$this->filename=$filename;
@@ -53,24 +63,20 @@ class Master extends CI_Controller {
 		$data['id_kas']	=strtoupper($_POST['id_kas']);
 		$data['nm_kas']	=strtoupper($_POST['nm_kas']);
 		$data['sa_kas']	=($_POST['sa_kas']);
-		$data['sl_kas']	=($_POST['sl_kas']);
+		$data['sl_kas']	=empty($_POST['sl_kas'])?0:$_POST['sl_kas'];
 		$data['created_by']	=$this->session->userdata('userid');
 			$this->Admin_model->replace_data('mst_kas',$data);
-			
-			$sql='select * from mst_kas order by nm_kas';
-			$this->_generate_list($sql,'Kas',$list_key='id_kas');
+			$this->list_data_akun();
 	}
 	function simpan_kas_harian(){
 		$data=array();
+		$data['no_trans']=$_POST['no_trans'];
 		$data['id_kas']	=strtoupper($_POST['id_kas']);
 		$data['nm_kas']	=strtoupper($_POST['nm_kas']);
 		$data['sa_kas']	=($_POST['sa_kas']);
 		$data['tgl_kas']=tglToSql($_POST['tgl_kas']);
 		$data['created_by']	=$this->session->userdata('userid');
 			$this->Admin_model->replace_data('mst_kas_harian',$data);
-			
-			$sql='select * from mst_kas_harian order by tgl_kas,nm_kas';
-			$this->_generate_list($sql,'kasharian',$list_key='tgl_kas');
 	}
 	function simpan_kas_keluar(){
 		$data=array();$datax=array();
@@ -92,18 +98,10 @@ class Master extends CI_Controller {
 			$this->_generate_list($sql,'kaskeluar',$list_key='no_transaksi','deleted');
 	}
 	function get_datakas(){
-		$str=addslashes($_POST['str']);
-		$induk=$_POST['induk'];
-		$this->inv_model->tabel('mst_kas');
-		$this->inv_model->field('id_kas');
-		$datax=$this->inv_model->get_datakas();
-		if($datax->num_rows>0){
-			echo "<ul>";
-				foreach ($datax->result() as $lst){
-					echo '<li onclick="suggest_click(\''.$lst->id_kas.'\',\''.$_POST['fld'].'\',\''.$induk.'\');">'.$lst->id_kas."</li>";
-				}
-			echo "</ul>";
-		}		
+		$data=array();
+		$data=$this->Admin_model->show_single_field('mst_kas','id_kas',' order by id_kas');
+		echo $data;
+
 	}
 	function get_datailkas(){
 		$data=array();
@@ -131,7 +129,30 @@ class Master extends CI_Controller {
 			$this->zetro_buildlist->list_data($section);
 			$this->zetro_buildlist->BuildListData($list_key);
 	}
-	
+	function list_kas_harian(){
+		$data=array();	
+		$data=array();$n=0;
+		$data=$this->Admin_model->show_list('mst_kas_harian',"where month(tgl_kas)='".date('m')."' and year(tgl_kas)='".date('Y')."' order by id_kas");
+		foreach($data as $r){
+			$n++;
+			echo tr().td($n,'center').
+				 td(tglfromSql($r->tgl_kas,'center')).
+				 td($r->id_kas).td($r->nm_kas).td($r->sa_kas).
+				 td("<img src='".base_url()."asset/images/no.png' onclick=\"image_click('".$r->id_kas."','del');\" >",'center').
+				 _tr();
+		}
+	}
+	function list_data_akun(){
+		$data=array();$n=0;
+		$data=$this->Admin_model->show_list('mst_kas','order by id_kas');
+		foreach($data as $r){
+			$n++;
+			echo tr().td($n,'center').
+				 td($r->id_kas).td($r->nm_kas).td($r->sa_kas).
+				 td("<img src='".base_url()."asset/images/no.png' onclick=\"image_click('".$r->id_kas."','del');\" >",'center').
+				 _tr();
+		}
+	}
 // seting shu dan neraca
 	function get_subneraca(){
 		$ID=$_POST['ID'];$n=0;
@@ -150,5 +171,46 @@ class Master extends CI_Controller {
 	}
 	function get_head_shu(){
 		echo $data;	
+	}
+//vendor transaction
+	function get_next_id(){
+		$data=0;
+		$data=$this->Admin_model->show_single_field('inv_pemasok','ID','order by ID desc limit 1');
+		$data=($data+1);
+		if(strlen($data)==1){
+			$data='000'.$data;
+		}else if(strlen($data)==2){
+			$data='00'.$data;
+		}else if(strlen($data)==3){
+			$data='0'.$data;
+		}else if(strlen($data)==4){
+			$data=$data;
+		}
+		echo $data;
+	}
+  	
+	function set_data_vendor(){
+		$data=array();
+		$data['ID']		=round($_POST['ID']);
+		$data['Pemasok']=addslashes(strtoupper($_POST['pemasok']));
+		$data['Alamat']	=ucwords(addslashes($_POST['alamat']));
+		$data['Kota']	=ucwords($_POST['kota']);
+		$data['Propinsi']=ucwords($_POST['propinsi']);
+		$data['Telepon']=$_POST['telepon'];
+		$data['cp_nama']=addslashes(strtoupper($_POST['cp_nama']));
+		$data['Status'] =$_POST['ID'];
+		$this->Admin_model->replace_data('inv_pemasok',$data);
+	}
+	function list_vendor(){
+		$data=array(); $n=0;
+		$nama=empty($_POST['nama'])?$where='':$where="where Pemasok like '%".$_POST['nama']."%'";
+		$data=$this->Admin_model->show_list('inv_pemasok',$where.' order by Pemasok');
+		foreach($data as $row){
+			$n++;
+			echo tr().td($n,'center').td($row->Status,'center').td($row->Pemasok).
+				 td($row->Alamat).td($row->Kota).td($row->Propinsi).
+				 td($row->cp_nama).td($row->Telepon).td().
+				 _tr();
+		}
 	}
 }

@@ -4,8 +4,8 @@ $(document).ready(function(e) {
 	var prs=$('#prs').val();
 	($('#otor').val()=='disabled')? $('#nm_group').attr('disabled','disabled'):	$('#nm_group').removeAttr('disabled');  
    	$('#frm2 select#nm_group').val($('#uea').val()).select();
-    $('#datapelanggan').removeClass('tab_button');
-	$('#datapelanggan').addClass('tab_select');
+    $('#dataakun').removeClass('tab_button');
+	$('#dataakun').addClass('tab_select');
 	$('table#panel tr td').click(function(){
 		var id=$(this).attr('id');
 			$('#'+id).removeClass('tab_button');
@@ -20,6 +20,7 @@ $(document).ready(function(e) {
 			}
 
 	})
+	_show_data();
 	$('#frm3 #nm_kas')
 		.focusout(function(){
 			if($('#frm3 #id_kas').val().length==0){
@@ -157,7 +158,7 @@ function image_click(id,cl){
 	  	if (confirm('Yakin data '+id[0] +' ' +id[1]+' akan dihapus')){
 						$.post(path+'inventory/hapus_inv',{'tbl':'mst_'+id[0],'id':id[1],'fld':'nm_'+id[0]},
 						function(result){
-							$('#v_data'+id[0]+' table#ListTable tbody tr#nm-'+id[1]).remove();
+							_show_data();
 						})
 		}	
 	  break;
@@ -170,4 +171,12 @@ function pos_terbilang(id){
 	var t=pos.top+25
 	$('#terbilang').css({'top':t,'left':l,'position':'fixed'});
 	$('#terbilang').show();	
+}
+
+function _show_data(){
+	show_indicator('ListTable',5);
+	$.post('list_data_akun'	,{'id':''},
+		function(result){
+			$('table#ListTable tbody').html(result);
+		})
 }

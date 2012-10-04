@@ -71,7 +71,7 @@ class Pembelian extends CI_Controller{
 		$data['NoUrut']		=$_POST['no_trans'];
 		$data['Tanggal']	=tgltoSql($_POST['tanggal']);
 		$data['ID_Jenis']	=$_POST['cbayar'];	
-		$data['ID_Pemasok']	=(count($supplier)!=0)?$supplier[1]:'0';	
+		$data['ID_Pemasok']	=$_POST['id_pemasok'];	
 		$data['Nomor']		=$_POST['faktur'];	
 		$data['Bulan']		=substr($_POST['tanggal'],3,2);	
 		$data['Tahun']		=substr($_POST['tanggal'],6,4);	
@@ -120,7 +120,7 @@ class Pembelian extends CI_Controller{
 		$data['nm_barang']	=$_POST['nm_barang'];
 		$data['batch']		=date('yz');
 		$data['stock']		=$stock_akhir;
-		$data['harga_beli']	=$_POST['harga_beli'];
+		$data['harga_beli']	=round($_POST['harga_beli']/$_POST['jumlah'],-2);
 		$data['created_by']	=$this->session->userdata('userid');
 		$this->Admin_model->replace_data('inv_material_stok',$data);
 	}
@@ -134,7 +134,7 @@ class Pembelian extends CI_Controller{
 			foreach ($data as $r){
 				$n++;
 				echo tr().td($n,'center').
-						  td(rdb('inv_barang','Kode','Kode',"where ID='".$r->ID_Barang."'")).
+						  //td(rdb('inv_barang','Kode','Kode',"where ID='".$r->ID_Barang."'")).
 						  td(rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$r->ID_Barang."'")).
 						  td(rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".$r->Bulan."'")).
 						  td(number_format($r->Jml_Faktur,2),'right').
@@ -158,25 +158,32 @@ class Pembelian extends CI_Controller{
 	function laporan_pembelian(){
 	//process filter
 	$data=array();$where='';$datax=array();$n=0;
+	empty($_POST['dari_tanggal'])?
+		$where="":
+		$where="where Tanggal='".tgltoSql($_POST['dari_tanggal'])."'";
 	empty($_POST['smp_tanggal'])?
-		$where="where Tanggal='".tgltoSql($_POST['dari_tanggal'])."'":
+		$where .="":
 		$where="where (Tanggal between '".tgltoSql($_POST['dari_tanggal'])."' and '".tgltoSql($_POST['smp_tanggal'])."')"; 
-		//echo $where;
+	empty($_POST['nm_vendor'])?
+		$where .='':
+	empty($_POST['dari_tanggal'])?
+		$where .=" and ID_Pemasok='".$_POST['nm_vendor']."'":
+		$where ="where ID_Pemasok='".$_POST['nm_vendor']."'";
 		$data=$this->Admin_model->show_list('inv_pembelian',$where." order by NoUrut");
 		foreach($data as $r){
 			$n++;$x=0;
-			echo tr('xx list_genap').td($n.nbs(3),'center').td($r->NoUrut,'center').td(tglfromSql($r->Tanggal),'center').
+			echo tr('xx list_genap').td($n.nbs(3),'center').td(tglfromSql($r->Tanggal),'center').td($r->NoUrut,'center').
 					  td(strtoupper(rdb('inv_pemasok','Pemasok','Pemasok',"where ID='".$r->ID_Pemasok."'")),'left\' colspan=\'3\'').
-					  td(rdb('inv_pembelian_jenis','Jenis_Beli','Jenis_Beli',"where ID='".$r->ID_Jenis."'")).
+					 // td(rdb('inv_pembelian_jenis','Jenis_Beli','Jenis_Beli',"where ID='".$r->ID_Jenis."'")).
 					  td('<b>'.number_format($r->ID_Bayar,2).'</b>','right').
 				 _tr();	
 			$datax=$this->Admin_model->show_list('inv_pembelian_detail',"where ID_Beli='".$r->ID."'");
 			foreach($datax as $row){
 				$x++;
-				echo tr().td(nbs(2).$x,'center').
-						  td(rdb('inv_barang','Kode','Kode',"where ID='".$row->ID_Barang."'").nbs(5),'right\' colspan=\'2\'').
-						  td(nbs(2).rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$row->ID_Barang."'")).
-						  td(rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".$row->Bulan."'")).
+				echo tr().td(nbs(3).$x,'center\' colspan=\'2\'').
+						 // td(rdb('inv_barang','Kode','Kode',"where ID='".$row->ID_Barang."'").nbs(5),'right\' colspan=\'2\'').
+						  td(nbs(2).rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$row->ID_Barang."'"),'left').
+						  td(nbs(5).rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".$row->Bulan."'")).
 						  td(number_format($row->Jml_Faktur,2),'right').
 						  td(number_format($row->Harga_Beli,2),'right').
 						  td(number_format($row->Jumlah,2),'right').

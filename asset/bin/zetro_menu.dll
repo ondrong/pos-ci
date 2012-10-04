@@ -24,20 +24,21 @@
 ;Master ===========================================================		
 	[Master]
 	1|User Account|controlpanel/userlist||
-	;2|Data General|master/data_general||
-	2|Tools Akun|master/tools||
+	2|Data Akun|master/general|||
 	3|<hr>|x||
-	4|About|admin/about|n|
+	4|Vendor|master/vendor||
+	5|<hr>|x||
+	6|About|admin/about|n|
 		
-		[Tools Akun]
-		1|Setting Neraca|settingneraca|y|zce
-		2|Setting SHU|settingshu|y|zce
+		[Vendor]
+		1|Add Vendor|addvendor|y|zce
+		2|List Vendor|listvendor|y|zce
 		
 		[Data General]
-		1|Departement|data_dept|y|zcev
-		2|Klasifikasi|data_class|y|zcev
-		3|Sub Klasifikasi|data_sub_class|y|zcev
-		4|Perkiraan|data_akun|y|zcev
+		;1|Departement|data_dept|y|zcev
+		;2|Klasifikasi|data_class|y|zcev
+		;3|Sub Klasifikasi|data_sub_class|y|zcev
+		1|Data Akun|dataakun|y|zcev
 	
 	[User Account]
 	1|Add User|adduser|y|zce
@@ -46,12 +47,12 @@
 	
 ;Keanggotaan ======================================================
 	[Pelanggan]
-	1|Registrasi|member/index||
+	1|Pelanggan Baru|member/index||
 	2|Daftar Pelanggan|member/member_list|y|cevp
 	;3|Simpanan Anggota|member/member_saving||
 	
-		[Registrasi]
-		1|Anggota Baru|anggotabaru|y|zce
+		[Pelanggan Baru]
+		1|Pelanggan Baru|pelangganbaru|y|zce
 		;2|Upload Photo|auploadphoto|y|zce
 			
 			[Member Detail]
@@ -61,20 +62,29 @@
 		[Laporan]
 			1|Laporan Penjualan|report/jual|y|zvp|
 			2|Laporan Pembelian|report/beli|||
+			3|<hr>|x||
+			4|Laporan Kas|report/kas|||
+			5|Laporan Piutang|report/piutang|||
+			6|Laporan Hutang|report/hutang|||
+			7|<hr>|x||
+			8|Grafik Penjualan|report/grafik|||
+			9|Grafik Pendapatan|report/grafik_kas|||
+			
+
 			
 				[Laporan Pembelian]
 				1|Laporan Pembelian|laporanpembelian|y|zvp|
 		
 ;Inventory =====================================================	
 	[Inventory]
-	1|Master Data|inventory/general||
+	1|Kategori Barang|inventory/general||
 	2|<hr>|x||
-	3|Master Barang|inventory/index||
+	3|Data Barang|inventory/index||
 	4|Stock Inventory|stock/index||
 	5|<hr>|x||
 	6|Stock Opname|stock/counting||
 	
-	[Master Data]
+	[Kategori Barang]
 	1|Kategori Barang|kategoribarang|y|zcev|
 	2|Jenis Barang|jenisbarang|y|zcev|
 	

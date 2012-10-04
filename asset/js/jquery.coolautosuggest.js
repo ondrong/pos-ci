@@ -181,11 +181,10 @@
 
 		this.show=function(height){
 			var ck=(screen.height-this.textField.position().top)
-			//alert(this.textField.position().top);
 			this.holder.css({
 				"position"	:"absolute",
 				"left"		:this.textField.position().left + "px",
-				"top"		:(ck < 464)? (this.textField.position().top-265):this.textField.position().top + this.textField.height() + 5 + "px"
+				"top"		:(ck < 464)? (this.textField.position().top-(34*this.arrData.length)):this.textField.position().top + this.textField.height() + 5 + "px"
 				//"height"	:height + "px"
 			});
 

@@ -72,11 +72,11 @@ class Stock extends CI_Controller{
 			$where="where ID_Kategori='$kat' and Status='$stat'";
 		}
 		if($cari!='' && $where !=''){
-			$where .= "and Nama_Barang like '".$cari."%'";
+			$where .= " and Nama_Barang like '".$cari."%'";
 		}else if($cari!='' && $where ==''){
 			$where ="where Nama_Barang like '".$cari."%'";
 		}
-		echo $where;
+		//echo $where;
 		if($kat!='' || $cari!=''){
 		$nmj=$this->inv_model->set_stock($where);
 			foreach ($nmj as $row){
@@ -98,6 +98,7 @@ class Stock extends CI_Controller{
 		foreach($data as $r){
 			$stok	=$r->stock;
 			$sat	=$r->satuan;
+			
 		}
 		($stok=='')?'0':$stok;
 		echo json_encode($data[0]);
