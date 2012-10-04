@@ -1,0 +1,33 @@
+[Server]
+hostname|localhost
+username|root
+password|
+dbname|setujudb
+
+[WebPage]
+Title|TOKOKU V.2.2
+subtitle| TOKO SETUJU
+
+[Path]
+z_menu|asset/bin/zetro_menu.dll
+z_config|asset/bin/zetro_config.dll
+z_table|asset/bin/zetro_table.cfg
+z_form|asset/bin/form.cfg
+localhost|http://localhost/kbr
+
+[InfoCo]
+Name|TOKO SETUJU
+subtitle| Toko Besi dan Bangunan
+Address|Jl. Tengah
+Kota|Purwakarta 41152
+Propinsi| Jawa Barat
+Telp|Telp :
+Fax |Fax : 
+BH|Badan Hukum: 
+NPWP|NPWP  :
+NPPKP|NPPKP:
+
+
+[SHU Kode]
+1|35|SHU Tahun Lalu
+2|36|SHU Tahun Berjalan
