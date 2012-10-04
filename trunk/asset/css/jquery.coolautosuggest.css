@@ -8,6 +8,7 @@
 	max-height:400px;
 	overflow-x:hidden;
 	max-width:500px;
+	z-index:99999;
 }
 /*
 

@@ -6,7 +6,7 @@ dbname|setujudb
 
 [WebPage]
 Title|TOKOKU V.2.2
-subtitle| TOKO SETUJU
+subtitle| PD SETUJU
 
 [Path]
 z_menu|asset/bin/zetro_menu.dll
@@ -16,13 +16,13 @@ z_form|asset/bin/form.cfg
 localhost|http://localhost/kbr
 
 [InfoCo]
-Name|TOKO SETUJU
-subtitle| Toko Besi dan Bangunan
-Address|Jl. Tengah
+Name|PD SETUJU
+subtitle| Toko Besi
+Address|Jl. RE. Martadinata No.103
 Kota|Purwakarta 41152
 Propinsi| Jawa Barat
-Telp|Telp :
-Fax |Fax : 
+Telp|Telp :(0264) 201043
+Fax |Fax :(0264) 206749
 BH|Badan Hukum: 
 NPWP|NPWP  :
 NPPKP|NPPKP:

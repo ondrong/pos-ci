@@ -7,7 +7,7 @@ $path='application/views/master';
 link_css('autosuggest.css','asset/css');
 link_js('auto_sugest.js,jquery.fixedheader.js,master_kas_harian.js,jquery_terbilang.js','asset/js,asset/js,'.$path.'/js,asset/js');
 tab_select('');
-panel_begin('Kas Toko');
+panel_begin('Kas Harian Toko');
 panel_multi('setupsaldokas');
 if($all_kas_harian!=''){
 	$zfm->AddBarisKosong(true);

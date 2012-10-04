@@ -32,11 +32,12 @@ if($c_pembelian__index!=''){
 panel_multi_end();
 panel_multi('listpembelian','block',false);
 if($all_pembelian__list_beli!=''){
-addText(array('Periode Dari','Sampai',''),
+addText(array('Periode Dari','Sampai','Nama Vendor',''),
 		array("<input type='text' id='dari_tanggal' value='' class='w100'>",
 			  "<input type='text' id='smp_tanggal' value='' class='w100'>",
+			  "<input type='text' id='nm_vendor' value='' class='w100'>",
 			  "<input type='button' id='okelah' value='OK'>"));
-		$zlb->section('lappembelian');
+		$zlb->section('lapbelilist');
 		$zlb->aksi(false);
 		$zlb->Header('100%','newTable');
 		echo "</tbody></table>";
@@ -53,4 +54,5 @@ terbilang();
 <input type="hidden" id='total_beli' value='0' />
 <input type="hidden" id='trans_new' value='' />
 <input type="hidden" id='id_pemasoke' value='' />
+<input type="hidden" id='id_vendor' value='' />
 <input type='hidden' id='aktif_user' value='<?=$this->session->userdata('idlevel');?>'/>

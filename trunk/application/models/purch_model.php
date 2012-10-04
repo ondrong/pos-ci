@@ -8,11 +8,11 @@ class Purch_model extends CI_Model {
 	}
 	function  get_pemasok($str,$limit){
 		$data=array();
-		$sql="select * from inv_pemasok where Pemasok like '".$str."%' order by Pemasok limit $limit";
+		$sql="select * from inv_pemasok where Pemasok like '%".$str."%' order by Pemasok limit $limit";
 		$rs=mysql_query($sql) or die(mysql_error());
 		while($row=mysql_fetch_object($rs)){
-				$data[]=array('data'		=>$row->Pemasok.' - '.$row->ID,
-							  'description' =>$row->Alamat." ".$row->Kota." ".$row->Propinsi,
+				$data[]=array('data'		=>$row->Pemasok,
+							  'description' =>'No. Urut : '.$row->Status.'<br>'.$row->Alamat." ".$row->Kota." ".$row->Propinsi,
 							  'id_pemasok'	=>$row->ID
 							  );
 		}

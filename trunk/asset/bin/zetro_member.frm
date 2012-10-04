@@ -2,15 +2,15 @@
 1|No. ID,input,text n,No_Agt,w35 upper,,
 ;2|Departement,select,text n,ID_Dept,S70,,10%,RD,mst_departemen-ID-Departemen-,AB
 ;3|NIP/NIK,input,text n,NIP,w50,,
-2|Nama Lengkap,input,text n,Nama,w90 ,,
-3|Perusahaan,input,text n,Nama,w90 ,,
+2|Nama Lengkap,input,text n,Nama,w90 upper ,,
+3|Perusahaan,input,text n,Catatan,w90 upper ,,
 ;5|Jenis Kelamin,select,text n,ID_Kelamin,s50,,5%,RS,Sex
 4|Alamat,textarea,text n,Alamat,t90,,
 5|Kota,input,text n,Kota,w70,,
 6|Propinsi,input,text n,Propinsi,w50,,
 7|Telepon,input,text n,Telepon,w50,,
 8|Fax,input,text n,Faksimili,w50,,
-;9|Status Anggota,select,text n,ID_Aktif,w50,,,RD,keaktifan-ID-Keaktifan-,
+9|Limit Kredit,input,text n,Status,w35 angka,,
 
 [biodata]
 1|Tanggal Masuk,input,text t,TanggalMasuk,w35,,
@@ -33,13 +33,12 @@
 1|Nama Propinsi, input,text n,Propinsi,w70 upper,,
 
 [listanggota]
-1|No.ID,input,text n,no_anggota,w35 upper,,12%,
-;2|Departement,select,text n,id_department,S70,,10%,
-;3|NIP/NIK,input,text n,nip_anggota,w50,,10%,
-2|Nama Lengkap,input,text n,nm_anggota,w90 upper,,25%,
-3|Alamat,input,text n,alm_anggota,w90,,30%,
-4|Telepon,select,text n,telp_anggota,s50,,15%,
-5|Status ,input,text n,status_anggota,w50,,10%,
+1|No.ID,input,text n,no_anggota,w35 upper,,8%,
+2|Nama Lengkap,input,text n,nm_anggota,w90 upper,,15%,
+3|Perusahaan,select,text n,Catatan,S70,,15%,
+4|Alamat,input,text n,alm_anggota,w90,,25%,
+5|Telepon,select,text n,telp_anggota,s50,,12%,
+6|Kredit Limit ,input,text n,status_anggota,w50,,12%,
 
 [detail]
 1|Kode,,,,,,10%,

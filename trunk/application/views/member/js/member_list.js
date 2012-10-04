@@ -30,6 +30,9 @@ $(document).ready(function(e) {
 	$('#cari').css('opacity','1');
 	$('span#td').html(format_number($('#totdata').val(),0));
 	find_by('');
+	
+	//add new member
+	
 /*
 not used in this version
 	$('#dept').change(function(){
@@ -57,7 +60,8 @@ not used in this version
 		var id=$('#ordby').val().replace('undefined,','');
 		$('#dept').change();
 	})
-*/	$('#cari').click(function(){
+*/
+	$('#cari').click(function(){
 		if($('#carix').val().length>0)	find_by($('#carix').val());
 	})
 	$('#urutan')

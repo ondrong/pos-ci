@@ -34,6 +34,7 @@ addText(array('Cari Berdasarkan Nama'),
 panel_multi_end();
 loading_ajax();
 popup_full();
+terbilang();
 ?>
 <input type='hidden' id='ordby' value='' class='w100'/>
 <input type='hidden' id='totdata' value='<?=(!empty($list))?count($list):0;?>' />

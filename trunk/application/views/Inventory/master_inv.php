@@ -6,7 +6,7 @@ $zlb->config_file('asset/bin/zetro_inv.frm');
 $path='application/views/inventory';
 link_js('material_inv.js',$path.'/js');
 tab_select('');
-panel_begin('Master Data');
+panel_begin('Kategori Barang');
 panel_multi('kategoribarang','block',false);
 if($all_kategori!=''){
 	$zfm->AddBarisKosong(true);

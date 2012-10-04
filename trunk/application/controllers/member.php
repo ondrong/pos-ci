@@ -27,7 +27,7 @@ class Member extends CI_Controller{
 		$this->Footer();
 	}
 	function index(){
-		$this->zetro_auth->menu_id(array('anggotabaru','uploadphoto'));
+		$this->zetro_auth->menu_id(array('pelangganbaru','uploadphoto'));
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('member/member_view');
 	}
@@ -54,12 +54,13 @@ class Member extends CI_Controller{
 			$n++;
 			echo "<tr onclick='' class='xx' title='Double click for detail view'
 				 ondblclick=\"show_member_detail('".$row->ID."');\">
-				 <td width='5%' class='kotak' align='center'>$n</td>
-				 <td width='10%' class='kotak' align='center'>".$row->No_Agt."</td>
-				 <td width='40%' class='kotak'>".$row->Nama."</td>
-				 <td width='10%' class='kotak' >".$row->Alamat." ".$row->Kota."</td>
-				 <td width='10%' class='kotak' >".$row->Telepon."/".$row->Faksimili."</td>
-				 <td width='8%' class='kotak'>".rdb('Keaktifan','Keaktifan','Keaktifan',"where ID='".$row->ID_Aktif."'")."</td>
+				 <td class='kotak' align='center'>$n</td>
+				 <td class='kotak' align='center'>".$row->No_Agt."</td>
+				 <td class='kotak'>".$row->Nama."</td>
+				 <td class='kotak'>".$row->Catatan."</td>
+				 <td class='kotak' >".$row->Alamat." ".$row->Kota."</td>
+				 <td class='kotak' >".$row->Telepon."/".$row->Faksimili."</td>
+				 <td class='kotak' align='right'>".number_format($row->Status,2)."</td>
 				</tr>";
 			}
 		}else{
@@ -75,8 +76,8 @@ class Member extends CI_Controller{
 		$data['NoUrut']		=$_POST['No_Agt'];
 		$data['ID']			=$_POST['No_Agt'];
 		$data['ID_Dept']	='1';//$_POST['NIP'];
-		$data['Nama']		=addslashes($_POST['Nama']);
-		//$data['ID_Kelamin']	=$_POST['ID_Kelamin'];
+		$data['Nama']		=addslashes(strtoupper($_POST['Nama']));
+		$data['Catatan']	=empty($_POST['Catatan'])?'':addslashes(strtoupper($_POST['Catatan']));
 		$data['Alamat']		=$_POST['Alamat'];
 		$data['Kota']		=addslashes(ucwords($_POST['Kota']));
 		$data['Propinsi']	=addslashes(ucwords($_POST['Propinsi']));
@@ -84,18 +85,10 @@ class Member extends CI_Controller{
 		$data['Faksimili']	=$_POST['Faksimili'];
 		$data['ID_Aktif']	=empty($_POST['ID_Aktif'])?'0':$_POST['ID_Aktif'];
 		$data['ID_Jenis']	='1';
+		$data['Status']		=empty($_POST['Status'])?'0':$_POST['Status'];
 		$this->Admin_model->replace_data('mst_anggota',$data);
-		/*/update table mst_kota
-		$kota=array();
-		$kota['kota_anggota']=addslashes(ucwords($_POST['Kota']));
-		$this->Admin_model->replace_data('mst_kota',$kota);
-		//update table porpinsi
-		$prop=array();
-		$prop['prop_anggota']=addslashes(ucwords($_POST['Propinsi']));
-		$this->Admin_model->replace_data('mst_propinsi',$prop);
-		
-		redirect('member/index');*/
 	}
+	
 	function get_nomor_anggota(){
 		echo $this->member_model->nomor_anggota();	
 	}

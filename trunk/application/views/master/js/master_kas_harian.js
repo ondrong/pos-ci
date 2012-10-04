@@ -14,13 +14,17 @@ $(document).ready(function(e) {
 				
 			}
 	})
+	lock('#no_trans');
 	$('#saved-kaskeluar').attr('disabled','disabled');
 	_generate_nomor($('#trans_new').val(),'#frm2 input#no_transaksi')
+	_generate_nomor('D','#frm1 input#no_trans')
 	tglNow('#frm1 #tgl_kas');
 	tglNow('#frm2 #tgl_transaksi');
 	$('#frm1 #nm_kas').attr('disabled','disabled')
 	$('#frm2 #no_transaksi').attr('disabled','disabled')
 	//setup saldo kas
+	__id_kas('1')
+	__id_kas('2')
 	$('#frm1 #tgl_kas')
 		.click(function(){
 			$(this).focus().select();
@@ -39,8 +43,8 @@ $(document).ready(function(e) {
 		})
 	$('#frm1 #id_kas')
 		.click(function(){
-			auto_suggest3('get_datakas',$(this).val(),$(this).attr('id')+'-frm1');
-			pos_div('#frm1 #id_kas');
+			//auto_suggest3('get_datakas',$(this).val(),$(this).attr('id')+'-frm1');
+			//pos_div('#frm1 #id_kas');
 		})
 	$('#frm1 #sa_kas')
 		.click(function(){
@@ -79,13 +83,12 @@ $(document).ready(function(e) {
 		})
 	$('#frm2 #akun_transaksi')
 		.click(function(){
-			pos_div('#frm2 #akun_transaksi');
-			auto_suggest3('get_datakas',$(this).val(),$(this).attr('id')+'-frm2');
 		})
 		
 	$('#frm2 #jml_transaksi')
 		.click(function(){
 			$(this).focus().select();
+			
 		})
 		.keyup(function(){
 			pos_info(this,'terbilang');
@@ -99,6 +102,19 @@ $(document).ready(function(e) {
 		})
 		.focusout(function(){
 			$('#terbilang').hide();
+		})
+	$('#frm2 #harga_beli')
+		.focus(function(){
+		unlock('#saved-kaskeluar');	
+		})
+		.keyup(function(){
+			kekata(this);
+		})
+		.focusout(function(){
+			kekata_hide();
+		})
+		.keypress(function(e){
+			kekata_hide();
 		})
 	
 	$(':button').click(function(){
@@ -187,4 +203,15 @@ function image_click(id,cl){
 					$('#frm2 #harga_beli').val(to_number(jml_transaksi.substr(0,(jml_transaksi.length-3))));
 	  $('#saved-kaskeluar').click();
 	}
+}
+
+function __id_kas(id){
+	$.post('get_datailkas',{'id':id},
+		function(result){
+			var rst=$.parseJSON(result)
+			$('#frm'+id+' #id_kas').val(rst.id_kas);
+			$('#frm'+id+' #nm_kas').val(rst.nm_kas);
+			$('#frm'+id+' #akun_transaksi').val(rst.id_kas);
+			$('#sa_kas').focus().select();
+		})
 }

@@ -7,11 +7,12 @@ $path='application/views/member';
 link_css('jquery.coolautosuggest.css','asset/css');
 link_js('jquery.coolautosuggest.js,member.js','asset/js,'.$path.'/js');
 link_js('ajaxupload.js','asset/js');
+link_js('jquery_terbilang.js','asset/js');
 !empty($panel)?$panel=$panel:$panel='';
 tab_select($panel);
-panel_begin('Registrasi');
-panel_multi('anggotabaru','block');
-if($all_anggotabaru!=''){
+panel_begin('Pelanggan Baru');
+panel_multi('pelangganbaru','block');
+if($all_pelangganbaru!=''){
 	$zfm->AddBarisKosong(true);
 	$zfm->Start_form(true,'frm1');
 	$zfm->BuildForm('registrasi',true,'50%');
@@ -55,5 +56,5 @@ $fld.="<input type='hidden' id='nipe'  value='$nip'>";
 panel_multi_end();
 panel_end();
 auto_sugest();
-
+terbilang();
 ?>
