@@ -1,5 +1,5 @@
 [Menu Utama]
-1|Home|admin/index|n|home.png|admin/index
+1|Home|admin/index|y|home.png|admin/index
 2|Pelanggan||y||
 3|Transaksi||n||
 4|Toko||y|kasir.png|penjualan/index
