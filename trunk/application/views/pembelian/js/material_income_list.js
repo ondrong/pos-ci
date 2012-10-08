@@ -8,6 +8,7 @@ $(document).ready(function(e) {
     $('#okelah').click(function(){
 		_show_data()
 	})
+	_show_data();
 });
 
 function _show_data(){

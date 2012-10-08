@@ -14,17 +14,22 @@ $(document).ready(function(e) {
 				
 			}
 	})
-	lock('#no_trans');
+	
 	$('#saved-kaskeluar').attr('disabled','disabled');
 	_generate_nomor($('#trans_new').val(),'#frm2 input#no_transaksi')
 	_generate_nomor('D','#frm1 input#no_trans')
 	tglNow('#frm1 #tgl_kas');
 	tglNow('#frm2 #tgl_transaksi');
-	$('#frm1 #nm_kas').attr('disabled','disabled')
-	$('#frm2 #no_transaksi').attr('disabled','disabled')
+	$('#frm1 #no_trans').attr('readonly','readonly')
+	$('#frm1 #nm_kas').attr('readonly','readonly')
+	$('#frm2 #no_transaksi').attr('readonly','readonly')
 	//setup saldo kas
 	__id_kas('1')
 	__id_kas('2')
+	//tampilkan data kas harian
+	__show_data('1')
+	__show_data_trans('2')
+	$('#frm2 #fmrTable tr#6').hide();
 	$('#frm1 #tgl_kas')
 		.click(function(){
 			$(this).focus().select();
@@ -102,6 +107,7 @@ $(document).ready(function(e) {
 		})
 		.focusout(function(){
 			$('#terbilang').hide();
+			
 		})
 	$('#frm2 #harga_beli')
 		.focus(function(){
@@ -114,7 +120,10 @@ $(document).ready(function(e) {
 			kekata_hide();
 		})
 		.keypress(function(e){
+			if(e.which==13){
 			kekata_hide();
+			$(':button').focus()
+			}
 		})
 	
 	$(':button').click(function(){
@@ -123,16 +132,17 @@ $(document).ready(function(e) {
 		switch(id){
 			case 'saved-kas':
 				$.post('simpan_kas_harian',{
+					'no_trans'	:$('#frm1 #no_trans').val(),
 					'tgl_kas'	:$('#frm1 #tgl_kas').val(),
 					'id_kas'	:$('#frm1 #id_kas').val(),
 					'nm_kas'	:$('#frm1 #nm_kas').val(),
 					'sa_kas'	:$('#frm1 #sa_kas').val()
 				},function(result){
 					$('#frm1 :reset').click();
+					_generate_nomor('D','#frm1 input#no_trans')
 					tglNow('#frm1 #tgl_kas');
-					$('#v_setupsaldokas table#ListTable tbody').html(result);
-       				$('#v_setupsaldokas table#ListTable').fixedHeader({width:700, height:250})
-        
+					__id_kas('1');
+        			__show_data('1')
 				})
 			break;
 			case 'saved-kaskeluar':
@@ -143,16 +153,14 @@ $(document).ready(function(e) {
 					'harga_beli'	:$('#frm2 #harga_beli').val(),
 					'akun_transaksi':$('#frm2 #akun_transaksi').val(),
 					'jtran'			:$('#trans_new').val(),
-					'tipe'			:$('#trans_new').val()
+					'tipe'			:$('#trans_new').val(),
+					'tanggal'		:$('#frm2 #tgl_transaksi').val()
 				},function(result){
 					$('#frm2 :reset').click();
+					__id_kas('2');
 					_generate_nomor($('#trans_new').val(),'#frm2 input#no_transaksi')
-					$('#v_operasionaltoko table#ListTable tbody').html(result);
 					tglNow('#frm2 #tgl_transaksi');
-					$('#v_operasionaltoko table#ListTable').fixedHeader({width:850, height:250})
-					$('#frm2 #ket_transaksi').val('')
-					$('#frm2 #harga_beli').val('')
-					$('#frm2 #akun_transaksi').val('')
+					__show_data_trans('2')
 					$('#trans_new').val('D');
 					lock('#saved-kaskeluar');
 				})
@@ -190,17 +198,6 @@ function image_click(id,cl){
 	var id=id.split('-');
 	switch(cl){
 	  case 'del':
-				 var no_transaksi	=$('#v_operasionaltoko table#ListTable tr#nm-'+id[1]+' td:nth-child(2)').html();
-				 var tgl_transaksi	=$('#v_operasionaltoko table#ListTable tr#nm-'+id[1]+' td:nth-child(3)').html();
-				 var akun_transaksi	=$('#v_operasionaltoko table#ListTable tr#nm-'+id[1]+' td:nth-child(4)').html();
-				 var ket_transaksi	=$('#v_operasionaltoko table#ListTable tr#nm-'+id[1]+' td:nth-child(5)').html();
-				 var jml_transaksi	=$('#v_operasionaltoko table#ListTable tr#nm-'+id[1]+' td:nth-child(6)').html();
-					$('#trans_new').val('DR');
-					//$('#frm2 #no_transaksi').val(no_transaksi);
-					$('#frm2 #tgl_transaksi').val(tgl_transaksi);
-					$('#frm2 #akun_transaksi').val(akun_transaksi);
-					$('#frm2 #ket_transaksi').val(ket_transaksi+'-cancel transaksi');
-					$('#frm2 #harga_beli').val(to_number(jml_transaksi.substr(0,(jml_transaksi.length-3))));
 	  $('#saved-kaskeluar').click();
 	}
 }
@@ -214,4 +211,18 @@ function __id_kas(id){
 			$('#frm'+id+' #akun_transaksi').val(rst.id_kas);
 			$('#sa_kas').focus().select();
 		})
+}
+function __show_data(id){
+	$.post('list_kas_harian',{'tanggal':''},
+	function(result){
+		$('#v_setupsaldokas table#ListTable tbody').html(result);
+       	$('#v_setupsaldokas table#ListTable').fixedHeader({width:(screen.width-100), height:150})
+	})
+}
+function __show_data_trans(id){
+	$.post('list_kas_trans',{'tanggal':$('#tgl_transaksi').val()},
+	function(result){
+		$('#v_operasionaltoko table#ListTable tbody').html(result)
+		$('#v_operasionaltoko table#ListTable').fixedHeader({width:(screen.width-100), height:200})
+	})
 }

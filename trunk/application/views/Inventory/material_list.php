@@ -1,4 +1,4 @@
-<?
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 $zfm=new zetro_frmBuilder('asset/bin/zetro_inv.frm');
 $zlb=new zetro_buildlist();
 $section='Barang';
@@ -15,21 +15,11 @@ link_css('jquery.coolautosuggest.css','asset/css');
 link_js('jquery.coolautosuggest.js,jquery_terbilang.js','asset/js,asset/js');
 link_js('jquery.fixedheader.js,material_list.js','asset/js,'.$path.'/js');
 panel_begin('Master Barang');
-panel_multi('tambahdata','none',false);
-if($c_add!=''){
-	$zfm->AddBarisKosong(true);
-	$zfm->Start_form(true);
-	$zfm->BuildForm($section,true,'70%');
-	$zfm->BuildFormButton('Simpan','add');
-}else{
-	no_auth();
-}
-panel_multi_end();
 panel_multi('listbarang','block',false);
 if($e_list!='' || $v_list!=''){
 addText(array('Filter by Kategori :',' Jenis :','Status',' Cari by nama'),array($kateg,$jenis,$stats,$cari));
 /*	$sql="select * from inv_barang order by nama_barang";*/
-		$zlb->section($section);
+		$zlb->section('BarangList');
 		$zlb->aksi(($e_list!='')?true:false);
 		$zlb->Header('100%');
 		$zlb->icon();
@@ -131,6 +121,7 @@ popup_start('edit_barang','Edit Data',550);
 	$zfm->BuildFormButton('Simpan','edit_mat');
 popup_end();
 auto_sugest();
+terbilang();
 echo "<input type='hidden' value='".date('d/m/Y')."' id='today'>";
 ?>
 <script language="javascript">
@@ -140,3 +131,6 @@ echo "<input type='hidden' value='".date('d/m/Y')."' id='today'>";
 		//$('#v_listobat table#ListTable').fixedHeader({width:900,height:400})
     });
 </script>
+<input type='hidden' id='id_kategori' value=''>
+<input type='hidden' id='id_jenis' value=''>
+<input type='hidden' id='id_satuan' value=''>

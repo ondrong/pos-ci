@@ -1,13 +1,14 @@
 <?php
 $zfm=new zetro_frmBuilder('asset/bin/zetro_beli.frm');
 $zlb=new zetro_buildlist();
+calender();
 $zlb->config_file('asset/bin/zetro_beli.frm');
 $path='application/views/penjualan';
 $printer="<img src='".base_url()."asset/images/print.png' id='printsheet' title='Print count sheet'>";
 link_css('autosuggest.css','asset/css');
 link_css('jquery.coolautosuggest.css','asset/css');
 link_js('jquery.coolautosuggest.js','asset/js');
-link_js('jquery.fullscreenr.js','asset/js');
+link_js('jquery.fixedheader.js','asset/js');
 link_js('material_jual.js,jquery_terbilang.js,jquery.sumfield.js',$path.'/js,asset/js,asset/js');
 panel_begin('Toko');
 panel_multi('penjualan','block',false);
@@ -23,18 +24,19 @@ if($c_penjualan__index!=''){
 	<div id='trblkasir' style='font-size:medium; font-weight:bold'>Rp. </div></td></tr></table>
 	<hr>
 	<table id='frame2' width='99%'>
-		<tr><td rowspan='2' width='75%' style='overflow:auto; max-height:200px'>";
-		echo "<form id='frm2' name='frm2' method='post' action=''>";
+		<tr valign='top'><td rowspan='1' width='75%' style='overflow:auto; max-height:100px'>";
+	echo "<div  style='height:320px;overflow:auto'>
+		<form id='frm2' name='frm2' method='post' action=''>";
 			$zlb->section('penjualanlist');
 			$zlb->aksi(false);
-			$zlb->Header('99%');
+			$zlb->Header('100%');
 			$zfm->section('penjualanlist');
-			$zfm->rowCount(8);
+			$zfm->rowCount(20);
 			$zfm->button('simpan');
 			$zfm->BuildGrid(false);
 			echo "</tbody></table></form>";
-	echo "</td>
-	<td class='kotak' width='25%' valign='top' height='100px'>
+	echo "</div></td>
+	<td class='kotak' width='25%' valign='top' height='70px' rowspan='2'>
 		  <table id='inform' style='border-collapse:collapse' width='100%'>
 		  	<tr class='header'><td colspan='2' class='kotak'>Information</td></tr>
 		  	<tr><td width='40%' class='kotak'>In line Stock</td>
@@ -49,11 +51,20 @@ if($c_penjualan__index!=''){
 			<tr><td colspan='2'>&nbsp;</td></tr>
 			<tr><td colspan='2'><input type='hidden' id='v_ist' value=''></td></tr>
 		  </table>
-	</td></tr>
-	<tr><td class='kotak' valign='top' align=''>
-		<table width='100%'>
+	<!--/td></tr>
+	<tr><td class='kotak' valign='top' align=''-->
+		<table width='100%' id='b'>
 		<tr><td class='kotak' width='35%'>Cara Bayar </td>
 		<td class='kotak' width='65%'> <select id='cbayare' class='S100'></select></td>
+		</tr>
+		<tr id='nontunai'><td class='kotak' width='35%'>Nomor </td>
+		<td class='kotak' width='65%'><input type='text' id='nogiro' class='w100 upper'></td>
+		</tr>
+		<tr id='nontunai'><td class='kotak' width='35%'>Bank </td>
+		<td class='kotak' width='65%'><input type='text' id='n_bank' class='w100 upper'></td>
+		</tr>
+		<tr id='nontunai'><td class='kotak' width='35%'>Tanggal </td>
+		<td class='kotak' width='65%'><input type='text' id='tgl_giro' class='w100 upper'></td>
 		</tr>
 		<tr><td colspan='2'>&nbsp;</td></tr>
 		<tr><td colspan='2' align='center'>
@@ -63,7 +74,7 @@ if($c_penjualan__index!=''){
 		  </td>
 		 </tr></table>
 	</tr>
-	 <tr><td colspan='2'>
+	 <tr><td colspan='1' class=''>
 		  <table style='border-collapse:collpse'>
 			  <tr align='center'>
 				<td class='kotak' width='80px'>F1<br> Cek Stock</td>
@@ -133,5 +144,6 @@ terbilang();
 <script language="javascript">
 $(document).ready(function(e) {
     $('#cbayare').html("<? dropdown('inv_penjualan_jenis','ID','Jenis_Jual','order by ID','1');?>");
+	//$('#frm2 table#ListTable').fixedHeader({width:(screen.width-300),height:(screen.height-450)})
 });
 </script>

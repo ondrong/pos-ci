@@ -1,4 +1,4 @@
-<?php
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 // Inventori model
 
 class Inv_model extends CI_Model {
@@ -118,6 +118,7 @@ class Inv_model extends CI_Model {
 							  'kategori'	=>$row->ID_Kategori,
 							  'satuan'		=>$row->ID_Satuan,
 							  'nm_satuan'	=>rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".$row->ID_Satuan."'"),
+							  'nm_jenis'	=>rdb('inv_barang_jenis','JenisBarang','JenisBarang',"where ID='".$row->ID_Satuan."'"),
 							  'status'		=>$row->Status,
 							  'kode'		=>$row->Kode,
 							  'pemasok'		=>$row->ID_Pemasok."-".rdb('inv_pemasok','Pemasok','Pemasok',"where ID='".$row->ID_Pemasok."'"),
@@ -129,10 +130,52 @@ class Inv_model extends CI_Model {
 		}
 		return $data;
 	}
+	function get_kategori($str,$limit='8'){
+		$data=array();
+		$sql="select * from inv_barang_kategori where Kategori like '".$str."%' order by Kategori limit $limit";
+		$rw= mysql_query($sql) or die(mysql_error());
+		while($row=mysql_fetch_object($rw)){
+			$data[]=array('data'	=>$row->Kategori,
+						  'ID'		=>$row->ID);	
+		}
+		return $data;
+	}
+	function get_jenis($str,$limit='8'){
+		$data=array();
+		$sql="select * from inv_barang_jenis where JenisBarang like '".$str."%' order by JenisBarang limit $limit";
+		$rw= mysql_query($sql) or die(mysql_error());
+		while($row=mysql_fetch_object($rw)){
+			$data[]=array('data'	=>$row->JenisBarang,
+						  'ID'		=>$row->ID);	
+		}
+		return $data;
+	}
+	function get_satuan($str,$limit='8'){
+		$data=array();
+		$sql="select * from inv_barang_satuan where Satuan like '".$str."%' order by Satuan limit $limit";
+		$rw= mysql_query($sql) or die(mysql_error());
+		while($row=mysql_fetch_object($rw)){
+			$data[]=array('data'	=>$row->Satuan,
+						  'ID'		=>$row->ID);	
+		}
+	return $data;
+	}
+	function get_bank($str=''){
+		$data=array();
+		$sql="select * from mst_bank where NamaBank like '$str%' order by NamaBank";
+		$rw=mysql_query($sql) or die(mysql_error());
+		while($row=mysql_fetch_object($rw)){
+			$data[]=array('data'	=>$row->NamaBank,
+						  'description'=>$row->NoRek
+						  )	;
+		}
+	return $data;			
+	}
 	// daftar barang
 	function list_barang($where){
 		$data=array();
-		$sql="select b.ID,bj.JenisBarang,bk.Kategori,b.Kode,b.Nama_Barang,b.Harga_Beli,b.Harga_Jual,bs.Satuan,b.Status
+		$sql="select b.ID,bj.JenisBarang,bk.Kategori,b.Kode,b.Nama_Barang,
+				b.Harga_Beli,b.Harga_Jual,bs.Satuan,b.Status,b.minstok
 				from inv_barang as b
 				left join inv_barang_jenis as bj
 				on bj.ID=b.ID_Jenis
@@ -145,7 +188,14 @@ class Inv_model extends CI_Model {
 		return $data->result();
 	}
 	function update_barang($id){
-		$sql="select * from inv_barang where id='$id'";
+		$sql="select ib.*,k.Kategori,j.JenisBarang,s.Satuan from inv_barang as ib
+			  left join inv_barang_kategori as k
+			  on k.ID=ib.ID_Kategori
+			  left join inv_barang_jenis as j
+			  on j.ID=ib.ID_Jenis
+			  left join inv_barang_satuan as s
+			  on s.ID=ib.ID_Satuan
+			  where ib.ID='$id'";
 		$data=$this->db->query($sql);
 		return $data->result();
 	}
@@ -196,5 +246,50 @@ class Inv_model extends CI_Model {
 				where id_barang='$nm_barang'";
 		$data=$this->db->query($sql);
 		return $data->result();
+	}
+	function auto_data(){
+	//membuat jenis pembelian
+	 $sql="CREATE TABLE IF NOT EXISTS `inv_pembelian_jenis` (
+			  `ID` int(11) DEFAULT NULL,
+			  `Jenis_Beli` varchar(10) DEFAULT NULL
+			) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+	 $sql1=" REPLACE INTO `inv_pembelian_jenis` (`ID`, `Jenis_Beli`) VALUES
+				(1, 'Tunai'),
+				(2, 'Giro'),
+				(3, 'Transfer'),
+				(4, 'Cheque');";
+  //membuat jenis penjualan
+	$sql2="CREATE TABLE IF NOT EXISTS `inv_penjualan_jenis` (
+		  `ID` int(11) NOT NULL AUTO_INCREMENT,
+		  `Jenis_Jual` varchar(20) DEFAULT NULL,
+		  PRIMARY KEY (`ID`)
+		) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;";
+
+	$sql3="REPLACE INTO `inv_penjualan_jenis` (`ID`, `Jenis_Jual`) VALUES
+			(1, 'Tunai'),
+			(2, 'Giro'),
+			(3, 'Transfer'),
+			(4, 'Cheque');";
+			
+	//membuat akun untuk kas harian
+	$sql4="CREATE TABLE IF NOT EXISTS `mst_kas` (
+		  `id_kas` varchar(100) NOT NULL DEFAULT '',
+		  `nm_kas` varchar(225) DEFAULT '',
+		  `sa_kas` double DEFAULT '0',
+		  `sl_kas` double DEFAULT '0',
+		  `doc_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+		  `created_by` varchar(100) DEFAULT NULL,
+		  PRIMARY KEY (`id_kas`)
+		) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+
+	$sql4="REPLACE INTO `mst_kas` (`id_kas`, `nm_kas`, `sa_kas`, `sl_kas`, `doc_date`, `created_by`) VALUES
+	('KAS TOKO', 'KAS HARIAN TOKO', 0, 0, '2012-10-04 12:13:50', 'superuser');";
+	//execute query diatas
+		mysql_query($sql) or die($sql.mysql_error());
+		mysql_query($sql1) or die($sql1.mysql_error());
+		mysql_query($sql2) or die($sql2.mysql_error());
+		mysql_query($sql3) or die($sql3.mysql_error());
+		mysql_query($sql4) or die($sql4.mysql_error());
+	
 	}
 }

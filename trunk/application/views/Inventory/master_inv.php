@@ -1,4 +1,4 @@
-<?php
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 $zfm=new zetro_frmBuilder('asset/bin/zetro_inv.frm');
 $zlb=new zetro_buildlist();
 $section='Barang';
@@ -8,7 +8,7 @@ link_js('material_inv.js',$path.'/js');
 tab_select('');
 panel_begin('Kategori Barang');
 panel_multi('kategoribarang','block',false);
-if($all_kategori!=''){
+if($all_kategoribarang!=''){
 	$zfm->AddBarisKosong(true);
 	$zfm->Start_form(true,'frm2');
 	$zfm->BuildForm('Kategori',true,'50%');
@@ -16,7 +16,7 @@ if($all_kategori!=''){
 	echo "<hr/>";
 	$sql2="select * from inv_barang_kategori order by Kategori";
 		$zlb->section('Kategori');
-		$zlb->aksi(($e_kategori!='')?true:false);
+		$zlb->aksi(($e_kategoribarang!='')?false:false);
 		$zlb->icon('deleted');
 		$zlb->query($sql2);
 		$zlb->Header('50%');

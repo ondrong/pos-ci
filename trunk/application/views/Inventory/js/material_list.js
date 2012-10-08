@@ -3,6 +3,7 @@
 // author : Iswan Putera
 
 $(document).ready(function(e) {
+	var path=$('#path').val();
 	var prs=$('#prs').val();
 	$('#v_satuan img.edit').hide();
 	lock('#frm4 #saved-konv')
@@ -44,6 +45,9 @@ $(document).ready(function(e) {
 			auto_suggest3('get_status',$(this).val(),$(this).attr('id')+'-frm1');
 			pos_div('#frm1 input#status_barang');
 		})
+	$('#frm9 :reset').click(function(){
+		keluar();
+	})
 	$(':button').click(function(){
 		var id=$(this).attr('id');
 		var idr=id.split('-');
@@ -80,21 +84,23 @@ $(document).ready(function(e) {
 			break;
 			case 'saved-jenis': //button simpan jenis
 				$.post('simpan_jenis',{
-					'nm_jenis'	:$('#frm5 input#nm_jenis').val(),
+					'nm_jenis'	:$('#frm5 input#JenisBarang').val(),
 					'induk'		:'',
 					'linked'	:''
 					},
 				function(result){
 					$('#frm1 select#nm_jenis').html(result);
-					$('#frm5 input#nm_jenis').val('')
+					$('#frm1 select#nm_jenis option:selected').text($('#frm5 input#JenisBarang').val().toUpperCase());
+					$('#frm5 input#JenisBarang').val('')
 					keluar();
 				})
 			break;
 			case 'saved-kat': //button simpan kategori
-				$.post('simpan_kategori',{'nm_kategori':$('#frm6 input#nm_kategori').val(),'induk':''},
+				$.post('simpan_kategori',{'nm_kategori':$('#frm6 input#Kategori').val(),'induk':''},
 				function(result){
 					$('#frm1 select#nm_kategori').html(result);
-					$('#frm6 input#nm_kategori').val('')
+					$('#frm1 select#nm_kategori option:selected').text($('#frm6 input#Kategori').val().toUpperCase());
+					$('#frm6 input#Kategori').val('')
 					keluar();
 				})
 			break;
@@ -111,19 +117,19 @@ $(document).ready(function(e) {
 				})
 			break;
 			case 'saved-sat': //button simpan satuan
-				$.post('simpan_satuan',{
+				$.post(path+'inventory/simpan_satuan',{
 					'nm_satuan'	:$('#frm3 input#Satuan').val(),
 					'induk'		:'',
 					'linked'	:''
 					},
 				function(result){
-					$('#v_satuan table#ListTable tbody').html(result);
+					$('table#ListTable tbody').html(result);
 					$('#frm3 input#Satuan').val('')
 				})
 			break;
 			case 'saved-satuan': //button popup simpan satuan
-				$.post('simpan_satuan',{
-					'nm_satuan'	:$('#frm8 input#nm_satuan').val(),
+				$.post(path+'inventory/simpan_satuan',{
+					'nm_satuan'	:$('#frm8 input#Satuan').val(),
 					'induk'		:'frm3',
 					'linked'	:''
 					},
@@ -133,27 +139,42 @@ $(document).ready(function(e) {
 						$.post('dropdown',{'tbl':'inv_barang_satuan','field':'Satuan'},
 						function(result){
 							$('#frm1 select#nm_satuan').html(result);
-							$('#frm1 select#nm_satuan').val($('#frm8 input#nm_satuan').val('')).select()
-							$('#frm8 input#nm_satuan').val('');
+							$('#frm1 select#nm_satuan option:selected').text($('#frm8 input#Satuan').val().toUpperCase())
+							$('#frm8 input#Satuan').val('');
 							keluar();
 						})/**/
 				})
 			break;
 			case 'saved-edit_mat': //icon edit pada list barang
-				$.post('simpan_barang',
-				{'nm_jenis'		:$('#frm9 select#nm_jenis').val(),
-				 'nm_kategori'	:$('#frm9 select#nm_kategori').val(),
+				$.post(path+'inventory/simpan_barang',
+				{'id_jenis'		:$('#id_jenis').val(),
+				 'id_kategori'	:$('#id_kategori').val(),
+				 'id_satuan'	:$('#id_satuan').val(),
 				 'id_barang'	:$('#frm9 input#id_barang').val(),
 				 'nm_barang'	:$('#frm9 input#nm_barang').val(),
-				 'nm_satuan'	:$('#frm9 select#nm_satuan').val(),
 				 'status_barang':$('#frm9 input#status_barang').val(),
 				 'stokmin'		:$('#frm9 input#stokmin').val(),
 				 'stokmax'		:$('#frm9 input#stokmax').val(),
+				 'minstok'		:$('#frm9 input#stoklimit').val(),
+				 'nm_jenis'		:$('#frm9 input#nm_jenis').val(),
+				 'nm_kategori'	:$('#frm9 input#nm_kategori').val(),
+				 'nm_satuan'	:$('#frm9 input#nm_satuan').val(),
 				 'linked'		:''
 				 },
 				function(result){
 					keluar();
-					$('#v_listbarang table#ListTable tbody').html(result);
+					$.post(path+'inventory/show_list',{
+						'id'		:$('#plh_kategori').val(),
+						'id_jenis'	:$('#plh_jenis').val(),
+						'stat'		:$('#plh_stat').val(),
+						'cari'		:$('#plh_cari').val()
+					},
+					function(result){
+						$('#v_listbarang table#ListTable tbody').html(result);
+						$('#bawahan').html("<b>&bull;&bull;&bull; Total record :"+$('#v_listbarang table#ListTable tbody tr').length+"");
+						$('#v_listbarang table#ListTable').fixedHeader({width:(screen.width-30),height:(screen.height-345)});
+						$('#bawahan').show();
+					})
 				})
 			break;
 			case 'saved-hgb': //simpan harga beli
@@ -173,13 +194,13 @@ $(document).ready(function(e) {
 			break;
 			case 'saved-konv':
 			unlock('#frm4 select#nm_satuan');
-				$.post('simpan_konversi',
+				$.post(path+'inventory/simpan_konversi',
 					{'nm_barang'	:$('#frm4 input#nm_barang').val(),
 					'nm_satuan'		:$('#frm4 select#nm_satuan').val(),
 					'isi_konversi'	:$('#frm4 input#isi_konversi').val(),
 					'sat_beli'		:$('#frm4 select#sat_beli').val()},
 					function(result){
-						$('#v_unitkonversi table#konversi tbody').html(result);
+						$('table#konversi tbody').html(result);
 						$('#frm4 input#nm_barang').val('');
 						$('#frm4 select#nm_satuan').val('');
 						$('#frm4 input#isi_konversi').val('');
@@ -240,16 +261,16 @@ $(document).ready(function(e) {
 	//popup add barang
 	$('#frm4 input#nm_barang')
 		.coolautosuggest({
-				url:'data_material?fld=Nama_Barang&limit=10&str=',
+				url:path+'inventory/data_material?fld=Nama_Barang&limit=10&str=',
 				width:350,
 				showDescription	:false,
 				onSelected:function(result){
 					$('#frm4 #nm_satuan')
 						.val(result.satuan).select()
 						.attr('disabled','disabled');
-				$.post('list_konversi',{'nm_barang':result.description},
+				$.post(path+'inventory/show_konversi',{'nm_barang':result.description},
 				function(result){
-					$('#v_unitkonversi table#konversi tbody').html(result);
+					$('table#konversi tbody').html(result);
 				});
 				}
 		})
@@ -319,10 +340,11 @@ $(document).ready(function(e) {
 	$('#plh').change(function(){
 		show_indicator('ListTable','10');
 		$('plh_cari').val('')
-		$.post('show_list',{
+		$.post(path+'inventory/show_list',{
 			'id'		:$(this).val(),
 			'id_jenis'	:$('#plh_jenis').val(),
-			'stat'		:$('#plh_stat').val()
+			'stat'		:$('#plh_stat').val(),
+			'cari'		:$('#plh_cari').val()
 		},
 		function(result){
 			$('#v_listbarang table#ListTable tbody').html(result);
@@ -334,10 +356,11 @@ $(document).ready(function(e) {
 	$('#plh_jenis').change(function(){
 		show_indicator('ListTable','10');
 		$('plh_cari').val('')
-		$.post('show_list',{
+		$.post(path+'inventory/show_list',{
 			'id'		:$('#plh').val(),
 			'id_jenis'	:$('#plh_jenis').val(),
-			'stat'		:$('#plh_stat').val()
+			'stat'		:$('#plh_stat').val(),
+			'cari'		:$('#plh_cari').val()
 		},
 		function(result){
 			$('#v_listbarang table#ListTable tbody').html(result);
@@ -348,10 +371,11 @@ $(document).ready(function(e) {
 	})
 	$('#plh_stat').change(function(){
 		show_indicator('ListTable','10');
-		$.post('show_list',{
+		$.post(path+'inventory/show_list',{
 			'id'		:$('#plh').val(),
 			'id_jenis'	:$('#plh_jenis').val(),
-			'stat'		:$('#plh_stat').val()
+			'stat'		:$('#plh_stat').val(),
+			'cari'		:$('#plh_cari').val()
 		},
 		function(result){
 			$('#v_listbarang table#ListTable tbody').html(result);
@@ -364,7 +388,7 @@ $(document).ready(function(e) {
 	.keyup(function(){
 		if($(this).val().length >2){
 			show_indicator('ListTable','10');
-			$.post('show_list',{
+			$.post(path+'inventory/show_list',{
 				'id'		:$('#plh').val(),
 				'id_jenis'	:$('#plh_jenis').val(),
 				'stat'		:$('#plh_stat').val(),
@@ -378,37 +402,83 @@ $(document).ready(function(e) {
 			})
 		}
 	})
+		//auotsuggest kategori
+		$('#frm9 #nm_kategori')
+			.coolautosuggest({
+				url	:'get_kategori?limit=8&str=',
+				width:250,
+				showDescription:false,
+				onSelected:function(result){
+					$('#id_kategori').val(result.ID)
+				}
+			})
+		$('#frm9 #nm_jenis')
+			.coolautosuggest({
+				url	:'get_jenis?limit=8&str=',
+				width:250,
+				showDescription:false,
+				onSelected:function(result){
+					$('#id_jenis').val(result.ID)
+				}
+			})
+		$('#frm9 #nm_satuan')
+			.coolautosuggest({
+				url	:'get_satuan?limit=8&str=',
+				width:250,
+				showDescription:false,
+				onSelected:function(result){
+				$('#id_satuan').val(result.ID)	
+				}
+			})
+		$('#frm9 #stokmin')
+			.focus(function(){$(this).select()})
+			.keyup(function(){kekata(this);})
+			.focusout(function(){kekata_hide();$('#stokmax').focus().select()})
+			.keypress(function(e){if(e.which==13){ $(this).focusout();}})
+		
+		$('#frm9 #stokmax')
+			.focus(function(){$(this).select()})
+			.keyup(function(){kekata(this);})
+			.focusout(function(){kekata_hide();$('#stoklimit').focus().select()})
+			.keypress(function(e){if(e.which==13){$(this).focusout();}})
+		
+		$('#frm9 #stoklimit')
+			.focusout(function(){$(':button').focus()})
+			.keypress(function(e){if(e.which==13){$(this).focusout();}})
+
 });
 
  //update data_material dari daftar barang
 	function upd_barang(id){
+		var path=$('#path').val();
 					$('#pp-edit_barang').css({'left':'20%','top':'20%'});
 						$('#nama').val('edit_barang');
 						lock('#frm9 input#nm_barang');
-						lock('#frm9 input#add-nm_jenis');
-						lock('#frm9 input#add-nm_kategori');
-						lock('#frm9 input#add-nm_golongan');
-						lock('#frm9 input#add-nm_satuan');
-						$.post('edit_material',{'nm_barang':id},
+						lock('#frm9 input#id_barang');
+						$.post(path+'inventory/edit_material',{'nm_barang':id},
 							function(result){
 							var obj=$.parseJSON(result);
-							  $('#frm9 select#nm_jenis').val(obj.ID_Jenis).select()
-							  $('#frm9 select#nm_kategori').val(obj.ID_Kategori).select()
+							  $('#frm9 input#nm_jenis').val(obj.JenisBarang)
+							  $('#frm9 input#nm_kategori').val(obj.Kategori)
 							  $('#frm9 input#id_barang').val(obj.Kode)
 							  $('#frm9 input#nm_barang').val(obj.Nama_Barang)
-							  $('#frm9 select#nm_satuan').val(obj.ID_Satuan).select()
+							  $('#frm9 input#nm_satuan').val(obj.Satuan)
 							 //$('#frm9 input#expired').val(obj.expired)
 							  $('#frm9 input#stokmin').val(obj.Harga_Beli)
-							 $('#frm9 input#stokmax').val(obj.Harga_Jual)
-							  $('#frm9 input#status_barang').val(obj.Status);
+							  $('#frm9 input#stokmax').val(obj.Harga_Jual)
+							  $('#frm9 input#stoklimit').val(obj.minstok);
+							  $('#id_kategori').val(obj.ID_Kategori);
+							  $('#id_jenis').val(obj.ID_Jenis);
+							  $('#id_satuan').val(obj.ID_Satuan);
 							})
 						$('#lock').show();
 						$('#pp-edit_barang').show('slow');
 	}
 	//delete data material dari daftar barang
 	function delet_barang(id){
-					if (confirm('Yakin data '+id+'  akan di hapus?')){
-						$.post('hapus_inv',{'tbl':'inv_barang','id':id,'fld':'ID'},
+		var path=$('#path').val();
+					if (confirm('Yakin data ini  akan di hapus?')){
+						$.post(path+'inventory/hapus_inv',{'tbl':'inv_barang','id':id,'fld':'ID'},
 						function(result){
 							$('#v_listbarang table#ListTable tbody tr#nm-'+id).remove();
 						})
@@ -416,6 +486,7 @@ $(document).ready(function(e) {
 	}
 // fungsi lama tidak kepakai
 	function image_click(id,cl){
+		var path=$('#path').val()
 	  var induk=$('#'+id).parent().parent().parent().parent().parent().attr('id');
 	  //alert(induk);
 	  //alert(id)
@@ -460,20 +531,6 @@ $(document).ready(function(e) {
 				break;
 				case 'v_unitkonversi':
 				//alert(id[1]);
-				var sat=$('#v_unitkonversi table#ListTable tbody tr#nm-'+id[1]+' td:nth-child(4)').html();
-					if (confirm('Yakin data '+id[1]+'  akan di hapus?')){
-						$.post('hapus_konversi',{'tbl':id[1],'fld':$('#frm4 #nm_barang').val()},
-						function(result){
-							$.post('list_konversi',{'nm_barang':$('#frm4 #nm_barang').val()},
-							function(result){
-								$('#v_unitkonversi table#konversi tbody').html(result);
-							});
-								/*$.post('dropdown',{'tbl':'inv_konversi','field':'nm_barang'},
-								function(result){
-									$('#frm1 select#nm_konversi').html(result);
-								})*/
-						})
-					}
 				break;
 			}
 		}
@@ -483,6 +540,18 @@ function keluar(){
 	$('.autosuggest').hide();
 	$('#pp-'+nm).hide('slow');
 	$('#lock').hide();
+}
+function hapus_konv(id,aksi){
+	var path=$('#path').val()
+		if (confirm('Yakin data akan di hapus?')){
+			$.post(path+'inventory/hapus_konversi',{'tbl':aksi,'fld':id},
+			function(result){
+				$.post(path+'inventory/show_konversi',{'nm_barang':$('#frm4 #nm_barang').val()},
+					function(result){
+						$('table#konversi tbody').html(result);
+					});
+			})
+		}
 }
 
 function on_clicked(id,fld,frm){

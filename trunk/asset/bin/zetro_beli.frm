@@ -57,17 +57,13 @@
 
 
 [return]
-1|,input,hidden n,no_transaksi,w50 upper,,10%
-2|Doc.No.,input,text n,no_doc,w50 upper,,10%
-3|Tanggal,input,date t,tgl_transaksi,w35,,8%
-4|No.Faktur,input,text n,faktur_transaksi,w70 upper,,12%
-5|Nama Pelanggan,input,text n,nm_nasabah,w70 upper,,15%,,,
-6|Nama Obat,input,text n,nm_barang,w90 upper,,25%
-7|Satuan,input,text n,nm_satuan,w35 upper,,8%
-8|Jumlah,input,text d,jml_transaksi,w35 angka,,12%
-9|Harga,input,text d,harga_beli,w35 angka,,10%
-10|Total Harga,input,text d,total_harga,w35 angka subtt,,10%
-11|Expired,input,text t,expired,w35,,15%
+1|No. Transaksi,input,text n,NoUrut,w50,,
+2|Tanggal,input,text t,Tanggal,w35,,
+3|Nama Pelanggan,input,text n,Nama,w90 upper,,
+4|Nama Barang,input,text n,Nama_Barang,w70 upper,,
+5|Satuan,input,text n,ID_Satuan,w35 upper,,
+6|Jumlah,input,text d,Jumlah,w35 angka,,
+7|Harga Beli,input,text d,harga_beli,w35 angka,,
 
 [return_beli]
 1|,input,hidden n,no_transaksi,w50 upper,,10%
@@ -88,6 +84,8 @@
 3|&nbsp;&nbsp;&nbsp;Sampai Tanggal,input,text t,sampai_tgl,w35,,
 4|Kategori,select,text n,nm_golongan,S70,,,RD,inv_barang_kategori-ID-Kategori-
 5|Nama Vendor,input,text n,nm_produsen,w90 upper,,
+6|Susun Berdasarkan,select,text n,susunan,S70,,,RS,SusunanBeli
+7|&nbsp;&nbsp;&nbsp; Jenis Urutan,select,textn,urutan,S50,,,RS,Urutan
 
 ;array(10,22,70,15,25,25,30,40,40)
 [lapbelilist]
@@ -105,6 +103,27 @@
 3|&nbsp;&nbsp;&nbsp;Sampai Tanggal,input,text t,sampai_tgl,w35,,
 4|Kategori Barang,select,text n,nm_jenis,S70,,,RD,inv_barang_kategori-ID-Kategori-
 5|Nama Pelanggan,input,text n,nm_dokter,w90 upper,,
+6|Susun Berdasarkan,select,text n,susunan,S70,,,RS,SusunanJual
+7|&nbsp;&nbsp;&nbsp; Jenis Urutan,select,textn,urutan,S50,,,RS,Urutan
+
+[SusunanJual]
+1|Nama_Barang,Nama Barang
+2|Nama,Nama Pelanggan
+3|dt.Tanggal-Nama_Barang,Tanggal Penjualan dan Nama Barang
+4|Nama-Nama_Barang, Nama Pelanggan dan Nama Barang
+5|Jumlah-Nama_Barang,Jumlah dan Nama Barang
+
+[SusunanBeli]
+1|Nama_Barang,Nama Barang
+2|Pemasok,Nama Vendor
+3|dt.Tanggal-Nama_Barang,Tanggal Pembelian dan Nama Barang
+4|Pemasok-Nama_Barang, Nama Vendor dan Nama Barang
+5|Jml_Faktur-Nama_Barang,Jumlah dan Nama Barang
+6|Jumlah,Harga Beli
+
+[Urutan]
+1|asc,Kecil ke Besar (A-Z)
+2|desc,Besar ke Kecil (Z-A)
 
 ;array(10,22,70,15,25,25,30,40,40)
 [lapjuallist]
@@ -138,4 +157,13 @@
 2|&nbsp;&nbsp;&nbsp;Dari Tanggal,input,text t,dari_tgl,w35,,
 3|&nbsp;&nbsp;&nbsp;Sampai Tanggal,input,text t,sampai_tgl,w35,,
 4|Jenis Barang,select,text n,nm_jenis,S70,,,RD,inv_jenis-nm_jenis-nm_jenis-
+
+[rptbeli]
+1|Tanggal,,,,,,,,,25
+2|Nama Barang,,,,,,,,,70
+3|Satuan,,,, ,,,,,18
+4|Jumlah,,,,,,,,,25
+5|Harga Beli,,,, ,,,,,30
+6|Total Harga,,,,,,,,,30
+7|Keterangan,,,,,,,,,70
 

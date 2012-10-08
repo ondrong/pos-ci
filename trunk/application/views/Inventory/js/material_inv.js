@@ -3,10 +3,10 @@
 // author : Iswan Putera
 
 $(document).ready(function(e) {
+	var path=$('#path').val()
 	var prs=$('#prs').val();
 		$('#kategoribarang').removeClass('tab_button');
 		$('#kategoribarang').addClass('tab_select');
-		$('span#v_jenisobat').show();
 
 	$('table#panel tr td').click(function(){
 		var id=$(this).attr('id');
@@ -28,21 +28,21 @@ $(document).ready(function(e) {
 		var induk=$(this).parent().parent().parent().parent().parent().attr('id');
 		switch(id){
 				case 'saved-jenis':
-				$.post('simpan_jenis',{'nm_jenis':$('#frm1 input#JenisBarang').val(),'induk':'frm1'},
+				$.post(path+'inventory/simpan_jenis',{'nm_jenis':$('#frm1 input#JenisBarang').val(),'induk':'frm1'},
 				function(result){
 					$('#v_jenisbarang table#ListTable tbody').html(result);
 					$('#frm1 input#JenisBarang').val('')
 				})
 			break;
 			case 'saved-kat':
-				$.post('simpan_kategori',{'nm_kategori':$('#frm2 input#Kategori').val(),'induk':'frm2'},
+				$.post(path+'inventory/simpan_kategori',{'nm_kategori':$('#frm2 input#Kategori').val(),'induk':'frm2'},
 				function(result){
 					$('#v_kategoribarang table#ListTable tbody').html(result);
 					$('#frm2 input#Kategori').val('')
 				})
 			break;
 			case 'saved-subkat':
-				$.post('simpan_golongan',{'nm_golongan':$('#frm3 input#nm_golongan').val(),'induk':'frm3'},
+				$.post(path+'inventory/simpan_golongan',{'nm_golongan':$('#frm3 input#nm_golongan').val(),'induk':'frm3'},
 				function(result){
 					$('#v_subkategori table#ListTable tbody').html(result);
 					$('#frm3 input#nm_golongan').val('')
@@ -54,6 +54,7 @@ $(document).ready(function(e) {
 });
 
 function image_click(id,cl){
+	var path=$('#path').val()
 		var id=id.split('-');
 		var cl=cl;
 		var induk=id[0]
@@ -62,7 +63,7 @@ function image_click(id,cl){
 			switch(id[0]){
 				case 'Jenis':
 					if (confirm('Yakin data '+id[1]+'  akan di hapus?')){
-						$.post('hapus_inv',{'tbl':'inv_barang_jenis','id':id[1],'fld':'JenisBarang'},
+						$.post(path+'inventory/hapus_inv',{'tbl':'inv_barang_jenis','id':id[1],'fld':'JenisBarang'},
 						function(result){
 							$('#v_jenisbarang table#ListTable tbody tr#nm-'+id[1]).remove();
 						})
@@ -70,7 +71,7 @@ function image_click(id,cl){
 				break;
 				case 'Kategori':
 					if (confirm('Yakin data '+id[1]+'  akan di hapus?')){
-						$.post('hapus_inv',{'tbl':'inv_barang_kategori','id':id[1],'fld':'Kategori'},
+						$.post(path+'inventory/hapus_inv',{'tbl':'inv_barang_kategori','id':id[1],'fld':'Kategori'},
 						function(result){
 							$('#v_kategoribarang table#ListTable tbody tr#nm-'+id[1]).remove();
 						})
@@ -78,7 +79,7 @@ function image_click(id,cl){
 				break;
 				case 'Golongan':
 					if (confirm('Yakin data '+id[1]+'  akan di hapus?')){
-						$.post('hapus_inv',{'tbl':'inv_golongan','id':id[1],'fld':'nm_golongan'},
+						$.post(path+'inventory/hapus_inv',{'tbl':'inv_golongan','id':id[1],'fld':'nm_golongan'},
 						function(result){
 							$('#v_golongan table#ListTable tbody tr#nm-'+id[1]).remove();
 						})

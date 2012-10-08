@@ -22,17 +22,18 @@
 		  foreach($temp_rec->result_object() as $r)
 		  {
 			 $hgb=rdb('inv_barang','Harga_Beli','Harga_Beli',"where ID='".$r->ID_Barang."'");
+			 $jenis=($r->ID_Jenis!='5')?rdb('inv_penjualan_jenis','Jenis_Jual','Jenis_Jual',"where ID='".$r->ID_Jenis."'"):'Return';
 			$n++;
 			$a->Row(array($n, tglfromSql($r->Tanggal),
 							 rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$r->ID_Barang."'"),
 							 rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".rdb('inv_barang','ID_Satuan','ID_Satuan',"where ID='".$r->ID_Barang."'")."'"),
-							 $r->Jumlah, number_format('0',2), 
+							 $r->Jumlah, number_format($hgb,2), 
 							 number_format(($r->Harga),2), 
 							 rdb('mst_anggota','Nama','Nama',"where ID='".$r->ID_Anggota."'"),
-							 'Ref.:'.$r->Keterangan." - ". rdb('inv_penjualan_jenis','Jenis_Jual','Jenis_Jual',"where ID='".$r->ID_Jenis."'")));
+							 'Ref.:'.$r->Keterangan." - ".$jenis));
 			//sub tlot
-			$harga =($harga+($r->Jumlah*$r->Harga));
-			$hargaj =($hargaj+($r->Jumlah*$hgb));
+			$harga =($harga+(abs($r->Jumlah)*$r->Harga));
+			$hargaj =($hargaj+($hgb));
 		  }
 		  $a->SetFont('Arial','B',10);
 		  $a->SetFillColor(225,225,225);
