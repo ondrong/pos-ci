@@ -69,7 +69,7 @@ class Master extends CI_Controller {
 			$this->list_data_akun();
 	}
 	function simpan_kas_harian(){
-		$data=array();
+		$data=array();$datax=array();
 		$data['no_trans']=$_POST['no_trans'];
 		$data['id_kas']	=strtoupper($_POST['id_kas']);
 		$data['nm_kas']	=strtoupper($_POST['nm_kas']);
@@ -77,25 +77,29 @@ class Master extends CI_Controller {
 		$data['tgl_kas']=tglToSql($_POST['tgl_kas']);
 		$data['created_by']	=$this->session->userdata('userid');
 			$this->Admin_model->replace_data('mst_kas_harian',$data);
+		$datax['nomor']=$_POST['no_trans'];
+		$datax['jenis_transaksi']	='D';
+		$this->Admin_model->replace_data('nomor_transaksi',$datax);
+		$this->list_kas_harian();
 	}
 	function simpan_kas_keluar(){
-		$data=array();$datax=array();
-		$data['akun_transaksi']	=strtoupper($_POST['akun_transaksi']);
-		$data['no_transaksi']	=($_POST['no_transaksi']);
-		$data['jml_transaksi']	=($_POST['jtran']=='DR')?'1':'-1';
-		$data['harga_beli']		=($_POST['tipe']=='D')?(0-$_POST['harga_beli']):$_POST['harga_beli'];
-		$data['ket_transaksi']	=ucwords($_POST['ket_transaksi']);
-		$data['jenis_transaksi']=$_POST['jtran'];
-		$data['tgl_transaksi']	=tglToSql($_POST['tgl_transaksi']);
-		$data['created_by']		=$this->session->userdata('userid');
-		$datax['nomor']				=$_POST['no_transaksi'];
-		$datax['jenis_transaksi']	=$_POST['jtran'];
+		$data=array();$datax=array();$sal_kas=0;$tot_trans=0;
+		$sal_kas	=rdb('mst_kas_harian','saldo_kas','sum(sa_kas) as saldo_kas',"where tgl_kas='".tglToSql($_POST['tgl_transaksi'])."'");
+		$tot_trans	=rdb('mst_kas_trans','jumlah','sum(jumlah) as jumlah',"where tgl_trans='".tglToSql($_POST['tgl_transaksi'])."'");
+		$data['id_kas']		=strtoupper($_POST['akun_transaksi']);
+		$data['id_trans']	=($_POST['no_transaksi']);
+		$data['jumlah']		=$_POST['harga_beli'];
+		$data['saldo_kas']	=($sal_kas-$tot_trans-$_POST['harga_beli']);
+		$data['uraian_trans']=ucwords($_POST['ket_transaksi']);
+		$data['tgl_trans']	=tglToSql($_POST['tgl_transaksi']);
+		$data['created_by']	=$this->session->userdata('userid');
+		//update nomor transaski
+		$datax['nomor']		=$_POST['no_transaksi'];
+		$datax['jenis_transaksi']	='D';
 		//print_r($datax);
 			$this->Admin_model->replace_data('nomor_transaksi',$datax);
-			$this->Admin_model->replace_data('detail_transaksi',$data);
-			
-			$sql="select * from detail_transaksi where tgl_transaksi='".date('Y-m-d')."' and (jenis_transaksi='D' or jenis_transaksi='DR') order by no_transaksi";
-			$this->_generate_list($sql,'kaskeluar',$list_key='no_transaksi','deleted');
+			$this->Admin_model->replace_data('mst_kas_trans',$data);
+			$this->list_kas_trans();
 	}
 	function get_datakas(){
 		$data=array();
@@ -135,10 +139,26 @@ class Master extends CI_Controller {
 		$data=$this->Admin_model->show_list('mst_kas_harian',"where month(tgl_kas)='".date('m')."' and year(tgl_kas)='".date('Y')."' order by id_kas");
 		foreach($data as $r){
 			$n++;
-			echo tr().td($n,'center').
-				 td(tglfromSql($r->tgl_kas,'center')).
-				 td($r->id_kas).td($r->nm_kas).td($r->sa_kas).
-				 td("<img src='".base_url()."asset/images/no.png' onclick=\"image_click('".$r->id_kas."','del');\" >",'center').
+			echo tr().td($n,'center').td($r->no_trans,'center').
+				 td(tglfromSql($r->tgl_kas),'center').
+				 td($r->id_kas).td($r->nm_kas).td(number_format($r->sa_kas,2),'right').
+				 //td("<img src='".base_url()."asset/images/no.png' onclick=\"image_click('".$r->no_trans."','del');\" >",'center').
+				 _tr();
+		}
+	}
+	function list_kas_trans(){
+		$data=array();	
+		$data=array();$n=0;
+		$tanggal=tgltoSql($_POST['tanggal']);
+		$data=$this->Admin_model->show_list('mst_kas_trans',"where tgl_trans='".$tanggal."' order by id_trans");
+		foreach($data as $r){
+			$n++;
+			echo tr().td($n,'center').td($r->id_trans,'center').
+				 td(tglfromSql($r->tgl_trans),'center').
+				 td($r->id_kas).td($r->uraian_trans).
+				 td(number_format($r->jumlah,2),'right').
+				 td(number_format($r->saldo_kas,2),'right').
+				 //td("<img src='".base_url()."asset/images/no.png' onclick=\"image_click('".$r->id_trans."','del');\" >",'center').
 				 _tr();
 		}
 	}

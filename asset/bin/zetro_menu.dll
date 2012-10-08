@@ -3,7 +3,8 @@
 2|Pelanggan||y||
 3|Transaksi||n||
 4|Toko||y|kasir.png|penjualan/index
-5|Inventory||y|inventory.png|inventory/index
+5|Gudang||y|inventory.png|inventory/index
+;5|Inventory||y|inventory.png|inventory/index
 6|Accounting||n||
 7|Laporan||y||
 8|Master||y|admin.png|controlpanel/userlist
@@ -74,42 +75,73 @@
 			
 				[Laporan Pembelian]
 				1|Laporan Pembelian|laporanpembelian|y|zvp|
+				
+				[Laporan Kas]
+				1|Laporan Kas|laporankas|y|zvp
 		
 ;Inventory =====================================================	
 	[Inventory]
 	1|Kategori Barang|inventory/general||
 	2|<hr>|x||
 	3|Data Barang|inventory/index||
-	4|Stock Inventory|stock/index||
+	4|Stock Barang|stock/index||
 	5|<hr>|x||
 	6|Stock Opname|stock/counting||
 	
-	[Kategori Barang]
-	1|Kategori Barang|kategoribarang|y|zcev|
-	2|Jenis Barang|jenisbarang|y|zcev|
+	;[Kategori Barang]
+	;1|Kategori Barang|kategoribarang|y|zcev|
+	;2|Jenis Barang|jenisbarang|y|zcev|
 	
 	[Master Barang]
-	1|Tambah Data|add|y|zce
-	2|List Barang|list|y|zevp
-	3|Satuan|unit|y|zcev
-	4|Unit Konversi|kunit|y|zcev
+	;1|Tambah Data|add|y|zce
+	1|List Barang|list|y|zevp
+	;3|Satuan|unit|y|zcev
+	;4|Unit Konversi|kunit|y|zcev
 	;5|Harga Beli|hargabeli|y|zcev
 	
 	[Stock Inventory]
 	1|Stock Overview|stockoverview|y|zvp
 	2|List Stock|liststock|y|zvp
 	
+;Gudang ================================================================
+	[Gudang]
+	1|Tambah Barang|gudang/index|y|zcev
+	2|Daftar Barang|gudang/list_barang||
+	3|<hr>|x||
+	4|Kategori Barang|gudang/kategori||
+	5|Jenis Barang|gudang/jenis||
+	6|<hr>|x||
+	7|Satuan Barang|gudang/satuan||
+	8|Konversi Satuan|gudang/konversi||
+		
+		[Daftar Barang]
+		1|List Barang|listbarang|y|zevp
+		
+		[Kategori Barang]
+		1|Kategori Barang|kategoribarang|y|zcev
+		
+		[Jenis Barang]
+		1|Jenis Barang|jenisbarang|y|zcev
+		
+		[Satuan Barang]
+		1|Satuan Barang|satuanbarang|y|zcev
+		
+		[Konversi Satuan]
+		1|Konversi Satuan|konversisatuan|y|zcev
+		
+		
 ;Toko ==================================================================	
 	[Toko]
 	1|Penjualan|penjualan/index|y|zce
 	;2|Pembuatan Resep|penjualan/resep_std||zce
 	2|Return Penjualan|penjualan/return_jual||zce
 	3|<hr>|x||
-	4|Kas Harian Toko|master/kas_harian||
-	5|Print Faktur Penjualan|laporan/faktur||zp
-	6|<hr>|x||
-	7|Pembelian Barang|pembelian/index||
-	8|Return Pembelian|pembelian/retur||
+	4|Pembelian Barang|pembelian/index||
+	5|<hr>|x||
+	6|Kas Harian Toko|master/kas_harian||
+	7|<hr>|x||
+	8|Print Faktur Penjualan|laporan/faktur||zp
+	;8|Return Pembelian|pembelian/retur||
 	
 		[Kas Harian Toko]
 		1|Setup Saldo Kas|kas_harian|y|zce

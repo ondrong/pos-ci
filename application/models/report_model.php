@@ -28,24 +28,28 @@ class Report_model extends CI_Model {
 		return $this->db->query($sql);
 	}
 	function select_trans($where,$rpt='No'){
-		$sql="select dt.*,p.ID_Anggota from inv_penjualan_detail as dt 
+		$sql="select dt.*,p.ID_Anggota,p.ID_Jenis,a.Nama from inv_penjualan_detail as dt 
 			 	left join inv_barang as im
 				on im.ID=dt.ID_Barang
 				left join inv_penjualan as p
 				on p.ID=dt.ID_Jual
+				left join mst_anggota as a
+				on a.ID=p.ID_Anggota
 				$where";
 		//echo $sql;
 		
 		return ($rpt=='No')?$sql:$this->db->query($sql);
 	}
 	function select_trans_beli($where,$rpt='No'){
-		$sql="select dt.*,p.ID_Pemasok from inv_pembelian_detail as dt 
+		$sql="select dt.*,p.ID_Pemasok,p.NoUrut,p.Nomor,p.ID_Jenis,v.Pemasok from inv_pembelian_detail as dt 
 			 	left join inv_barang as im
 				on im.ID=dt.ID_Barang
 				left join inv_pembelian as p
 				on p.ID=dt.ID_Beli
+				left join inv_pemasok as v
+				on v.ID=p.ID_Pemasok
 				$where";
-		//echo $sql;
+		echo $sql;
 		
 		return ($rpt=='No')?$sql:$this->db->query($sql);
 	}
@@ -144,6 +148,19 @@ class Report_model extends CI_Model {
 	function laporan_faktur($no_trans){
 		$sql="select * from detail_transaksi where no_transaksi='$no_trans' order by id_transaksi";
 		return $this->db->query($sql);	
+	}
+	
+	function get_cash_flow($where,$groupby=''){
+		$sql="select j.Tanggal,(sum(abs(j.Jumlah)*j.harga))as penjualan,(sum(k.jumlah)) as Kredit,sum(p.Jumlah) as Debet
+				from inv_penjualan_detail as j
+				left join inv_pembelian_detail as p
+				on p.Tanggal=j.Tanggal
+				left join mst_kas_trans as k
+				on k.tgl_trans=j.Tanggal
+				$where
+				$groupby";
+				//echo $sql;
+		return $this->db->query($sql);
 	}
 	
 }

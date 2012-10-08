@@ -15,7 +15,12 @@ if($all_kas_harian!=''){
 	$zfm->BuildForm('kasharian',($e_kas_harian=='' || $c_kas_harian=='')? false:true,'50%');
 	($e_kas_harian=='' || $c_kas_harian=='')?'': $zfm->BuildFormButton('Simpan','kas');
 	echo "<hr>";
-	buildgrid('mst_kas_harian','tgl_kas','kasharian',true,'deleted');
+	//buildgrid('mst_kas_harian','tgl_kas','kasharian',true,'deleted');
+		$zlb->section('kasharian');
+		$zlb->aksi(false);
+		$zlb->icon('deleted');
+		$zlb->Header('100%');
+		echo "</tbody></table>";
 }else{
 	no_auth();
 }
@@ -27,7 +32,12 @@ if($all_kas_keluar!=''){
 	$zfm->BuildForm('kaskeluar',($e_kas_keluar=='' || $c_kas_keluar=='')? false:true,'50%');
 	($e_kas_keluar=='' || $c_kas_keluar=='')?'': $zfm->BuildFormButton('Simpan','kaskeluar');
 	echo "<hr>";
-	buildgrid("detail_transaksi where tgl_transaksi='".date('Y-m-d')."' and (jenis_transaksi='D' or jenis_transaksi='DR')",'no_transaksi','kaskeluar',true,'deleted');
+	//buildgrid("detail_transaksi where tgl_transaksi='".date('Y-m-d')."' and (jenis_transaksi='D' or jenis_transaksi='DR')",'no_transaksi','kaskeluar',true,'deleted');
+		$zlb->section('kaskeluar');
+		$zlb->aksi(false);
+		$zlb->icon('deleted');
+		$zlb->Header('100%');
+		echo "</tbody></table>";
 }else{
 	no_auth();
 }
@@ -57,7 +67,5 @@ $zlb->config_file('asset/bin/zetro_master.frm');
 <input type='hidden' id='trans_new' value='D' />
 <script language="javascript">
 	$(document).ready(function(e) {
-        $('#v_setupsaldokas table#ListTable').fixedHeader({width:700, height:250})
-        $('#v_operasionaltoko table#ListTable').fixedHeader({width:850, height:250})
     });
 </script>

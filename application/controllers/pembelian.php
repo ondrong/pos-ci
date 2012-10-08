@@ -124,6 +124,7 @@ class Pembelian extends CI_Controller{
 		$data['created_by']	=$this->session->userdata('userid');
 		$this->Admin_model->replace_data('inv_material_stok',$data);
 	}
+	//list pembelian di mode input pembelian
 	function show_list(){
 		$data=array();$n=0;$id_beli='';
 		$jtran=$_POST['no_transaksi'];
@@ -166,10 +167,9 @@ class Pembelian extends CI_Controller{
 		$where="where (Tanggal between '".tgltoSql($_POST['dari_tanggal'])."' and '".tgltoSql($_POST['smp_tanggal'])."')"; 
 	empty($_POST['nm_vendor'])?
 		$where .='':
-	empty($_POST['dari_tanggal'])?
-		$where .=" and ID_Pemasok='".$_POST['nm_vendor']."'":
-		$where ="where ID_Pemasok='".$_POST['nm_vendor']."'";
+		$where .=" and ID_Pemasok='".$_POST['nm_vendor']."'";
 		$data=$this->Admin_model->show_list('inv_pembelian',$where." order by NoUrut");
+		echo $where;
 		foreach($data as $r){
 			$n++;$x=0;
 			echo tr('xx list_genap').td($n.nbs(3),'center').td(tglfromSql($r->Tanggal),'center').td($r->NoUrut,'center').

@@ -1,18 +1,20 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 $zfm=new zetro_frmBuilder('asset/bin/zetro_beli.frm');
 $zlb=new zetro_buildlist();
 $zlb->config_file('asset/bin/zetro_beli.frm');
 $path='application/views/laporan/transaksi';
 $printer="<img src='".base_url()."asset/images/print.png' id='printsheet' class='menux' style='display:none' title='Print report'>";
+calender();
 link_css('jquery.coolautosuggest.css','asset/css');
 link_js('jquery.coolautosuggest.js','asset/js');
 link_js('auto_sugest.js,lap_jual.js,jquery.fixedheader.js','asset/js,'.$path.'/js,asset/js');
-panel_begin('Lap.Penjualan','',','.$printer);
-panel_multi('transaksipenjualan','block',false);
+panel_begin('Laporan','',','.$printer);
+panel_multi('laporanpenjualan','block',false);
 $fld="<input type='hidden' id='jtran' name='jtran' value=''>";
 $fld.="<input type='hidden' id='section' name='section' value='lapjuallist'>";
 $fld.="<input type='hidden' id='lap' name='lap' value='jual'>";
 $fld.="<input type='hidden' id='optional' name='optional' value=''>";
+$fld.="<input type='hidden' id='ID_Anggota' name='ID_Anggota' value=''>";
 if($all_trans_jual!=''){
 	$zfm->Addinput($fld);
 	$zfm->AddBarisKosong(true);

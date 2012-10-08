@@ -1,8 +1,8 @@
 // JavaScript Document
 $(document).ready(function(e) {
 	var path=$('#path').val();
-    $('#transaksipenjualan').removeClass('tab_button');
-	$('#transaksipenjualan').addClass('tab_select');
+    $('#laporanpenjualan').removeClass('tab_button');
+	$('#laporanpenjualan').addClass('tab_select');
 	$('#v_tranpembelian table#ListTable').hide();
 	$('table#panel tr td').click(function(){
 		var id=$(this).attr('id');
@@ -16,6 +16,8 @@ $(document).ready(function(e) {
 			}
 	})
 	//laporan penjualan obat
+	$('#frm1 #dari_tgl').dynDateTime();
+	$('#frm1 #sampai_tgl').dynDateTime();
 	$('#frm1 #jtran').val("GI' or jenis_transaksi='GIR'");
 	$('#frm1 #optional').val(" order by dt.Tanggal");
 	$('#frm1 #dari_tgl')
@@ -49,9 +51,7 @@ $(document).ready(function(e) {
 				width	:350,
 				showDescription	:true,
 				onSelected		:function(result){
-					//tombol bayar kredit aktif
-					//unlock('#kredit')
-					//$('#id_member').val(result.ID);
+					$('#ID_Anggota').val(result.ID);
 				}
 		})
 	//laporan penjualan resep

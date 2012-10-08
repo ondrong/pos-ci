@@ -31,6 +31,7 @@ class Inventory extends CI_Controller {
 		$this->Footer();
 	}
 	function index(){
+		$this->inv_model->auto_data();
 		$this->zetro_auth->menu_id(array('add','list','unit','kunit','hargabeli'));
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('inventory/material_list');
@@ -44,17 +45,20 @@ class Inventory extends CI_Controller {
 		$this->View('inventory/master_inv');
 	}
 	function show_konversi(){
+	$data=array(); $n=0;
 	$id=$_POST['nm_barang'];
-	echo "<hr/>";
-	$sql2="select * from inv_konversi where nm_barang='$id' order by sat_beli";
-		$this->zetro_buildlist->section('Konversi');
-		$this->zetro_buildlist->aksi(true);
-		$this->zetro_buildlist->icon('deleted');
-		$this->zetro_buildlist->query($sql2);
-		$this->zetro_buildlist->Header('50%');
-		$this->zetro_buildlist->list_data('Konversi');
-		$this->zetro_buildlist->BuildListData('nm_barang');
-		echo "</tbody></table>";
+	
+	$data=$this->Admin_model->show_list('inv_konversi',"where nm_barang='".$id."'");
+	
+		foreach($data as $row){
+			$n++;
+			echo tr().td($n,'center').td($row->nm_barang).
+			td(rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".$row->nm_satuan."'")).
+			td(rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".$row->sat_beli."'")).
+			td(number_format($row->isi_konversi,2),'right').
+			td("<img src='".base_url()."asset/images/no.png' title='Click for delete' onclick=\"hapus_konv('".$row->id_barang."','".$row->sat_beli."');\">",'center').
+			_tr();
+		}
 	}
 	//save data
 	
@@ -62,7 +66,7 @@ class Inventory extends CI_Controller {
 		$data=array();
 		$nm_jenis=ucwords($_POST['nm_jenis']);
 		$induk=$_POST['induk'];
-		$data['JenisBarang']=($nm_jenis);
+		$data['JenisBarang']=strtoupper($nm_jenis);
 		//$data['created_by']=$this->session->userdata("userid");
 		$this->Admin_model->replace_data('inv_barang_jenis',$data);
 		$this->zetro_auth->tab_select('tambahdata');
@@ -70,7 +74,7 @@ class Inventory extends CI_Controller {
 			dropdown('inv_barang_jenis','ID','JenisBarang','',$nm_jenis);
 		}else{
 			$this->_filename();
-			$this->zetro_buildlist->icon('deleted');
+			$this->zetro_buildlist->icon();
 			$this->zetro_buildlist->section('Jenis');
 			$sql2="select * from inv_barang_jenis order by JenisBarang";
 			$this->zetro_buildlist->query($sql2);
@@ -82,14 +86,14 @@ class Inventory extends CI_Controller {
 		$data=array();
 		$nm_jenis=($_POST['nm_kategori']);
 		$induk=$_POST['induk'];
-		$data['Kategori']=ucwords($nm_jenis);
+		$data['Kategori']=strtoupper($nm_jenis);
 		//$data['created_by']=$this->session->userdata("userid");
 		$this->Admin_model->replace_data('inv_barang_kategori',$data);
 		if($induk==''){
 		dropdown('inv_barang_kategori','ID','Kategori','',$nm_jenis);
 		}else{
 			$this->_filename();
-			$this->zetro_buildlist->icon('deleted');
+			$this->zetro_buildlist->icon();
 			$this->zetro_buildlist->section('Kategori');
 			$sql2="select * from inv_barang_kategori order by Kategori";
 			$this->zetro_buildlist->query($sql2);
@@ -101,7 +105,7 @@ class Inventory extends CI_Controller {
 		$data=array();
 		$nm_jenis=strtoupper($_POST['nm_golongan']);
 		$induk=$_POST['induk'];
-		$data['nm_golongan']=$nm_jenis;
+		$data['nm_golongan']=strtoupper($nm_jenis);
 		//$data['created_by']=$this->session->userdata("userid");
 		$this->Admin_model->replace_data('inv_golongan',$data);
 		if($induk==''){
@@ -124,38 +128,40 @@ class Inventory extends CI_Controller {
 		$data['Satuan']=$nm_jenis;
 		//$data['created_by']=$this->session->userdata("userid");
 		$this->Admin_model->replace_data('inv_barang_satuan',$data);
-		if($induk=='frm1'){
-		dropdown('inv_barang_satuan','ID','Satuan','',$nm_jenis,true);
-		}else{
+
 	 	$this->_filename();
 		$this->zetro_buildlist->section('Satuan');
-		$this->zetro_buildlist->icon('deleted');
+		$this->zetro_buildlist->icon();
 		$sql2="select * from inv_barang_satuan order by Satuan";
 		$this->zetro_buildlist->query($sql2);
 		$this->zetro_buildlist->list_data('Satuan');
 		$this->zetro_buildlist->BuildListData('Satuan');
-		}
 	}
 	function simpan_barang(){
-		$data=array();
-		$data['ID_Jenis']=$_POST['nm_jenis'];
-		$data['Kode']=$_POST['id_barang'];
-		$data['ID_Kategori']=$_POST['nm_kategori'];
+		$data=array();$kat=array();$jen=array();$sat=array();
+		$data['ID_Jenis']	=empty($_POST['id_jenis'])?'1':$_POST['id_jenis'];
+		$data['Kode']		=empty($_POST['id_barang'])?rand(1000,9999):strtoupper($_POST['id_barang']);
+		$data['ID_Kategori']=empty($_POST['id_kategori'])?'1':$_POST['id_kategori'];
 		$data['Nama_Barang']=addslashes(strtoupper($_POST['nm_barang']));
-		$data['ID_Satuan']=$_POST['nm_satuan'];
-		$data['Status']=ucwords($_POST['status_barang']);
-		$data['Harga_Beli']=$_POST['stokmin'];
-		$data['Harga_Jual']=$_POST['stokmax'];
-		//$data['created_by']=$this->session->userdata("userid");
+		$data['ID_Satuan']	=empty($_POST['id_satuan'])?'1':$_POST['id_satuan'];
+		$data['Status']		=ucwords($_POST['status_barang']);
+		$data['Harga_Beli']	=$_POST['stokmin'];
+		$data['Harga_Jual']	=$_POST['stokmax'];
+		$data['minstok']	=$_POST['minstok'];
+		$kat['Kategori']	=empty($_POST['nm_kategori'])?'':strtoupper($_POST['nm_kategori']);
+		$jen['JenisBarang']	=empty($_POST['nm_kategori'])?'':strtoupper($_POST['nm_jenis']);
+		$sat['Satuan']		=empty($_POST['nm_kategori'])?'':strtoupper($_POST['nm_satuan']);
+		if(rdb('inv_barang_kategori','Kategori','Kategori',"where Kategori='".strtoupper($_POST['nm_kategori'])."'")==''){
+			$this->Admin_model->replace_data('inv_barang_kategori',$kat);
+		}
+		if(rdb('inv_barang_jenis','JenisBarang','JenisBarang',"where JenisBarang='".strtoupper($_POST['nm_jenis'])."'")==''){
+			$this->Admin_model->replace_data('inv_barang_jenis',$jen);
+		}
+		if(rdb('inv_barang_satuan','Satuan','Satuan',"where Satuan='".strtoupper($_POST['nm_satuan'])."'")==''){
+			$this->Admin_model->replace_data('inv_barang_satuan',$sat);
+		}
 		$this->Admin_model->replace_data('inv_barang',$data);
-		/*$this->zetro_auth->tab_select($_POST['linked']);
-		//generate list table
-	 	$this->_filename();
-		$this->zetro_buildlist->section('Barang');
-		$sql2="select * from inv_material order by nm_barang";
-		$this->zetro_buildlist->query($sql2);
-		$this->zetro_buildlist->list_data('Barang');
-		$this->zetro_buildlist->BuildListData('nm_barang');*/
+		echo $this->inv_model->total_record('inv_barang','');
 	}
 	function data_hgb(){
 		$data=array();
@@ -181,6 +187,7 @@ class Inventory extends CI_Controller {
 	}
 	function list_konversi(){
 	 	$this->_filename();
+		$this->zetro_buildlist->aksi(true);
 		$this->zetro_buildlist->icon('deleted');
 		$this->zetro_buildlist->section('Konversi');
 		$sql2="select k.nm_barang as nm_barang,s.Satuan as nm_satuan, sb.Satuan as sat_beli,k.isi_konversi
@@ -223,36 +230,6 @@ class Inventory extends CI_Controller {
 		$this->Admin_model->replace_data('inv_konversi',$data);
 		//generate list table
 		$this->list_konversi();
-	}
-	//auto sugetion 
-	function jenis_obat(){
-		$str=addslashes($_POST['str']);
-		$induk=$_POST['induk'];
-		$this->inv_model->tabel('inv_jenis');
-		$this->inv_model->field('nm_jenis');
-		$datax=$this->inv_model->auto_sugest($str);
-		if($datax->num_rows>0){
-			echo "<ul>";
-				foreach ($datax->result() as $lst){
-					echo '<li onclick="suggest_click(\''.$lst->nm_jenis.'\',\'nm_jenis\',\''.$induk.'\');">'.$lst->nm_jenis."</li>";
-				}
-			echo "</ul>";
-		}		
-	}
-	function kategori_obat(){
-		$str=addslashes($_POST['str']);
-		$induk=$_POST['induk'];
-		$this->inv_model->tabel('inv_kategori');
-		$fld='nm_kategori';
-		$this->inv_model->field($fld);
-		$datax=$this->inv_model->auto_sugest($str);
-		if($datax->num_rows>0){
-			echo "<ul>";
-				foreach ($datax->result() as $lst){
-					echo '<li onclick="suggest_click(\''.$lst->$fld.'\',\'nm_kategori\',\''.$induk.'\');">'.$lst->$fld."</li>";
-				}
-			echo "</ul>";
-		}		
 	}
 
 	function data_material(){
@@ -302,10 +279,13 @@ class Inventory extends CI_Controller {
 		/* echo $id.'='. $where; //for debug only*/
 		$data=$this->inv_model->list_barang($where);
 		foreach($data as $r){
-			$n++;
+			$n++;$stock=0;
+			$stock=rdb('inv_material_stok','stock','sum(stock) as stock',"where id_barang='".$r->ID."'");
 			echo tr('xx','nm-'.$r->ID).td($n,'center').td($r->Kategori,'kotak\' nowrap=\'nowrap' ).td($r->JenisBarang). td(strtoupper($r->Kode)).
 				 td(strtoupper($r->Nama_Barang)).td($r->Satuan).
-				 td(number_format($r->Harga_Beli,2),'right').td(number_format($r->Harga_Jual,2),'right').td($r->Status);
+				 td(number_format($stock,2),'right').
+				 td(number_format($r->Harga_Beli,2),'right').
+				 td(number_format($r->Harga_Jual,2),'right').td($r->minstok,'center');
 			echo ($this->zetro_auth->cek_oto('e','list')!='')?
 				 td(aksi('asset/images/editor.png','edit','Click for edit',"upd_barang('".$r->ID."');").'&nbsp;'.
 				 	aksi('asset/images/no.png','del','Click for delete',"delet_barang('".$r->ID."');"),'center'):'';
@@ -340,28 +320,16 @@ class Inventory extends CI_Controller {
 	}
 	function hapus_konversi(){
 		$fld=$_POST['fld'];
-		$tbl=rdb('inv_barang_satuan','ID','ID',"where Satuan='".$_POST['tbl']."'");
-		$this->Admin_model->hps_data('inv_konversi',"where nm_barang='$fld' and sat_beli='$tbl'");
+		$tbl=$_POST['tbl'];
+		$this->Admin_model->hps_data('inv_konversi',"where id_barang='$fld' and sat_beli='$tbl'");
 	}
 	//get additional constantdata for buildlist
 	function _filename(){
 		$this->zetro_buildlist->config_file('asset/bin/zetro_inv.frm');
-		$this->zetro_buildlist->aksi();
+		$this->zetro_buildlist->aksi(false);
 		$this->zetro_buildlist->icon();
 	}
 	
-	//get data status [akctive, no aktive]
-	function get_status(){
-		$str=addslashes($_POST['str']);
-		$induk=$_POST['induk'];
-		$fld=$_POST['fld'];
-		$datax=$this->inv_model->get_status();
-			echo "<ul>";
-				foreach ($datax->result() as $lst){
-					echo '<li onclick="suggest_click(\''.$lst->nm_status.'\',\''.$fld.'\',\''.$induk.'\');">'.$lst->nm_status."</li>";
-				}
-			echo "</ul>";
-	}
 	function get_satuan(){
 		$id_barang=$_POST['id_barang'];
 	}

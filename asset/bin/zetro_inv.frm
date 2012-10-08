@@ -8,15 +8,27 @@
 1|Sub Kategori,input,text n,nm_golongan,w70 upper,,70%
 
 [Barang]
-1|Kategori,select,text n,nm_kategori,S70,,10%,RD,inv_barang_kategori-ID-Kategori-order by Kategori,AB,20
-2|Jenis Barang,select,text n,nm_jenis,S50,,10%,RD,inv_barang_jenis-ID-JenisBarang-order by JenisBarang,AB,20
+1|Kategori,input,text n,nm_kategori,w70 upper,,10%,,,,20
+2|Jenis Barang,input,text n,nm_jenis,w50 upper,,10%,,,,20
 3|Kode Barang,input,text n,id_barang,w70 upper,,10%,
 4|Nama Barang,input,text n,nm_barang,w90 upper,,20%,60
-5|Satuan Jual,select,text n,nm_satuan,S35,,5%,RD,inv_barang_satuan-ID-Satuan-order by Satuan,AB,15
+5|Satuan Jual,input,text n,nm_satuan,S35 upper,,5%,,,,15
 ;6|Expire Date,input, date t,expired,w35,,8%
 6|Harga Beli,input,text d,stokmin,w35 angka,0,7%,10
 7|Harga Jual,input,text d,stokmax,w35 angka,0,7%,10
-8|Status,input,text n,status_barang,w35 upper,Continue,8%,10
+8|Minimum Stock,input,text d,stoklimit,w25 angka,,5%,10
+9|,input,hidden n,status_barang,w35 upper,Continue,,10
+
+[BarangList]
+1|Kategori,input,text n,nm_kategori,w70 upper,,10%,,,,20
+2|Jenis Barang,input,text n,nm_jenis,w50 upper,,10%,,,,20
+3|Kode Barang,input,text n,id_barang,w70 upper,,8%,
+4|Nama Barang,input,text n,nm_barang,w90 upper,,20%,60
+5|Satuan Jual,input,text n,nm_satuan,S35 upper,,5%,,,,15
+6|Total Stock,input,text n,expired,w35,,10%,,15
+7|Harga Beli,input,text d,stokmin,w35 angka,0,7%,10
+8|Harga Jual,input,text d,stokmax,w35 angka,0,7%,10
+9|Minimum Stock,input,text d,stoklimit,w25 angka,,5%,10
 
 [Harga Beli]
 1|Nama Barang,input,text n,nm_barang,w90 upper,,20%

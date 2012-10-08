@@ -395,3 +395,8 @@
 		var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
 		return result;
 	}
+	function rdOnly(field,stat){
+		(stat==true)?
+		$(field).attr('readonly','readonly'):
+		$(field).removeAttr('readonly');
+	}

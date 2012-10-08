@@ -15,6 +15,8 @@ $(document).ready(function(e) {
 				$('span:not(#v_'+id+')').hide();
 			}
 	})	
+	$('#frm1 #dari_tgl').dynDateTime();
+	$('#frm1 #sampai_tgl').dynDateTime();
 	$('#frm1 #jtran').val("GR' or jenis_transaksi='GRR'");
 	$('#frm1 #optional').val(" order by p.NoUrut");
 	$('#frm1 #dari_tgl')
@@ -48,9 +50,7 @@ $(document).ready(function(e) {
 			width	:350,
 			showDescription	:true,
 			onSelected		:function(result){
-					//tombol bayar kredit aktif
-					//unlock('#kredit')
-					//$('#id_member').val(result.ID);
+					$('#ID_Pemasok').val(result.id_pemasok);
 				}
 		})
 	$(':button')
@@ -58,7 +58,9 @@ $(document).ready(function(e) {
 			var id=$(this).attr('id');
 			switch(id){
 				case 'saved-filter':
-				$('#printsheet').click();
+					$('#frm1').attr('action','print_laporan_beli');
+					document.frm1.submit();
+
 				/*
 				var dari_tgl	=$('#frm1 #dari_tgl').val();
 				var sampai_tgl	=$('#frm1 #sampai_tgl').val();	

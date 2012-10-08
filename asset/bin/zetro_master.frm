@@ -36,7 +36,14 @@
 2|Tanggal,input,text t,tgl_transaksi,w35,,10%
 3|ID Kas,input,text n,akun_transaksi,w50 upper,,10%
 4|Uraian,textarea,text n,ket_transaksi,t90,,25%
-5|Jumlah pengeluaran,input,text d,harga_beli,w35 angka,,10%
+5|Jumlah ,input,text d,harga_beli,w35 angka,,10%
+6|Saldo Kas,input,text d,harga_beli,w35 angka,,10%
+
+[filterlapkas]
+1|Periode,,,,,,,
+2|&nbsp;&nbsp;&nbsp;Dari Tanggal,input,text t,dari_tgl,w35,,
+3|&nbsp;&nbsp;&nbsp;Sampai Tanggal,input,text t,sampai_tgl,w35,,
+4|Jenis Laporan,select,text n,jenis_lap,S50,,,RS,JenisLaporan
 
 [lapkas]
 1|Tanggal,input,text t,tgl_transaksi,w35,,10%,,,22
@@ -47,6 +54,9 @@
 [formfaktur]
 1|ID. Transaksi,input,text n,no_transaksi,w70 upper,,10%
 
+[JenisLaporan]
+1|Summary,Rangkuman
+2|Detail,Detail
 
 [faktur]
 1|Nama Barang,,,nm_barang,,,,,,75

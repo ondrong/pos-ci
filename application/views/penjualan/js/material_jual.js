@@ -38,11 +38,19 @@ $(document).ready(function(e) {
 		lock('#tgl_transaksi');
 	}else{
 		unlock('#tgl_transaksi')
+		$('#tgl_transaksi').dynDateTime();
 	}
+	$('#tgl_giro').dynDateTime();
 	tglNow('#tgl_transaksi');
 	$('#kasir').html('0');//kosongkan nilai pada total transaksi
 	$('#aktif').val('')//kosongkan cell yang aktif
-	
+	//hide nontunai 
+	$('#frm2').click(function(){
+		//for debug only
+		//alert($(this).html());
+	})
+	var lnk='"div#ListTable_table_container div#ListTable_header_container table#ListTable_header'
+	$('table#b tr#nontunai').hide();
 	//event untuk input textbox di grid table#listTable
 		$('#frm2 input:text')
 				.focus(function(){
@@ -56,7 +64,7 @@ $(document).ready(function(e) {
 						if($('#frm2 #'+(parseInt(id[0])-1)+'__nm_barang').val()!=''){
 						_simpan_detail((parseInt(id[0])-1));
 						}
-					//alert(parseInt(id[0])-1)
+					
 					}
 				//autosuggest nama barang
 					$('#frm2 input#'+id[0]+'__nm_barang')
@@ -294,13 +302,26 @@ $(document).ready(function(e) {
 		})
 	//pilih cara pembayaran yang akan dilakukan	
 	$('#cbayare').change(function(){
-		if($(this).val()==2 && $('#nm_nasabah').val()==''){
-			alert('Nama Anggota harus isi terlebih dahulu \nJika pembayaran secara kredit');
+		if($(this).val()!=1 && $('#nm_nasabah').val()==''){
+			alert('Nama Pelanggan harus isi terlebih dahulu \nJika pembayaran secara kredit');
 			$('#nm_nasabah').focus().select();
 			$(this).val('0').select();
 		}
+		if($(this).val()!=1&& $('#nm_nasabah').val()!=''){
+			$('table#b tr#nontunai').show();
+		}else{
+			$('table#b tr#nontunai').hide();
+		}
 	})
-	 
+	 //autosuggest nama bank
+	 $('#n_bank')
+		.coolautosuggest({
+				url:'get_bank?fld='+$('#id_member').val()+'&limit=10&str=',
+				width:100,
+				showDescription	:false,
+				onSelected:function(result){
+				}
+		})
 	//handling button keypress
 	$(document).keypress(function(e){
 		if(e.keyCode==112){
@@ -439,7 +460,10 @@ $(document).ready(function(e) {
 			'id_jenis'	:$('#cbayare').val(),
 			'total'		:to_number($(frm+' #total_bayar').val()),
 			'cicilan'	:$(frm+' #cicilan').val(),
-			'id_anggota':$('#id_member').val()
+			'id_anggota':$('#id_member').val(),
+			'nogiro'	:$('#nogiro').val(),
+			'n_bank'	:$('#n_bank').val(),
+			'tgl_giro'	:$('#tgl_giro').val()
 		},function(result){
 			//alert(result);
 		})
