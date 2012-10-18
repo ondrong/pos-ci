@@ -41,7 +41,7 @@ class Member_model extends CI_Model{
 	function get_anggota($str,$limit='10',$id_dept=''){
 		$data=array();
 		($id_dept==1)?$copy='_copy':$copy='';
-			$sql="select * from mst_anggota$copy where Nama like '".$str."%' order by Nama limit $limit";	
+			$sql="select * from mst_anggota$copy where Nama like '".$str."%' and ID_Jenis='1' order by Nama limit $limit";	
 			//echo $sql;
 			$rw= mysql_query($sql) or die(mysql_error());
 			while($row=mysql_fetch_object($rw)){
@@ -53,7 +53,7 @@ class Member_model extends CI_Model{
 								  'ID_Dept'		=>$row->ID_Dept,
 								  'PhotoLink'	=>$row->PhotoLink,
 								  'Thumbnail'	=>'../uploads/member/'.$row->PhotoLink,
-								  'description'	=>'Nomor ID :'.$row->No_Agt."<br>".$row->Alamat." ".$row->Kota
+								  'description'	=>rdb('mst_departemen','Departemen','Departemen',"where ID='".$row->ID_Dept."'")
 								  );
 			}
 			return $data;
@@ -141,6 +141,7 @@ class Member_model extends CI_Model{
 				right join pinjaman as p
 				on a.ID=p.ID_Agt and p.ID_Dept='$ID'
 				where a.ID_Dept='$ID' and ID_Aktif='1'";
+		echo $sql;
 		return $this->db->query($sql);
 	}
 	function jml_simpanan($id){

@@ -1,9 +1,8 @@
 // JavaScript Document
 $(document).ready(function(e) {
 	var path=$('#path').val();
-    $('#laporanpenjualan').removeClass('tab_button');
-	$('#laporanpenjualan').addClass('tab_select');
-	$('#v_tranpembelian table#ListTable').hide();
+    $('#rekappenjualantunai').removeClass('tab_button');
+	$('#rekappenjualantunai').addClass('tab_select');
 	$('table#panel tr td').click(function(){
 		var id=$(this).attr('id');
 			if(id!=''){
@@ -18,8 +17,6 @@ $(document).ready(function(e) {
 	//laporan penjualan obat
 	$('#frm1 #dari_tgl').dynDateTime();
 	$('#frm1 #sampai_tgl').dynDateTime();
-	$('#frm1 #jtran').val("GI' or jenis_transaksi='GIR'");
-	$('#frm1 #optional').val(" order by dt.Tanggal");
 	$('#frm1 #dari_tgl')
 		.click(function(){
 			$(this).focus().select();
@@ -121,6 +118,10 @@ $(document).ready(function(e) {
 				$('#frm3 #nm_produsen').focus().select();
 			}
 		})
+	$('#okelah').click(function(){
+		$('#frm1').attr('action','lap_penjualan');
+		document.frm1.submit();
+	})
 
 	$(':button')
 		.click(function(){

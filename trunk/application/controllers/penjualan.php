@@ -114,22 +114,27 @@ class Penjualan extends CI_Controller{
 		$data=array();
 		$no_trans	=$_POST['no_trans'];
 		$ID_Jenis	=$_POST['id_jenis'];
-		$TotalHg	=$_POST['total'];
+		$TotalHg	=empty($_POST['total'])?'0':$_POST['total'];
 		$Tanggal	=$_POST['tanggal'];
-		$id_anggota	=empty($_POST['id_anggota'])?''	:$_POST['id_anggota'];
+		$id_anggota	=empty($_POST['id_anggota'])?'0':$_POST['id_anggota'];
 		$cicilan	=empty($_POST['cicilan'])?'0'	:$_POST['cicilan'];
-		$nogiro		=empty($_POST['nogiro'])?''		:strtoupper($_POST['nogiro']);
+		$nogiro		=empty($_POST['nogiro'])?'0'	:strtoupper($_POST['nogiro']);
 		$n_bank		=empty($_POST['n_bank'])?''		:strtoupper(addslashes($_POST['n_bank']));
-		$tgl_giro	=empty($_POST['tgl_giro'])?''	:tgltoSql($_POST['tgl_giro']);
+		$tgl_giro	=empty($_POST['tgl_giro'])?'0000-00-00'	:tgltoSql($_POST['tgl_giro']);
 		$this->Admin_model->upd_data('inv_penjualan',"set ID_Jenis='$ID_Jenis', ID_Anggota='$id_anggota', Total='".$TotalHg."', Cicilan='".$cicilan."',ID_Post='".$nogiro."', Deskripsi='".$n_bank."', Tgl_Cicilan='".$tgl_giro."'",
 									 "where NoUrut='".$no_trans."' and	Tanggal='".tgltoSql($Tanggal)."'");
 		$this->no_transaksi($no_trans);
 		$this->tanggal($Tanggal);
-		if($ID_Jenis=='2' && $id_anggota!=''){
-			$this->process_to_jurnal($id_anggota,$TotalHg);
+		if($TotalHg!='0'){
+			if($ID_Jenis=='2' && $id_anggota!=''){
+				$this->process_to_jurnal($id_anggota,$TotalHg);
+			}else if($ID_Jenis=='3' && $id_anggota!=''){
+				$ket='Retur Barang Kredit';	
+				$this->process_to_jurnal($id_anggota,$TotalHg,$ket);
+			}
 		}
 	}
-	
+
 	function set_detail_trans(){
 		$data=array();
 		$cekstatus=array();$countdata=0;
@@ -142,7 +147,8 @@ class Penjualan extends CI_Controller{
 		$data['Harga']		=$_POST['harga_jual'];
 		$data['Tanggal']	=tgltoSql($_POST['tanggal']);
 		$data['Bulan']		=$_POST['no_id'];
-		$data['Tahun']		=empty($_POST['batch'])?'0':$_POST['batch'];
+		$data['batch']		=empty($_POST['batch'])?'0':$_POST['batch'];
+		$data['ID_Satuan']	=rdb('inv_barang','ID_Satuan','ID_Satuan',"where Nama_Barang='".$_POST['nm_barang']."'");
 		$countdata=rdb('inv_penjualan_detail','ID','ID',"where Bulan='".$_POST['no_id']."' and Keterangan='".$_POST['no_trans']."' and Tanggal='".tgltoSql($_POST['tanggal'])."'");
 		//$this->inv_model->total_record('inv_penjualan_detail',"where ID_Jual='$id_jual'",'id_jual');
 		if($countdata==''){
@@ -163,33 +169,64 @@ class Penjualan extends CI_Controller{
 		$data['kembalian']		=$_POST['kembalian'];
 		//$data['terbilang']		=$_POST['terbilang'];
 		$data['created_by']	=$this->session->userdata('userid');
-		$this->update_material_stock($_POST['no_transaksi'],tgltoSql($_POST['tanggal']));//update stock
+		//$this->update_material_stock($_POST['no_transaksi'],tgltoSql($_POST['tanggal']));//update stock
 		
 		$this->Admin_model->replace_data('inv_pembayaran',$data);
 		//$this->Admin_model->hps_data('inv_material',"where nm_barang='".$_POST[
 		echo $_POST['no_transaksi'];
 	}
+	function update_stock_return(){
+		$ntran	=$_POST['no_trans'];
+		$tgl	=tglToSql($_POST['tanggal']);
+		$this->return_stock($ntran,$tgl);
+		echo '';
+	}
 	//update data stok material setelah di lakukan transaksi
 	//transaksi penjualan
-	function update_material_stock($ntran,$tgl){
-		$data=array();$first_stock=0;$end_stock=0;$datax=array();$hgb=0;
+	function update_material_stock($ntran='',$tgl=''){
+		$data=array();$first_stock=0;$end_stock=0;$datax=array();$hgb=0;$bt='';
+		$ntran	=$_POST['no_trans'];
+		$tgl	=tglToSql($_POST['tanggal']);
 		$data=$this->Admin_model->show_list('inv_penjualan_detail',"where ID_Jual='".rdb('inv_penjualan','ID','ID',"where NoUrut='".$ntran."' and Tanggal='". $tgl."'")."'");
-		//print_r($data);
+		$id_br=rdb('inv_penjualan_detail','ID_Barang','ID_Barang',"where ID_Jual='".rdb('inv_penjualan','ID','ID',"where NoUrut='".$ntran."' and Tanggal='". $tgl."'")."'");
+		$bath=$this->inv_model->get_detail_stocked($id_br,'desc');
+			foreach($bath as $w){
+				$bt=$w->batch;
+			}
 		foreach($data as $r){
-			$hgb=rdb('inv_material_stok','harga_beli','harga_beli',"where id_barang='".$r->ID_Barang."' and batch='".$r->Tahun."'");
-			$first_stock=rdb('inv_material_stok','stock','stock',"where id_barang='".$r->ID_Barang."' and batch='".$r->Tahun."'");
-			$end_stock=($first_stock-(abs($r->Jumlah)));
+			$jumlah=empty($_POST['jumlah'])?$r->Jumlah:$_POST['jumlah'];
+			$hgb=rdb('inv_material_stok','harga_beli','harga_beli',"where id_barang='".$r->ID_Barang."' and batch='".$bt."'");
+			$first_stock=rdb('inv_material_stok','stock','stock',"where id_barang='".$r->ID_Barang."' and batch='".$bt."'");
+			$end_stock=($first_stock-abs($jumlah));
+			$end_stock=($end_stock<0)? 0:$end_stock;
 			$datax['id_barang']	=$r->ID_Barang;
 			$datax['nm_barang']	=rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$r->ID_Barang."'");
-			$datax['batch']		=$r->Tahun;
+			$datax['batch']		=$bt;
 			$datax['stock']		=$end_stock;
 			$datax['harga_beli']=empty($hgb)?'0':$hgb;
 			$datax['nm_satuan'] =rdb('inv_barang','ID_Satuan','ID_Satuan',"where ID='".$r->ID_Barang."'");
 			$this->Admin_model->replace_data('inv_material_stok',$datax);
 		}
+		 echo ($first_stock-$r->Jumlah);
 	}
-	function return_stock(){
-		$this->update_material_stock($_POST['no_transaksi'],tgltoSql($_POST['tanggal']));//update stock
+	
+	
+	function return_stock($ntran,$tgl){
+		$data=array();$first_stock=0;$end_stock=0;$datax=array();$hgb=0;
+		$data=$this->Admin_model->show_list('inv_penjualan_detail',"where ID_Jual='".rdb('inv_penjualan','ID','ID',"where NoUrut='".$ntran."' and Tanggal='". $tgl."'")."'");
+		//print_r($data);
+		foreach($data as $r){
+			$hgb=rdb('inv_material_stok','harga_beli','harga_beli',"where id_barang='".$r->ID_Barang."' and batch='".$r->Batch."'");
+			$first_stock=rdb('inv_material_stok','stock','stock',"where id_barang='".$r->ID_Barang."' and batch='".$r->Batch."'");
+			$end_stock=($first_stock+(abs($r->Jumlah)));
+			$datax['id_barang']	=$r->ID_Barang;
+			$datax['nm_barang']	=rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$r->ID_Barang."'");
+			$datax['batch']		=$r->Batch;
+			$datax['stock']		=$end_stock;
+			$datax['harga_beli']=empty($hgb)?'0':$hgb;
+			$datax['nm_satuan'] =rdb('inv_barang','ID_Satuan','ID_Satuan',"where ID='".$r->ID_Barang."'");
+			$this->Admin_model->replace_data('inv_material_stok',$datax);
+		}
 	}
 	function transaski_kas(){
 		//pembayaran return material diambil dari uang kas toko
@@ -198,6 +235,7 @@ class Penjualan extends CI_Controller{
 		$data['id_kas']		='KAS TOKO';	
 	}
 	function batal_transaksi(){
+		//$this->return_stock($_POST['no_trans'],tgltoSql($_POST['tanggal']));
 		$this->Admin_model->hps_data('inv_penjualan',"where NoUrut='".$_POST['no_trans']."' and Tanggal='".tgltoSql($_POST['tanggal'])."'");	
 	}
 	function get_total_trans(){
@@ -272,13 +310,14 @@ class Penjualan extends CI_Controller{
 		$fax	=$this->zetro_manager->rContent('InfoCo','Fax',$nfile);
 		$tgl	=rdb('inv_penjualan','Tanggal','Tanggal',"where NoUrut='".$no_trans."' and Tanggal='".$this->tgl."'");
 		$Jenis	=rdb('inv_penjualan','ID_Jenis','ID_Jenis',"where NoUrut='".$no_trans."' and Tanggal='".$this->tgl."'");
+		$nJenis	=rdb('inv_penjualan_jenis','Jenis_Jual','Jenis_Jual',"where ID='".$Jenis."'");
 		$no_faktur=rdb('inv_penjualan','Nomor','Nomor',"where NoUrut='".$no_trans."' and Tanggal='".$this->tgl."'");
 		$isine	=array(
 					sepasi(((80-(strlen($slip)+6))/2)).''.newline(),
 					sepasi(80).newline(),
-					$coy.sepasi((79-strlen($coy)-strlen('Tanggal :'.tglfromSql($tgl))-3)).'Tanggal :'.tglfromSql($tgl).newline(),
+					$coy.sepasi((79-strlen($coy)-strlen('Tanggal :'.tglfromSql($tgl)))).'Tanggal :'.tglfromSql($tgl).newline(),
 					$address.sepasi((79-strlen($address)-strlen('No. Faktur :'.$no_faktur))).'No. Faktur :'.$no_faktur.newline(),
-					$phone.newline(),
+					$phone.sepasi((79-strlen($phone)-strlen('Pembelian :'.$nJenis)-(10-strlen($nJenis)))).'Pembelian :'.$nJenis.newline(),
 					str_repeat('-',79).newline(),
 					'| No.|'.sepasi(((32-strlen('Nama Barang'))/2)).'Nama Barang'.sepasi(((32-strlen('Nama Barang'))/2)).
 					'|'.sepasi(((10-strlen('Banyaknya'))/2)).'Banyaknya'.sepasi((((10-strlen('Banyaknya'))/2)-1)).'|'.
@@ -314,30 +353,35 @@ class Penjualan extends CI_Controller{
 		$data=array();$bawah="";
 		$nama=rdb('mst_anggota','Nama','Nama',"where ID='".rdb('inv_penjualan','ID_Anggota','ID_Anggota',"where NoUrut='".$this->no_trans."' and Tanggal='".$this->tgl."'")."'");
 		$urut=rdb('mst_anggota','NoUrut','NoUrut',"where ID='".rdb('inv_penjualan','ID_Anggota','ID_Anggota',"where NoUrut='".$this->no_trans."' and Tanggal='".$this->tgl."'")."'");
-		$alm =rdb('mst_anggota','Alamat','concat(Alamat," ",Kota) as Alamat',"where Nama='$nama'");
+		$alm =rdb('mst_departemen','Departemen','Departemen',"where ID='".
+				rdb('mst_anggota','Nama','Nama',"where ID='".
+				rdb('inv_penjualan','ID_Anggota','ID_Anggota',"where NoUrut='".$this->no_trans."' and Tanggal='".$this->tgl."'")."'")."'");
 		$this->inv_model->tabel('inv_pembayaran');
 		$data=$this->inv_model->show_list_1where('no_transaksi',$this->no_trans);
 			foreach($data->result() as $row){
 				$bawah=str_repeat('-',79).newline().
 				sepasi((61-strlen('Sub Total'))).'Sub Total :'.sepasi((14-strlen(number_format($row->total_belanja,2)))).number_format($row->total_belanja,2).newline(2).
-				sepasi((61-strlen('Corting'))).'Corting:'.sepasi((14-strlen(number_format($row->ppn,2)))).number_format($row->ppn,2).newline().
+				sepasi((61-strlen('Corting'))).'Corting :'.sepasi((14-strlen(number_format($row->ppn,2)))).number_format($row->ppn,2).newline().
 				sepasi(61).str_repeat('-',18).'+'.newline().
 				sepasi((61-strlen('Total'))).'Total :'.sepasi((14-strlen(number_format($row->total_bayar,2)))).number_format($row->total_bayar,2).newline(2).
 				sepasi((61-strlen('Cash'))).'Cash :'.sepasi((14-strlen(number_format($row->jml_dibayar,2)))).number_format($row->jml_dibayar,2).newline(2).
 				sepasi(61).str_repeat('-',17).'-'.newline().
 				sepasi((61-strlen('Kembali'))).'Kembali :'.sepasi((14-strlen(number_format($row->kembalian,2)))).number_format($row->kembalian,2).newline(2).
-				str_repeat('-',79).newline().
-				'No. Urut'.sepasi((14-strlen('No.Urut'))).':'.$urut.newline().
-				'Nama Pelanggan'.sepasi((14-strlen('Nama Pelanggan'))).':'.$nama.newline().
-				'Alamat'.sepasi((16-strlen('Alamat'))).':'.$alm.newline(2);
-			}
+				str_repeat('-',79).newline().'Terima Kasih.'.newline();
+				
+/*				'No. Anggota'.sepasi((14-strlen('No.Anggota'))).':'.$urut.newline().
+				'Nama Anggota'.sepasi((14-strlen('Nama Anggota'))).':'.$nama.newline().
+				'Departemen'.sepasi((16-strlen('Departemen'))).':'.$alm.newline(2);
+*/			}
 		return $bawah;
 	}
 	function struk_data_footer_kredit(){
 		$data=array();$bawah="";
 		$nama=rdb('mst_anggota','Nama','Nama',"where ID='".rdb('inv_penjualan','ID_Anggota','ID_Anggota',"where NoUrut='".$this->no_trans."' and Tanggal='".$this->tgl."'")."'");
 		$urut=rdb('mst_anggota','No_Agt','No_Agt',"where ID='".rdb('inv_penjualan','ID_Anggota','ID_Anggota',"where NoUrut='".$this->no_trans."' and Tanggal='".$this->tgl."'")."'");
-		$alm =rdb('mst_anggota','Alamat','concat(Alamat," ",Kota) as Alamat',"where Nama='$nama'");
+		$alm =rdb('mst_departemen','Departemen','Departemen',"where ID='".
+				rdb('mst_anggota','ID_Dept','ID_Dept',"where ID='".
+				rdb('inv_penjualan','ID_Anggota','ID_Anggota',"where NoUrut='".$this->no_trans."' and Tanggal='".$this->tgl."'")."'")."'");
 		$ncby=rdb('inv_penjualan_jenis','Jenis_Jual','Jenis_Jual',"where ID='".rdb('inv_penjualan','ID_Jenis','ID_Jenis',"where NoUrut='".$this->no_trans."' and Tanggal='".$this->tgl."'")."'");
 		$bank=rdb('inv_penjualan','Deskripsi','Deskripsi',"where NoUrut='".$this->no_trans."' and Tanggal='".$this->tgl."'");
 		$rek =rdb('inv_penjualan','ID_Post','ID_Post',"where NoUrut='".$this->no_trans."' and Tanggal='".$this->tgl."'");
@@ -354,9 +398,9 @@ class Penjualan extends CI_Controller{
 				sepasi(61).str_repeat('-',17).'-'.newline().
 				sepasi((61-strlen('Sisa'))).'Sisa :'.sepasi((14-strlen(number_format($row->kembalian,2)))).number_format($row->kembalian,2).newline(2).
 				str_repeat('-',79).newline().
-				'Pembayaran'.sepasi((14-strlen('Pembayaran'))).':'.$ncby.' No. :'.$rek.' '.$bank .'['.tglfromSql($tgir).']'.newline().
-				'Nama Konsumen'.sepasi((14-strlen('Nama Konsumen'))).':'.$nama.' [ '.$urut.' ]'.newline().
-				'Alamat'.sepasi((14-strlen('Alamat'))).':'.$alm.newline(2);
+				'Pembayaran'.sepasi((14-strlen('Pembayaran :'))).':'.$ncby.' No. :'.$rek.' '.$bank .'['.tglfromSql($tgir).']'.newline().
+				'Nama Konsumen'.sepasi((14-strlen('Nama Konsumen :'))).' :'.$nama.'[ '.$urut.' ]'.newline().
+				'Alamat'.sepasi((14-strlen('Alamat :'))).' :'.$alm.newline(1);
 			}
 		return $bawah;
 	}
@@ -382,7 +426,7 @@ class Penjualan extends CI_Controller{
 	
 	function return_jual(){
 		$data=array();
-		$this->zetro_auth->menu_id(array('penjualan__return_jual'));
+		$this->zetro_auth->menu_id(array('returnjual'));
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('penjualan/material_jual_return');
 	}
@@ -395,19 +439,6 @@ class Penjualan extends CI_Controller{
 		$data['nm_nasabah']=$this->Admin_model->show_single_field('detail_transaksi','nm_produsen',"where no_transaksi='$no_transaksi'");
 			echo json_encode($data);
 	}
-	function get_material(){
-		$datax=array();
-		$str=addslashes($_POST['str']);
-		$induk=$_POST['induk'];
-		$fld='nm_barang';
-		$this->inv_model->tabel('detail_transaksi');
-		$datax=$this->inv_model->get_material('no_transaksi',$str);
-			echo "<ul>";
-				foreach ($datax as $lst){
-					echo '<li onclick="suggest_click(\''.$lst.'\',\''.$fld.'\',\''.$induk.'\');">'.$lst."</li>";
-				}
-			echo "</ul>";
-	}
 	function get_detail_transaksi(){
 		$datax=array();
 		$nm_barang=$_POST['nm_barang'];
@@ -416,7 +447,7 @@ class Penjualan extends CI_Controller{
 		$datax=$this->inv_model->detail_transaksi($no_transaksi,$nm_barang);
 		echo json_encode($datax[0]);
 	}
-	function process_to_jurnal($id_anggota,$total){
+	function process_to_jurnal($id_anggota,$total,$ket=''){
 	/* membuat data untuk diposting dalam jurnal
 	  simpan penjualan barang secara kredit
 	  inputnya adalah ID anggota yng melakukan pembelian secara kredit
@@ -437,8 +468,12 @@ class Penjualan extends CI_Controller{
 		$data['ID_Klas']		=rdb('jenis_simpanan','ID_Klasifikasi','ID_Klasifikasi',"where ID='4'");
 		$data['ID_SubKlas']		=rdb('jenis_simpanan','ID_SubKlas','ID_SubKlas',"where ID='4'");
 		$data['ID_Dept']		=rdb('mst_anggota','ID_Dept','ID_Dept',"where ID='".$id_anggota."'");
-		$data['Debet']			=$total;//rdb('inv_penjualan','Total','Total',"where ID_Anggota='".$id_anggota."' and NoUrut='".$this->no_trans."'");
-		$data['Keterangan']		='Kredit barang toko no. Faktur: '.rdb('inv_penjualan','Nomor','Nomor',"where NoUrut='".$this->no_trans."'");
+		if($ket==''){
+			$data['Debet']		=$total;//rdb('inv_penjualan','Total','Total',"where ID_Anggota='".$id_anggota."' and NoUrut='".$this->no_trans."'");
+		}else{
+			$data['Kredit']		=$total;
+		}
+		$data['Keterangan']		=($ket=='')?'Kredit barang toko no. Faktur: '.rdb('inv_penjualan','Nomor','Nomor',"where NoUrut='".$this->no_trans."'"):$ket;
 		$data['tanggal']		=tgltoSql($this->tgl);
 		$data['ID_Bulan']		=substr($this->tgl,3,2);
 		$data['Tahun']			=substr($this->tgl,6,4);
@@ -451,12 +486,12 @@ class Penjualan extends CI_Controller{
 		$datax=array();
 		$datax['ID_Unit']		=rdb('jenis_simpanan','ID_Unit','ID_Unit',"where ID='4'");
 		$datax['ID_Klas']		=rdb('jenis_simpanan','ID_Klasifikasi','ID_Klasifikasi',"where ID='4'");
-		$datax['ID_SubKlas']		=rdb('jenis_simpanan','ID_SubKlas','ID_SubKlas',"where ID='4'");
+		$datax['ID_SubKlas']	=rdb('jenis_simpanan','ID_SubKlas','ID_SubKlas',"where ID='4'");
 		$datax['ID_Dept']		=rdb('mst_anggota','ID_Dept','ID_Dept',"where ID='".$ID_Agt."'");
 		$datax['ID_Simpanan']	=$ID_Simpanan;
-		$datax['ID_Agt']			=$ID_Agt;
+		$datax['ID_Agt']		=$ID_Agt;
 		$datax['ID_Calc']		=rdb('jenis_simpanan','ID_Calc','ID_Unit',"where ID='4'");
-		$datax['ID_Laporan']		=rdb('jenis_simpanan','ID_Laporan','ID_Laporan',"where ID='4'");
+		$datax['ID_Laporan']	=rdb('jenis_simpanan','ID_Laporan','ID_Laporan',"where ID='4'");
 		$datax['ID_LapDetail']	=rdb('jenis_simpanan','ID_LapDetail','ID_LapDetail',"where ID='4'");
 		echo $this->Admin_model->replace_data('perkiraan',$datax);
 		//print_r($datax);

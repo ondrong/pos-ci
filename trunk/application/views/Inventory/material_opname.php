@@ -8,12 +8,13 @@ link_css('autosuggest.css','asset/css');
 link_js('material_opname.js,auto_sugest.js,jquery_terbilang.js,jquery.fixedheader.js',$path.'/js,asset/js,asset/js,asset/js');
 panel_begin('Stock Opname',false,'',($p_countsheet!='')?'Print to printer':'');
 panel_multi('countsheet','block');
-	echo "Select Filter of list :";
-	$zfm->AddBarisKosong(false);
-	$zfm->Start_form(true,'frm2');
-	$zfm->BuildForm('stoklist filter',true,'50%');
-	$zfm->BuildFormButton('Process','filter','button',1);
-	echo "<hr>";
+	echo "<form id='frm2' name='frm2' method='post' action=''>";
+	addText(array('Kategori','Order By','Urutan',''),
+			array("<select id='Kategori' name='Kategori'></select>",
+				  "<select id='orderby' name='orderby'>".selectTxt('SusunanStock')."</select>",
+				  "<select id='urutan' name='urutan'>".selectTxt('Urutan',true)."</select>",
+				  "<input type='button' value='OK' id='okelah'/>"));
+	echo "</form>";
 		$zlb->section('stoklistview');
 		$zlb->aksi(false);
 		$zlb->Header('100%','sheet');
@@ -42,10 +43,10 @@ tab_select('prs');
 ?>
 <script language="javascript">
 $(document).ready(function(e) {
+   $('#Kategori').html("<? dropdown('inv_barang_kategori','ID','Kategori','order by Kategori','8');?>")
     $('#p-0').click(function(){
 		$('#frm2').attr('action','countsheet_prn');
 		document.frm2.submit();
-		//document.location.href='<?=base_url();?>index.php/report/countsheet';
 	})
 });
 </script>

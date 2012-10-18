@@ -79,3 +79,10 @@
 3|KBR,,,,,,10%
 4|USP,,,,,,10%
 
+[detailtransvendor]
+1|Tanggal,,,,,,10%,,,12
+2|Nomor Faktur,,,,,,12%,,,15
+3|Nama Barang,,,,,,40%,,,40
+4|Jumlah,,,,,,10%,,,15
+5|Satuan,,,,,,10%,,,12
+6|Total,,,,,,12%,,,20

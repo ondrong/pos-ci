@@ -1,9 +1,9 @@
 // JavaScript Document
 $(document).ready(function(e) {
 	var path=$('#path').val();
-    $('#laporanpembelian').removeClass('tab_button');
-	$('#laporanpembelian').addClass('tab_select');
-	$('#v_laporanpembelian table#ListTable').hide();
+    $('#rekappembelian').removeClass('tab_button');
+	$('#rekappembelian').addClass('tab_select');
+	$('#v_rekappembelian table#ListTable').hide();
 	$('table#panel tr td').click(function(){
 		var id=$(this).attr('id');
 			if(id!=''){
@@ -53,6 +53,12 @@ $(document).ready(function(e) {
 					$('#ID_Pemasok').val(result.id_pemasok);
 				}
 		})
+	$("#okelah").click(function(){
+		show_indicator('xx',1);
+		
+		$('#frm1').attr('action','lap_pembelian');
+		document.frm1.submit();
+	})
 	$(':button')
 		.click(function(){
 			var id=$(this).attr('id');

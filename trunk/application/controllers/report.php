@@ -5,6 +5,7 @@ class Report extends CI_Controller
 	  {
 		parent::__construct();
 		$this->load->model("report_model");
+		$this->load->model("kasir_model");
 		$this->load->helper("print_report");
 		$this->load->model("control_model");
 		$this->load->library("zetro_auth");
@@ -27,145 +28,205 @@ class Report extends CI_Controller
 		$this->load->view($view,$this->data);	
 		$this->Footer();
 	}
+	//Laporan Pembelian
 	function beli(){
-		//tampilkan laporan pembelian
-		$this->zetro_auth->menu_id(array('laporanpembelian'));
+		$this->zetro_auth->menu_id(array('rekappembelian'));
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('laporan/transaksi/lap_beli');
 
 	}
-	function kas(){
-		//tampilkan laporan penjualan
-		$this->zetro_auth->menu_id(array('laporankas'));
-		$this->list_data($this->zetro_auth->auth());
-		$this->View('laporan/transaksi/lap_kas');
+	function lap_pembelian(){
+		$data=array();$where='';
+		$data['dari']=$this->input->post('dari_tgl');
+		$data['sampai']=$this->input->post('sampai_tgl');
+		$where=empty($_POST['sampai_tgl'])?
+			   "where p.Tanggal='".tglToSql($_POST['dari_tgl'])."'":
+			   "where p.Tanggal between '".tglToSql($_POST['dari_tgl'])."' and '".tglToSql($_POST['sampai_tgl'])."'";
+		$where.=" and p.ID_Jenis='".$this->input->post('jenis_beli')."' and p.ID_Pemasok!='0'";
+		$group="group by p.Tanggal,v.Nama";
+		$data['id_jenis']=rdb('inv_pembelian_jenis','Jenis_Beli','Jenis_Beli',"Where ID='".$this->input->post('jenis_beli')."'");
+		$data['temp_rec']=$this->kasir_model->rekap_trans_beli($where,$group);
+		
+		$this->zetro_auth->menu_id(array('trans_beli'));
+		$this->list_data($data);
+		$this->View("laporan/transaksi/lap_beli_print");
+	  
 	}
-	function jual(){
-		//tampilkan laporan penggunaan kas
-		$this->zetro_auth->menu_id(array('trans_jual'));
+	//Laporan penjualan
+	function penjualan(){
+		$this->zetro_auth->menu_id(array('rekappenjualantunai'));
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('laporan/transaksi/lap_jual');
+
 	}
-	//ouput laporan dalam pdf
-	function print_laporan(){
-		//print laporan to pdf
-		$datap=array();
-		$nmj=array(); $data='';$valfld='';$datax='';
-		if($this->input->post('dari_tgl')==''){$dari_tgl='';}else{$dari_tgl=$this->input->post('dari_tgl');}
-		if($this->input->post('sampai_tgl')==''){$sampai_tgl=$this->input->post('dari_tgl');}else{$sampai_tgl=$this->input->post('sampai_tgl');}
-		//if($this->input->post('nm_golongan')!=''){$nmj['nm_golongan']=$this->input->post('nm_golongan');}
-		if($this->input->post('nm_produsen')!=''){
-			$nmj['p.ID_Pemasok']=rdb('inv_pemasok','Pemasok','Pemasok',"where ID='".$this->input->post('nm_produsen')."'");
-			}else{
-				if($this->input->post('nm_dokter')!=''){
-					$nmj['ID_Anggota']=rdb('mst_anggota','ID','ID',"where Nama='".$this->input->post('nm_dokter')."'");
-				}
-			}
-		if($this->input->post('nm_jenis')!=''){$nmj['im.ID_Jenis']=$this->input->post('nm_jenis');}
+	function lap_penjualan(){
+		$data=array();$where='';
+		$where=empty($_POST['sampai_tgl'])?
+			   "where p.Tanggal='".tglToSql($_POST['dari_tgl'])."'":
+			   "where p.Tanggal between '".tglToSql($_POST['dari_tgl'])."' and '".tglToSql($_POST['sampai_tgl'])."'";
+		$where.=($this->input->post('kategori')=='')?'':" and b.ID_Kategori='".$this->input->post('kategori')."'";
+		$where.=($this->input->post('id_jenis')=='')?'':" and b.ID_Jenis='".$this->input->post('id_jenis')."'";
+		$where.=" and p.ID_Jenis='".$this->input->post('jenis_beli')."'";
+		$group="group by concat(dt.harga,dt.ID_Barang)";
+		$ordby="order by trim(b.Nama_Barang)";
+		$data['dari']		=$this->input->post('dari_tgl');
+		$data['sampai']		=($this->input->post('sampai_tgl')=='')?$this->input->post('dari_tgl'):$this->input->post('sampai_tgl');
+		$data['Kategori']	=($this->input->post('kategori')=='')?'All':rdb('inv_barang_kategori','Kategori','Kategori',"where ID='".$this->input->post('kategori')."'");
+		$data['Jenis']		=($this->input->post('id_jenis')=='')?'All':rdb('inv_barang_jenis','JenisBarang','JenisBarang',"where ID='".$this->input->post('id_jenis')."'");
+		$data['judul']		=rdb('inv_penjualan_jenis','Jenis_Jual','Jenis_Jual',"where ID='".$this->input->post('jenis_beli')."'");
+		$data['temp_rec']=$this->kasir_model->rekap_trans_jual($where,$group,$ordby);
 		
-		$section=$this->input->post('section');
-		$jtran=$this->input->post('jtran');
-		$jenisobat=$this->input->post('nm_jenis').' '.$this->input->post('nm_golongan');
-		$nm_vendor=$this->input->post('nm_produsen').' '.$this->input->post('nm_dokter');
-		$optional=$this->input->post('optional');
-		
-		(!empty($dari_tgl))?$datax=" and dt.Tanggal between '".tglToSql($dari_tgl)."' and '".tglToSql($sampai_tgl)."'":$datax='';
-		
-		foreach(array_keys($nmj) as $nfield){
-			$data .=$nfield.",";	
-		}
-		foreach(array_values($nmj) as $valfield){
-			$valfld .=$valfield;
-		}
-		$data=substr($data,0,(strlen($data)-1));
-		if(empty($jtran) && empty($data) && empty($datax)){ $where='';}else{
-				if(!empty($jtran)) $where="";
-				if(!empty($data)) $where .="where concat($data)='$valfld'";
-				if(!empty($datax))$where .=$datax;
-				//if(!empty($optional)) $where .=$optional;
-		}
-		$susunan	=$this->input->post('susunan');
-		$urutan		=$this->input->post('urutan');
-		$urutan		=empty($urutan)?'ASC':strtoupper($urutan);
-		$ordby		=empty($susunan)? '':" order by concat(".str_replace('-',',',$susunan).') '.$urutan;
-		$datap['tanggal']	=(empty($dari_tgl))?'All':$dari_tgl ." s/d ". $sampai_tgl;
-		$datap['jenisobat']	=($jenisobat=='')?'All':rdb('inv_barang_kategori','Kategori','Kategori',"where ID='".$jenisobat."'");
-		$datap['nm_vendor']	=($nm_vendor=='')?'All':$nm_vendor;
-		$datap['temp_rec']	=$this->report_model->select_trans($where.$ordby,'Y');
-		//echo $ordby;
 		$this->zetro_auth->menu_id(array('trans_beli'));
-		$this->list_data($datap);
-		$this->View("laporan/transaksi/lap_".$this->input->post('lap')."_print");
+		$this->list_data($data);
+		$this->View("laporan/transaksi/lap_jual_print");
+	  
 	}
-	//report transaksi pembelian 
+	function barang_kredit(){
+		$this->zetro_auth->menu_id(array('rekapbarangkredit'));
+		$this->list_data($this->zetro_auth->auth());
+		$this->View('laporan/transaksi/lap_jual_kredit');
+
+	}
+	function penjualan_kredit(){
+		$this->zetro_auth->menu_id(array('rekappenjualankredit'));
+		$this->list_data($this->zetro_auth->auth());
+		$this->View('laporan/transaksi/lap_kreditur');
+
+	}
+	function lap_kreditur(){
+		$data=array();$where='';
+		$where=empty($_POST['sampai_tgl'])?
+			   "where p.Tanggal='".tglToSql($_POST['dari_tgl'])."'":
+			   "where p.Tanggal between '".tglToSql($_POST['dari_tgl'])."' and '".tglToSql($_POST['sampai_tgl'])."'";
+		$where.=($this->input->post('departemen')=='')?'':" and a.ID_Dept='".$this->input->post('departemen')."'";
+		$where.=($this->input->post('cicilan')=='')?'':" and b.Cicilan='".$this->input->post('cicilan')."'";
+		$where.=" and p.ID_Jenis='".$this->input->post('jenis_beli')."'";
+		$group="group by concat(p.ID_Anggota)";
+		$ordby="order by trim(a.Nama)";
+		$data['dari']		=$this->input->post('dari_tgl');
+		$data['sampai']		=($this->input->post('sampai_tgl')=='')?$this->input->post('dari_tgl'):$this->input->post('sampai_tgl');
+		$data['Kategori']	=($this->input->post('departemen')=='')?'All':rdb('mst_departemen','Departemen','Departemen',"where ID='".$this->input->post('departemen')."'");
+		$data['Jenis']		=($this->input->post('cicilan')=='')?'All':$this->input->post('cicilan');
+		$data['judul']		=rdb('inv_penjualan_jenis','Jenis_Jual','Jenis_Jual',"where ID='".$this->input->post('jenis_beli')."'");
+		$data['temp_rec']=$this->kasir_model->rekap_kreditur($where,$group,$ordby);
+		
+		$this->zetro_auth->menu_id(array('trans_beli'));
+		$this->list_data($data);
+		$this->View("laporan/transaksi/lap_kreditur_print");
+	}
+	//===============tagihan kredit
+	function tagihan_kredit(){
+		$this->zetro_auth->menu_id(array('tagihankredit'));
+		$this->list_data($this->zetro_auth->auth());
+		$this->View('laporan/transaksi/lap_kreditur_tagihan');
+
+	}
+	function lap_tagihan_kreditur(){
+		$data=array();$where='';
+		$where=empty($_POST['sampai_tgl'])?
+			   "where p.Tanggal='".tglToSql($_POST['dari_tgl'])."'":
+			   "where p.Tanggal between '".tglToSql($_POST['dari_tgl'])."' and '".tglToSql($_POST['sampai_tgl'])."'";
+		$where.=($this->input->post('departemen')=='')?'':" and a.ID_Dept='".$this->input->post('departemen')."'";
+		$where.=($this->input->post('cicilan')=='')?'':" and b.Cicilan='".$this->input->post('cicilan')."'";
+		$where.=" and p.ID_Jenis='".$this->input->post('jenis_beli')."'";
+		$group="group by concat(p.ID_Anggota)";
+		$ordby="order by trim(a.Nama)";
+		$data['dari']		=$this->input->post('dari_tgl');
+		$data['sampai']		=($this->input->post('sampai_tgl')=='')?$this->input->post('dari_tgl'):$this->input->post('sampai_tgl');
+		$data['Kategori']	=($this->input->post('departemen')=='')?'All':rdb('mst_departemen','Departemen','Departemen',"where ID='".$this->input->post('departemen')."'");
+		$data['Jenis']		=($this->input->post('cicilan')=='')?'All':$this->input->post('cicilan');
+		$data['judul']		=rdb('inv_penjualan_jenis','Jenis_Jual','Jenis_Jual',"where ID='".$this->input->post('jenis_beli')."'");
+		$data['temp_rec']=$this->kasir_model->rekap_kreditur($where,$group,$ordby);
+		
+		$this->zetro_auth->menu_id(array('trans_beli'));
+		$this->list_data($data);
+		$this->View("laporan/transaksi/lap_kreditur_tagihan_print");
+	}
+	//=============================menu file anggota
+	function inv_anggota(){
+		$this->zetro_auth->menu_id(array('pinjamanbarang','detailkredit'));
+		$this->list_data($this->zetro_auth->auth());
+		$this->View('member/member_pinjaman_barang');
+	}
 	
-	function print_laporan_beli(){
-		$datap=array();
-		$nmj=array(); $data='';$valfld='';$datax='';
-		if($this->input->post('dari_tgl')==''){$dari_tgl='';}else{$dari_tgl=$this->input->post('dari_tgl');}
-		if($this->input->post('sampai_tgl')==''){$sampai_tgl=$this->input->post('dari_tgl');}else{$sampai_tgl=$this->input->post('sampai_tgl');}
-		//if($this->input->post('nm_golongan')!=''){$nmj['nm_golongan']=$this->input->post('nm_golongan');}
-		if($this->input->post('nm_produsen')!=''){
-			$nmj['p.ID_Pemasok']=$this->input->post('ID_Pemasok');
-			}else{
-				if($this->input->post('nm_dokter')!=''){
-					$nmj['ID_Anggota']=rdb('mst_anggota','ID','ID',"where Nama='".$this->input->post('nm_dokter')."'");
+	function get_kreditur(){
+	$data=array();$n=0;
+		if(!empty($_POST['id_dept']) ||
+		   !empty($_POST['cari'])){
+			if(!empty($_POST['id_dept']) &&
+				empty($_POST['cari'])){   
+				$where= empty($_POST['id_dept'])?'':"where b.ID_dept='".$_POST['id_dept']."'";
+				$where.=empty($_POST['id_stat'])?'':" and ID_Aktif='".$_POST['id_stat']."'";
 				}
+			if(!empty($_POST['cari'])){
+				$where="where b.Nama like '".$_POST['cari']."%'";
 			}
-		if($this->input->post('nm_jenis')!=''){$nmj['im.ID_Jenis']=$this->input->post('nm_jenis');}
-		
-		$section=$this->input->post('section');
-		$jtran=$this->input->post('jtran');
-		$jenisobat=$this->input->post('nm_jenis').' '.$this->input->post('nm_golongan');
-		$nm_vendor=$this->input->post('nm_produsen').' '.$this->input->post('nm_dokter');
-		$optional=$this->input->post('optional');
-		
-		(!empty($dari_tgl))?$datax=" and dt.Tanggal between '".tglToSql($dari_tgl)."' and '".tglToSql($sampai_tgl)."'":$datax='';
-		
-		foreach(array_keys($nmj) as $nfield){
-			$data .=$nfield.",";	
+		$orderby=' group by p.ID_Anggota order by b.Nama';
+		$data=$this->kasir_model->get_kreditur($where,$orderby);
+		foreach($data as $r){
+			$n++;
+			echo tr('xx\' onclick="detail(\''.$r->ID.'\',\''.$r->ID_Anggota.'\');" attr=\'ax').td($n,'center').
+					  td($r->Departemen).
+					  td($r->NIP).
+					  td($r->Nama).
+					  td($r->Keaktifan).
+					  _tr();	
 		}
-		foreach(array_values($nmj) as $valfield){
-			$valfld .=$valfield;
+		}else{
+		 echo tr().td('Silahkan pilih departemen terlebih dahulu','kotak \' colspan=\'5')._tr();
 		}
-		$data=substr($data,0,(strlen($data)-1));
-		if(empty($jtran) && empty($data) && empty($datax)){ $where='';}else{
-				if(!empty($jtran)) $where="";
-				if(!empty($data)) $where .="where concat($data)='$valfld'";
-				if(!empty($datax))$where .=$datax;
-				//if(!empty($optional)) $where .=$optional;
-		}
-		$susunan	=$this->input->post('susunan');
-		$urutan		=$this->input->post('urutan');
-		$urutan		=empty($urutan)?'ASC':strtoupper($urutan);
-		$ordby		=empty($susunan)? '':" order by concat(".str_replace('-',',',$susunan).') '.$urutan;
-		//echo $ordby;
-		$datap['tanggal']	=(empty($dari_tgl))?'All':$dari_tgl ." s/d ". $sampai_tgl;
-		$datap['jenisobat']	=($jenisobat=='')?'All':rdb('inv_barang_kategori','Kategori','Kategori',"where ID='".$jenisobat."'");
-		$datap['nm_vendor']	=($nm_vendor=='')?'All':$nm_vendor;
-		$datap['temp_rec']	=$this->report_model->select_trans_beli($where.$ordby,'Y');
-		
-		$this->zetro_auth->menu_id(array('trans_beli'));
-		$this->list_data($datap);
-		$this->View("laporan/transaksi/lap_".$this->input->post('lap')."_print");
 	}
-	//laporan kas
-	function print_laporan_kas(){
-		$datap=array();
-		$nmj=array(); $data='';$valfld='';$datax='';
-		if($this->input->post('dari_tgl')==''){$dari_tgl='';}else{$dari_tgl=$this->input->post('dari_tgl');}
-		if($this->input->post('sampai_tgl')==''){$sampai_tgl=$this->input->post('dari_tgl');}else{$sampai_tgl=$this->input->post('sampai_tgl');}
-		empty($dari_tgl)?
-			$where="":
-			$where="where j.Tanggal between '".tglToSql($dari_tgl)."' and '".tglToSql($sampai_tgl)."'";
-		$ordby=' order by j.NoUrut';
-		$groupby=($this->input->post('jenis_lap')=='')?'':"group by j.Tanggal";
-		$datap['tanggal']	=(empty($dari_tgl))?'All':$dari_tgl ." s/d ". $sampai_tgl;
-		$datap['temp_rec']	=$this->report_model->get_cash_flow($where,$groupby);
-		
-		$this->zetro_auth->menu_id(array('trans_beli'));
-		$this->list_data($datap);
-		$this->View("laporan/transaksi/lap_kas_print");
+	function detail_kreditur(){
+		$data=array();$n=0;
+		$ID=$_POST['ID'];
+		$ID_Agt=$_POST['ID_Agt'];
+		$data['Agt']=rdb('mst_anggota','Nama','Nama',"where ID='".$_POST['ID_Agt']."'");
+		$data['Dept']=rdb('mst_departemen','Departemen','Departemen',"where ID='".
+					 rdb('mst_anggota','ID_Dept','ID_Dept',"where ID='".$_POST['ID_Agt']."'")."'");
+		$data['ID_Agt']=$ID_Agt;
+		$this->load->view('member/member_pinjaman_barang_detail',$data);	
 	}
+	function show_detail_kreditur_trans(){
+	$data=array();$n=0;$total=0;
+	$ID_Agt=$_POST['ID_Agt'];
+	$data=$this->kasir_model->get_trans_jual_kreditur($ID_Agt);
+		foreach($data as $r){
+			$n++;
+			echo tr().td($n,'center').
+					  td(tglfromSql($r->Tanggal),'center').
+					  td($r->Nomor).
+					  td($r->Nama_Barang).
+					  td(number_format($r->Jumlah,2),'right').
+					  td($r->Satuan).
+					  td(number_format(($r->Jumlah*$r->Harga),2),'right').
+				_tr();
+				$total=($total+($r->Jumlah*$r->Harga));
+		}
+		echo tr().td('<b>Total</b>','right\' colspan=\'6','kotak list_genap').td('<b>'.number_format($total,2).'</b>','right')._tr();
+	}
+
+	function show_detail_kreditur_jurnal(){
+	$data=array();$nx=0;$debet=0;$kredit=0;
+	$ID_Agt=$_POST['ID_Agt'];
+	$data=$this->kasir_model->get_trans_jurnal($ID_Agt);
+		foreach($data as $rx){
+			$nx++;
+			echo tr().td($nx,'center').
+					  td(tglfromSql($rx->Tanggal),'center').
+					  td($rx->Nomor).
+					  td($rx->Keterangan).
+					  td(number_format($rx->Debet,2),'right').
+					  td(number_format(($rx->Kredit),2),'right').
+				_tr();
+			$debet	=($debet+$rx->Debet);
+			$kredit	=($kredit+$rx->Kredit);
+		}
+		echo tr().td('<b>Total</b>','right\' colspan=\'4','kotak list_genap').
+			td('<b>'.number_format($debet,2).'</b>','right','kotak list_genap').
+			td('<b>'.number_format($kredit,2).'</b>','right','kotak list_genap')._tr().
+			tr().td('<b>Balance</b>','right\' colspan=\'5','kotak list_ganjil').
+			td('<b>'.number_format(((int)$debet-(int)$kredit),2).'</b>','right','kotak list_genap')._tr();
+	}
+
 }
 ?>

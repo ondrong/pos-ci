@@ -107,7 +107,8 @@ class Inv_model extends CI_Model {
 	}
 	function get_nm_material($str,$limit,$fld,$dest=''){
 		$data=array();
-		$sql="select * from inv_barang where $fld like '".$str."%' order by nama_barang limit $limit";	
+		$where=($dest=='')?'':$dest;
+		$sql="select * from inv_barang where $fld like '".$str."%' $where order by nama_barang limit $limit";	
 		//echo $sql;
 		($dest=='')?$dest='Nama_Barang':$dest=$dest;
 		$rw= mysql_query($sql) or die(mysql_error());
@@ -123,6 +124,7 @@ class Inv_model extends CI_Model {
 							  'kode'		=>$row->Kode,
 							  'pemasok'		=>$row->ID_Pemasok."-".rdb('inv_pemasok','Pemasok','Pemasok',"where ID='".$row->ID_Pemasok."'"),
 							  'hargabeli'	=>$row->Harga_Beli,
+							  'id_pemasok'	=>$row->ID_Pemasok,
 							  'hargajual'	=>$row->Harga_Jual,
 							  'id_barang'	=>$row->ID,
 							  'nm_kategori'	=>rdb('inv_barang_kategori','Kategori','Kategori',"where ID='".$row->ID_Kategori."'")
@@ -175,7 +177,7 @@ class Inv_model extends CI_Model {
 	function list_barang($where){
 		$data=array();
 		$sql="select b.ID,bj.JenisBarang,bk.Kategori,b.Kode,b.Nama_Barang,
-				b.Harga_Beli,b.Harga_Jual,bs.Satuan,b.Status,b.minstok
+				b.Harga_Beli,b.Harga_Jual,bs.Satuan,b.Status,b.minstok,ms.stock,ms.harga_beli
 				from inv_barang as b
 				left join inv_barang_jenis as bj
 				on bj.ID=b.ID_Jenis
@@ -183,7 +185,10 @@ class Inv_model extends CI_Model {
 				on bk.ID=b.ID_Kategori
 				left join inv_barang_satuan as bs
 				on bs.ID=b.ID_Satuan
+				left join inv_material_stok as ms
+				on ms.id_barang=b.ID
 				$where ";
+		//echo $sql;
 		$data=$this->db->query($sql);
 		return $data->result();
 	}
@@ -204,35 +209,37 @@ class Inv_model extends CI_Model {
 		$data=$this->db->query($sql);
 		return $data->result();
 	}
-	function set_stock($where){
-		$sql="select ms.stock,b.Kode,b.ID,bj.JenisBarang,bk.Kategori,
+	function set_stock($where,$orderby='order by b.Nama_Barang'){
+		$sql="select ms.stock,b.Kode,b.ID,bj.JenisBarang,k.Kategori,
 			  b.Kode,b.Nama_Barang,b.Harga_Beli,b.Harga_Jual,bs.Satuan,b.Status
 				from inv_barang as b
 				left join inv_material_stok as ms
 				on ms.nm_barang=b.Nama_Barang
 				left join inv_barang_jenis as bj
 				on bj.ID=b.ID_Jenis
-				left join inv_barang_kategori as bk
-				on bk.ID=b.ID_Kategori
+				left join inv_barang_kategori as k
+				on k.ID=b.ID_Kategori
 				left join inv_barang_satuan as bs
 				on bs.ID=b.ID_Satuan
-				$where order by b.Nama_Barang";
+				$where $orderby";
 		//echo $sql;		
 		$data=$this->db->query($sql);
 		return $data->result();
 	}
 	
-	function get_detail_stock($nm_barang){
+	function get_detail_stock($nm_barang,$sort=''){
 		$sql="select batch, sum(stock) as stock, sum(blokstok) as blokstok,
 			   expired,nm_satuan,harga_beli from inv_material_stok where nm_barang='$nm_barang'
-			   and stock <>'0' group by batch order by batch";
+			   and stock <>'0' group by batch order by batch $sort";
 		$data=$this->db->query($sql);
 		return $data->result();
 	}
-	function get_detail_stocked($nm_barang,$limit='limit 1'){
+	function get_detail_stocked($nm_barang,$sort='',$return='1',$limit='limit 1'){
+		$ret=($return=='1')?"and stock <>'0'":'';
 		$sql="select batch, sum(stock) as stock, sum(blokstok) as blokstok,
 			   expired,nm_satuan,harga_beli from inv_material_stok where id_barang='$nm_barang'
-			   and stock <>'0' group by batch order by batch desc $limit";
+			   $ret group by batch order by batch $sort $limit";
+		//echo $sql;
 		$data=$this->db->query($sql);
 		return $data->result();
 	}
@@ -244,6 +251,18 @@ class Inv_model extends CI_Model {
 				left join inv_barang_satuan as u
 				on u.ID=p.ID_Satuan
 				where id_barang='$nm_barang'";
+		$data=$this->db->query($sql);
+		return $data->result();
+	}
+	function get_detail_trans($id){
+		$sql="select b.Nama_Barang,s.ID,pd.Jumlah,pd.Harga_Beli,pd.batch,pd.ID_Satuan
+			  from inv_pembelian_detail as pd
+			  left join inv_barang as b
+			  on b.ID=pd.ID_Barang
+			  left join inv_barang_satuan as s
+			  on s.ID=b.ID_Satuan
+			  where pd.ID='$id'";
+			  //echo $sql;
 		$data=$this->db->query($sql);
 		return $data->result();
 	}

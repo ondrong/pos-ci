@@ -3,21 +3,14 @@
 -- Server version:               5.5.25a - MySQL Community Server (GPL)
 -- Server OS:                    Win32
 -- HeidiSQL version:             7.0.0.4140
--- Date/time:                    2012-10-05 14:42:28
+-- Date/time:                    2012-10-16 12:48:31
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!40014 SET FOREIGN_KEY_CHECKS=0 */;
 
--- Dumping database structure for setujudb
-DROP DATABASE IF EXISTS `setujudb`;
-CREATE DATABASE IF NOT EXISTS `setujudb` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `setujudb`;
-
-
--- Dumping structure for table setujudb.bayar_transaksi
-DROP TABLE IF EXISTS `bayar_transaksi`;
+-- Dumping structure for table kopkardb.bayar_transaksi
 CREATE TABLE IF NOT EXISTS `bayar_transaksi` (
   `no_transaksi` varchar(50) NOT NULL DEFAULT '',
   `total_belanja` double DEFAULT '0',
@@ -34,8 +27,7 @@ CREATE TABLE IF NOT EXISTS `bayar_transaksi` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.buku_besar
-DROP TABLE IF EXISTS `buku_besar`;
+-- Dumping structure for table kopkardb.buku_besar
 CREATE TABLE IF NOT EXISTS `buku_besar` (
   `ID` int(11) DEFAULT NULL,
   `Tanggal` datetime DEFAULT NULL,
@@ -49,8 +41,7 @@ CREATE TABLE IF NOT EXISTS `buku_besar` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.detail_transaksi
-DROP TABLE IF EXISTS `detail_transaksi`;
+-- Dumping structure for table kopkardb.detail_transaksi
 CREATE TABLE IF NOT EXISTS `detail_transaksi` (
   `id_transaksi` int(11) NOT NULL AUTO_INCREMENT,
   `no_transaksi` varchar(50) DEFAULT NULL,
@@ -74,8 +65,7 @@ CREATE TABLE IF NOT EXISTS `detail_transaksi` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_barang
-DROP TABLE IF EXISTS `inv_barang`;
+-- Dumping structure for table kopkardb.inv_barang
 CREATE TABLE IF NOT EXISTS `inv_barang` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Kode` varchar(15) DEFAULT NULL,
@@ -87,6 +77,7 @@ CREATE TABLE IF NOT EXISTS `inv_barang` (
   `Harga_Jual` float DEFAULT NULL,
   `ID_Satuan` int(11) DEFAULT NULL,
   `Status` varchar(11) DEFAULT NULL,
+  `minstok` double DEFAULT '1',
   PRIMARY KEY (`Nama_Barang`),
   KEY `ID` (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -94,8 +85,7 @@ CREATE TABLE IF NOT EXISTS `inv_barang` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_barang_jenis
-DROP TABLE IF EXISTS `inv_barang_jenis`;
+-- Dumping structure for table kopkardb.inv_barang_jenis
 CREATE TABLE IF NOT EXISTS `inv_barang_jenis` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `JenisBarang` varchar(10) NOT NULL DEFAULT '',
@@ -106,8 +96,7 @@ CREATE TABLE IF NOT EXISTS `inv_barang_jenis` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_barang_kategori
-DROP TABLE IF EXISTS `inv_barang_kategori`;
+-- Dumping structure for table kopkardb.inv_barang_kategori
 CREATE TABLE IF NOT EXISTS `inv_barang_kategori` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Kategori` varchar(20) NOT NULL DEFAULT '',
@@ -118,8 +107,7 @@ CREATE TABLE IF NOT EXISTS `inv_barang_kategori` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_barang_satuan
-DROP TABLE IF EXISTS `inv_barang_satuan`;
+-- Dumping structure for table kopkardb.inv_barang_satuan
 CREATE TABLE IF NOT EXISTS `inv_barang_satuan` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Satuan` varchar(10) NOT NULL DEFAULT '',
@@ -130,8 +118,7 @@ CREATE TABLE IF NOT EXISTS `inv_barang_satuan` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_blacklist
-DROP TABLE IF EXISTS `inv_blacklist`;
+-- Dumping structure for table kopkardb.inv_blacklist
 CREATE TABLE IF NOT EXISTS `inv_blacklist` (
   `ID` int(11) DEFAULT NULL,
   `ID_Agt` int(11) NOT NULL DEFAULT '0',
@@ -142,8 +129,7 @@ CREATE TABLE IF NOT EXISTS `inv_blacklist` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_golongan
-DROP TABLE IF EXISTS `inv_golongan`;
+-- Dumping structure for table kopkardb.inv_golongan
 CREATE TABLE IF NOT EXISTS `inv_golongan` (
   `nm_golongan` varchar(225) NOT NULL DEFAULT '',
   `doc_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -154,8 +140,7 @@ CREATE TABLE IF NOT EXISTS `inv_golongan` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_konversi
-DROP TABLE IF EXISTS `inv_konversi`;
+-- Dumping structure for table kopkardb.inv_konversi
 CREATE TABLE IF NOT EXISTS `inv_konversi` (
   `id_barang` varchar(50) NOT NULL DEFAULT '',
   `nm_barang` varchar(225) NOT NULL DEFAULT '',
@@ -170,8 +155,7 @@ CREATE TABLE IF NOT EXISTS `inv_konversi` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_material_count
-DROP TABLE IF EXISTS `inv_material_count`;
+-- Dumping structure for table kopkardb.inv_material_count
 CREATE TABLE IF NOT EXISTS `inv_material_count` (
   `nm_barang` varchar(125) NOT NULL DEFAULT '',
   `nm_satuan` varchar(50) DEFAULT NULL,
@@ -186,8 +170,7 @@ CREATE TABLE IF NOT EXISTS `inv_material_count` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_material_stok
-DROP TABLE IF EXISTS `inv_material_stok`;
+-- Dumping structure for table kopkardb.inv_material_stok
 CREATE TABLE IF NOT EXISTS `inv_material_stok` (
   `id_barang` int(50) NOT NULL DEFAULT '0',
   `nm_barang` varchar(125) NOT NULL DEFAULT '',
@@ -205,16 +188,15 @@ CREATE TABLE IF NOT EXISTS `inv_material_stok` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_pemasok
-DROP TABLE IF EXISTS `inv_pemasok`;
+-- Dumping structure for table kopkardb.inv_pemasok
 CREATE TABLE IF NOT EXISTS `inv_pemasok` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Pemasok` varchar(30) DEFAULT NULL,
-  `Alamat` varchar(125) DEFAULT NULL,
-  `Kota` varchar(50) DEFAULT NULL,
-  `Propinsi` varchar(50) DEFAULT NULL,
+  `Alamat` varchar(50) DEFAULT NULL,
+  `Kota` varchar(20) DEFAULT NULL,
+  `Propinsi` varchar(20) DEFAULT NULL,
   `Telepon` varchar(30) DEFAULT NULL,
-  `cp_nama` varchar(50) DEFAULT NULL,
+  `Faksimili` varchar(15) DEFAULT NULL,
   `Status` varchar(9) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -222,8 +204,7 @@ CREATE TABLE IF NOT EXISTS `inv_pemasok` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_pembayaran
-DROP TABLE IF EXISTS `inv_pembayaran`;
+-- Dumping structure for table kopkardb.inv_pembayaran
 CREATE TABLE IF NOT EXISTS `inv_pembayaran` (
   `no_transaksi` varchar(50) NOT NULL DEFAULT '0',
   `total_belanja` double DEFAULT '0',
@@ -239,8 +220,7 @@ CREATE TABLE IF NOT EXISTS `inv_pembayaran` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_pembelian
-DROP TABLE IF EXISTS `inv_pembelian`;
+-- Dumping structure for table kopkardb.inv_pembelian
 CREATE TABLE IF NOT EXISTS `inv_pembelian` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_Jenis` tinyint(4) DEFAULT NULL,
@@ -259,8 +239,7 @@ CREATE TABLE IF NOT EXISTS `inv_pembelian` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_pembelian_detail
-DROP TABLE IF EXISTS `inv_pembelian_detail`;
+-- Dumping structure for table kopkardb.inv_pembelian_detail
 CREATE TABLE IF NOT EXISTS `inv_pembelian_detail` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Tanggal` datetime DEFAULT NULL,
@@ -272,14 +251,15 @@ CREATE TABLE IF NOT EXISTS `inv_pembelian_detail` (
   `Jumlah` int(11) DEFAULT NULL,
   `Harga_Beli` float DEFAULT NULL,
   `Keterangan` varchar(50) DEFAULT NULL,
+  `ID_Satuan` int(11) DEFAULT NULL,
+  `Batch` varchar(50) DEFAULT NULL,
   KEY `ID` (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_pembelian_jenis
-DROP TABLE IF EXISTS `inv_pembelian_jenis`;
+-- Dumping structure for table kopkardb.inv_pembelian_jenis
 CREATE TABLE IF NOT EXISTS `inv_pembelian_jenis` (
   `ID` int(11) DEFAULT NULL,
   `Jenis_Beli` varchar(10) DEFAULT NULL
@@ -288,8 +268,7 @@ CREATE TABLE IF NOT EXISTS `inv_pembelian_jenis` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_pembelian_rekap
-DROP TABLE IF EXISTS `inv_pembelian_rekap`;
+-- Dumping structure for table kopkardb.inv_pembelian_rekap
 CREATE TABLE IF NOT EXISTS `inv_pembelian_rekap` (
   `ID` int(11) DEFAULT NULL,
   `Tanggal` datetime DEFAULT NULL,
@@ -301,14 +280,14 @@ CREATE TABLE IF NOT EXISTS `inv_pembelian_rekap` (
   `Jumlah` int(11) DEFAULT NULL,
   `Harga_Beli` float DEFAULT NULL,
   `Keterangan` varchar(50) DEFAULT NULL,
+  `ID_Satuan` int(11) DEFAULT NULL,
   `batch` varchar(50) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_pembelian_status
-DROP TABLE IF EXISTS `inv_pembelian_status`;
+-- Dumping structure for table kopkardb.inv_pembelian_status
 CREATE TABLE IF NOT EXISTS `inv_pembelian_status` (
   `ID` int(11) DEFAULT NULL,
   `Status` varchar(12) DEFAULT NULL
@@ -317,8 +296,7 @@ CREATE TABLE IF NOT EXISTS `inv_pembelian_status` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_penjualan
-DROP TABLE IF EXISTS `inv_penjualan`;
+-- Dumping structure for table kopkardb.inv_penjualan
 CREATE TABLE IF NOT EXISTS `inv_penjualan` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_Jenis` tinyint(4) DEFAULT NULL,
@@ -328,11 +306,11 @@ CREATE TABLE IF NOT EXISTS `inv_penjualan` (
   `NoUrut` varchar(50) NOT NULL DEFAULT '',
   `Nomor` varchar(50) DEFAULT NULL,
   `ID_Anggota` int(11) DEFAULT '0',
-  `Deskripsi` tinytext,
+  `Deskripsi` varchar(30) DEFAULT NULL,
   `Cicilan` tinyint(4) DEFAULT NULL,
   `Total` double DEFAULT NULL,
-  `Tgl_Cicilan` date DEFAULT NULL,
-  `ID_Post` varchar(50) DEFAULT NULL,
+  `Tgl_Cicilan` datetime DEFAULT NULL,
+  `ID_Post` tinyint(4) DEFAULT NULL,
   `ID_Close` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -340,8 +318,7 @@ CREATE TABLE IF NOT EXISTS `inv_penjualan` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_penjualan_bayar
-DROP TABLE IF EXISTS `inv_penjualan_bayar`;
+-- Dumping structure for table kopkardb.inv_penjualan_bayar
 CREATE TABLE IF NOT EXISTS `inv_penjualan_bayar` (
   `ID` int(11) DEFAULT NULL,
   `ID_Jual` int(11) DEFAULT NULL,
@@ -353,8 +330,7 @@ CREATE TABLE IF NOT EXISTS `inv_penjualan_bayar` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_penjualan_detail
-DROP TABLE IF EXISTS `inv_penjualan_detail`;
+-- Dumping structure for table kopkardb.inv_penjualan_detail
 CREATE TABLE IF NOT EXISTS `inv_penjualan_detail` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_Jenis` tinyint(4) DEFAULT NULL,
@@ -367,25 +343,24 @@ CREATE TABLE IF NOT EXISTS `inv_penjualan_detail` (
   `Harga` float DEFAULT NULL,
   `ID_Post` tinyint(4) DEFAULT NULL,
   `Keterangan` varchar(50) DEFAULT NULL,
+  `ID_Satuan` varchar(50) DEFAULT NULL,
+  `Batch` varchar(50) DEFAULT NULL,
   KEY `ID` (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_penjualan_jenis
-DROP TABLE IF EXISTS `inv_penjualan_jenis`;
+-- Dumping structure for table kopkardb.inv_penjualan_jenis
 CREATE TABLE IF NOT EXISTS `inv_penjualan_jenis` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Jenis_Jual` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `ID` int(11) DEFAULT NULL,
+  `Jenis_Jual` varchar(20) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_penjualan_rekap
-DROP TABLE IF EXISTS `inv_penjualan_rekap`;
+-- Dumping structure for table kopkardb.inv_penjualan_rekap
 CREATE TABLE IF NOT EXISTS `inv_penjualan_rekap` (
   `ID` int(11) DEFAULT NULL,
   `ID_Jenis` tinyint(4) DEFAULT NULL,
@@ -404,8 +379,7 @@ CREATE TABLE IF NOT EXISTS `inv_penjualan_rekap` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_penjualan_status
-DROP TABLE IF EXISTS `inv_penjualan_status`;
+-- Dumping structure for table kopkardb.inv_penjualan_status
 CREATE TABLE IF NOT EXISTS `inv_penjualan_status` (
   `ID` int(11) DEFAULT NULL,
   `Status_Jual` varchar(6) DEFAULT NULL
@@ -414,8 +388,7 @@ CREATE TABLE IF NOT EXISTS `inv_penjualan_status` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_posting_date
-DROP TABLE IF EXISTS `inv_posting_date`;
+-- Dumping structure for table kopkardb.inv_posting_date
 CREATE TABLE IF NOT EXISTS `inv_posting_date` (
   `ID` int(11) DEFAULT NULL,
   `PostingDate` datetime DEFAULT NULL
@@ -424,8 +397,7 @@ CREATE TABLE IF NOT EXISTS `inv_posting_date` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_posting_status
-DROP TABLE IF EXISTS `inv_posting_status`;
+-- Dumping structure for table kopkardb.inv_posting_status
 CREATE TABLE IF NOT EXISTS `inv_posting_status` (
   `ID` int(11) DEFAULT NULL,
   `PostStatus` varchar(8) DEFAULT NULL
@@ -434,8 +406,7 @@ CREATE TABLE IF NOT EXISTS `inv_posting_status` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.inv_tagihan
-DROP TABLE IF EXISTS `inv_tagihan`;
+-- Dumping structure for table kopkardb.inv_tagihan
 CREATE TABLE IF NOT EXISTS `inv_tagihan` (
   `ID` int(11) DEFAULT NULL,
   `ID_Jual` int(11) DEFAULT NULL
@@ -444,8 +415,7 @@ CREATE TABLE IF NOT EXISTS `inv_tagihan` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.jenis_simpanan
-DROP TABLE IF EXISTS `jenis_simpanan`;
+-- Dumping structure for table kopkardb.jenis_simpanan
 CREATE TABLE IF NOT EXISTS `jenis_simpanan` (
   `ID` int(11) DEFAULT NULL,
   `Jenis` varchar(12) DEFAULT NULL,
@@ -460,8 +430,7 @@ CREATE TABLE IF NOT EXISTS `jenis_simpanan` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.jurnal
-DROP TABLE IF EXISTS `jurnal`;
+-- Dumping structure for table kopkardb.jurnal
 CREATE TABLE IF NOT EXISTS `jurnal` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_Unit` int(11) DEFAULT NULL,
@@ -480,8 +449,7 @@ CREATE TABLE IF NOT EXISTS `jurnal` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.keaktifan
-DROP TABLE IF EXISTS `keaktifan`;
+-- Dumping structure for table kopkardb.keaktifan
 CREATE TABLE IF NOT EXISTS `keaktifan` (
   `ID` int(11) DEFAULT NULL,
   `Keaktifan` varchar(10) DEFAULT NULL
@@ -490,8 +458,7 @@ CREATE TABLE IF NOT EXISTS `keaktifan` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.klasifikasi
-DROP TABLE IF EXISTS `klasifikasi`;
+-- Dumping structure for table kopkardb.klasifikasi
 CREATE TABLE IF NOT EXISTS `klasifikasi` (
   `ID` int(11) DEFAULT NULL,
   `Kode` varchar(2) DEFAULT NULL,
@@ -501,8 +468,7 @@ CREATE TABLE IF NOT EXISTS `klasifikasi` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.laba_rugi
-DROP TABLE IF EXISTS `laba_rugi`;
+-- Dumping structure for table kopkardb.laba_rugi
 CREATE TABLE IF NOT EXISTS `laba_rugi` (
   `ID` int(11) DEFAULT NULL,
   `Jenis` varchar(20) DEFAULT NULL
@@ -511,8 +477,7 @@ CREATE TABLE IF NOT EXISTS `laba_rugi` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.laporan
-DROP TABLE IF EXISTS `laporan`;
+-- Dumping structure for table kopkardb.laporan
 CREATE TABLE IF NOT EXISTS `laporan` (
   `ID` int(11) DEFAULT NULL,
   `JenisLaporan` varchar(15) DEFAULT NULL
@@ -521,8 +486,7 @@ CREATE TABLE IF NOT EXISTS `laporan` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.lap_head
-DROP TABLE IF EXISTS `lap_head`;
+-- Dumping structure for table kopkardb.lap_head
 CREATE TABLE IF NOT EXISTS `lap_head` (
   `ID` int(11) DEFAULT NULL,
   `Header1` varchar(11) DEFAULT NULL,
@@ -537,8 +501,7 @@ CREATE TABLE IF NOT EXISTS `lap_head` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.lap_jenis
-DROP TABLE IF EXISTS `lap_jenis`;
+-- Dumping structure for table kopkardb.lap_jenis
 CREATE TABLE IF NOT EXISTS `lap_jenis` (
   `ID` int(11) DEFAULT NULL,
   `ID_Head` int(11) DEFAULT NULL,
@@ -552,8 +515,7 @@ CREATE TABLE IF NOT EXISTS `lap_jenis` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.lap_neraca_detail
-DROP TABLE IF EXISTS `lap_neraca_detail`;
+-- Dumping structure for table kopkardb.lap_neraca_detail
 CREATE TABLE IF NOT EXISTS `lap_neraca_detail` (
   `ID` int(11) DEFAULT NULL,
   `ID_Head` int(11) DEFAULT NULL,
@@ -570,8 +532,7 @@ CREATE TABLE IF NOT EXISTS `lap_neraca_detail` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.lap_neraca_head
-DROP TABLE IF EXISTS `lap_neraca_head`;
+-- Dumping structure for table kopkardb.lap_neraca_head
 CREATE TABLE IF NOT EXISTS `lap_neraca_head` (
   `ID` int(11) DEFAULT NULL,
   `ID_Ledger` int(11) DEFAULT NULL,
@@ -587,8 +548,7 @@ CREATE TABLE IF NOT EXISTS `lap_neraca_head` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.lap_neraca_ledger
-DROP TABLE IF EXISTS `lap_neraca_ledger`;
+-- Dumping structure for table kopkardb.lap_neraca_ledger
 CREATE TABLE IF NOT EXISTS `lap_neraca_ledger` (
   `ID` int(11) DEFAULT NULL,
   `ID_Ledger` int(11) DEFAULT NULL,
@@ -604,8 +564,7 @@ CREATE TABLE IF NOT EXISTS `lap_neraca_ledger` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.lap_shu_detail
-DROP TABLE IF EXISTS `lap_shu_detail`;
+-- Dumping structure for table kopkardb.lap_shu_detail
 CREATE TABLE IF NOT EXISTS `lap_shu_detail` (
   `ID` int(11) DEFAULT NULL,
   `ID_Head` int(11) DEFAULT NULL,
@@ -622,8 +581,7 @@ CREATE TABLE IF NOT EXISTS `lap_shu_detail` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.lap_shu_head
-DROP TABLE IF EXISTS `lap_shu_head`;
+-- Dumping structure for table kopkardb.lap_shu_head
 CREATE TABLE IF NOT EXISTS `lap_shu_head` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_Head` int(11) DEFAULT NULL,
@@ -639,8 +597,7 @@ CREATE TABLE IF NOT EXISTS `lap_shu_head` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.lap_subjenis
-DROP TABLE IF EXISTS `lap_subjenis`;
+-- Dumping structure for table kopkardb.lap_subjenis
 CREATE TABLE IF NOT EXISTS `lap_subjenis` (
   `ID` int(11) DEFAULT NULL,
   `NoUrut` int(11) DEFAULT NULL,
@@ -656,39 +613,36 @@ CREATE TABLE IF NOT EXISTS `lap_subjenis` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.mst_anggota
-DROP TABLE IF EXISTS `mst_anggota`;
+-- Dumping structure for table kopkardb.mst_anggota
 CREATE TABLE IF NOT EXISTS `mst_anggota` (
-  `ID` int(11) DEFAULT NULL,
+  `ID` int(11) NOT NULL DEFAULT '0',
   `ID_Jenis` tinyint(4) DEFAULT NULL,
-  `NoUrut` int(11) NOT NULL DEFAULT '0',
-  `ID_Aktif` int(11) DEFAULT NULL,
-  `ID_Dept` int(11) DEFAULT NULL,
+  `NoUrut` int(11) DEFAULT '0',
+  `ID_Aktif` int(11) DEFAULT '0',
+  `ID_Dept` int(11) DEFAULT '0',
   `No_Perkiraan` varchar(4) DEFAULT NULL,
   `NIP` varchar(10) DEFAULT NULL,
-  `No_Agt` varchar(10) NOT NULL DEFAULT '',
-  `Nama` varchar(40) DEFAULT NULL,
-  `ID_Check` smallint(6) DEFAULT NULL,
-  `ID_Kelamin` int(11) DEFAULT NULL,
+  `No_Agt` varchar(10) DEFAULT NULL,
+  `Nama` varchar(50) DEFAULT NULL,
+  `ID_Check` smallint(6) DEFAULT '0',
+  `ID_Kelamin` int(11) DEFAULT '0',
   `TanggalMasuk` datetime DEFAULT NULL,
   `TanggalKeluar` datetime DEFAULT NULL,
   `PhotoLink` varchar(255) DEFAULT NULL,
   `Catatan` mediumtext,
   `Alamat` varchar(50) DEFAULT NULL,
-  `Kota` varchar(20) DEFAULT NULL,
-  `Propinsi` varchar(20) DEFAULT NULL,
+  `Kota` varchar(50) DEFAULT NULL,
+  `Propinsi` varchar(50) DEFAULT NULL,
   `Telepon` varchar(50) DEFAULT NULL,
   `Faksimili` varchar(50) DEFAULT NULL,
-  `Status` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`NoUrut`),
-  KEY `ID` (`ID`)
+  `Status` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='table anggota koperasi';
 
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.mst_anggota_copy
-DROP TABLE IF EXISTS `mst_anggota_copy`;
+-- Dumping structure for table kopkardb.mst_anggota_copy
 CREATE TABLE IF NOT EXISTS `mst_anggota_copy` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_Jenis` tinyint(4) DEFAULT NULL,
@@ -717,21 +671,7 @@ CREATE TABLE IF NOT EXISTS `mst_anggota_copy` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.mst_bank
-DROP TABLE IF EXISTS `mst_bank`;
-CREATE TABLE IF NOT EXISTS `mst_bank` (
-  `NamaBank` varchar(150) NOT NULL DEFAULT '',
-  `NoRek` varchar(150) NOT NULL DEFAULT '',
-  `Nama` varchar(150) DEFAULT NULL,
-  `Saldo` double DEFAULT '0',
-  PRIMARY KEY (`NamaBank`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- Data exporting was unselected.
-
-
--- Dumping structure for table setujudb.mst_bulan
-DROP TABLE IF EXISTS `mst_bulan`;
+-- Dumping structure for table kopkardb.mst_bulan
 CREATE TABLE IF NOT EXISTS `mst_bulan` (
   `ID` int(11) NOT NULL DEFAULT '0',
   `Bulan` varchar(9) DEFAULT NULL,
@@ -741,20 +681,19 @@ CREATE TABLE IF NOT EXISTS `mst_bulan` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.mst_departemen
-DROP TABLE IF EXISTS `mst_departemen`;
+-- Dumping structure for table kopkardb.mst_departemen
 CREATE TABLE IF NOT EXISTS `mst_departemen` (
-  `ID` int(11) DEFAULT NULL,
+  `ID` int(11) NOT NULL DEFAULT '0',
   `Kode` varchar(2) DEFAULT NULL,
   `Departemen` varchar(40) DEFAULT NULL,
-  `Title` varchar(10) DEFAULT NULL
+  `Title` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.mst_kas
-DROP TABLE IF EXISTS `mst_kas`;
+-- Dumping structure for table kopkardb.mst_kas
 CREATE TABLE IF NOT EXISTS `mst_kas` (
   `id_kas` varchar(100) NOT NULL DEFAULT '',
   `nm_kas` varchar(225) DEFAULT '',
@@ -768,10 +707,8 @@ CREATE TABLE IF NOT EXISTS `mst_kas` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.mst_kas_harian
-DROP TABLE IF EXISTS `mst_kas_harian`;
+-- Dumping structure for table kopkardb.mst_kas_harian
 CREATE TABLE IF NOT EXISTS `mst_kas_harian` (
-  `no_trans` varchar(50) NOT NULL DEFAULT '0000-00-00',
   `tgl_kas` date NOT NULL DEFAULT '0000-00-00',
   `id_kas` varchar(50) NOT NULL DEFAULT '',
   `nm_kas` varchar(150) DEFAULT NULL,
@@ -784,25 +721,7 @@ CREATE TABLE IF NOT EXISTS `mst_kas_harian` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.mst_kas_trans
-DROP TABLE IF EXISTS `mst_kas_trans`;
-CREATE TABLE IF NOT EXISTS `mst_kas_trans` (
-  `id_trans` int(10) NOT NULL DEFAULT '0',
-  `id_kas` varchar(10) DEFAULT NULL,
-  `tgl_trans` date DEFAULT NULL,
-  `uraian_trans` text,
-  `jumlah` double DEFAULT '0',
-  `saldo_kas` double DEFAULT NULL,
-  `created_by` varchar(50) DEFAULT NULL,
-  `doc_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_trans`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='transaksi kas harian';
-
--- Data exporting was unselected.
-
-
--- Dumping structure for table setujudb.mst_kota
-DROP TABLE IF EXISTS `mst_kota`;
+-- Dumping structure for table kopkardb.mst_kota
 CREATE TABLE IF NOT EXISTS `mst_kota` (
   `kota_anggota` varchar(150) NOT NULL DEFAULT '',
   `created_by` varchar(150) NOT NULL DEFAULT '',
@@ -813,8 +732,7 @@ CREATE TABLE IF NOT EXISTS `mst_kota` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.mst_pelanggan
-DROP TABLE IF EXISTS `mst_pelanggan`;
+-- Dumping structure for table kopkardb.mst_pelanggan
 CREATE TABLE IF NOT EXISTS `mst_pelanggan` (
   `nm_pelanggan` varchar(125) NOT NULL DEFAULT '',
   `alm_pelanggan` text,
@@ -828,8 +746,7 @@ CREATE TABLE IF NOT EXISTS `mst_pelanggan` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.mst_produsen
-DROP TABLE IF EXISTS `mst_produsen`;
+-- Dumping structure for table kopkardb.mst_produsen
 CREATE TABLE IF NOT EXISTS `mst_produsen` (
   `nm_produsen` varchar(125) NOT NULL DEFAULT '',
   ` alm_produsen` text,
@@ -843,8 +760,7 @@ CREATE TABLE IF NOT EXISTS `mst_produsen` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.mst_propinsi
-DROP TABLE IF EXISTS `mst_propinsi`;
+-- Dumping structure for table kopkardb.mst_propinsi
 CREATE TABLE IF NOT EXISTS `mst_propinsi` (
   `prop_anggota` varchar(100) NOT NULL DEFAULT '',
   `doc_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -854,8 +770,7 @@ CREATE TABLE IF NOT EXISTS `mst_propinsi` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.mst_status
-DROP TABLE IF EXISTS `mst_status`;
+-- Dumping structure for table kopkardb.mst_status
 CREATE TABLE IF NOT EXISTS `mst_status` (
   `nm_status` varchar(50) NOT NULL DEFAULT '',
   PRIMARY KEY (`nm_status`)
@@ -864,8 +779,7 @@ CREATE TABLE IF NOT EXISTS `mst_status` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.nomor_transaksi
-DROP TABLE IF EXISTS `nomor_transaksi`;
+-- Dumping structure for table kopkardb.nomor_transaksi
 CREATE TABLE IF NOT EXISTS `nomor_transaksi` (
   `nomor` varchar(50) NOT NULL DEFAULT '',
   `jenis_transaksi` varchar(50) DEFAULT NULL,
@@ -877,8 +791,7 @@ CREATE TABLE IF NOT EXISTS `nomor_transaksi` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.perkiraan
-DROP TABLE IF EXISTS `perkiraan`;
+-- Dumping structure for table kopkardb.perkiraan
 CREATE TABLE IF NOT EXISTS `perkiraan` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_Klas` int(11) DEFAULT NULL,
@@ -900,8 +813,7 @@ CREATE TABLE IF NOT EXISTS `perkiraan` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.pinjaman
-DROP TABLE IF EXISTS `pinjaman`;
+-- Dumping structure for table kopkardb.pinjaman
 CREATE TABLE IF NOT EXISTS `pinjaman` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `ID_Unit` int(10) NOT NULL DEFAULT '0',
@@ -925,8 +837,7 @@ CREATE TABLE IF NOT EXISTS `pinjaman` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.pinjaman_bayar
-DROP TABLE IF EXISTS `pinjaman_bayar`;
+-- Dumping structure for table kopkardb.pinjaman_bayar
 CREATE TABLE IF NOT EXISTS `pinjaman_bayar` (
   `ID_pinjaman` int(10) NOT NULL DEFAULT '0',
   `ID_Agt` int(10) NOT NULL DEFAULT '0',
@@ -944,8 +855,7 @@ CREATE TABLE IF NOT EXISTS `pinjaman_bayar` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.pinjaman_limit
-DROP TABLE IF EXISTS `pinjaman_limit`;
+-- Dumping structure for table kopkardb.pinjaman_limit
 CREATE TABLE IF NOT EXISTS `pinjaman_limit` (
   `ID_Ang` int(10) NOT NULL DEFAULT '0',
   `Tahun` int(10) NOT NULL DEFAULT '0',
@@ -958,8 +868,7 @@ CREATE TABLE IF NOT EXISTS `pinjaman_limit` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.setup_simpanan
-DROP TABLE IF EXISTS `setup_simpanan`;
+-- Dumping structure for table kopkardb.setup_simpanan
 CREATE TABLE IF NOT EXISTS `setup_simpanan` (
   `id_simpanan` int(10) NOT NULL DEFAULT '0',
   `nm_simpanan` varchar(50) DEFAULT NULL,
@@ -971,8 +880,7 @@ CREATE TABLE IF NOT EXISTS `setup_simpanan` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.set_simpanan_log
-DROP TABLE IF EXISTS `set_simpanan_log`;
+-- Dumping structure for table kopkardb.set_simpanan_log
 CREATE TABLE IF NOT EXISTS `set_simpanan_log` (
   `id_simpanan` int(10) NOT NULL DEFAULT '0',
   `nm_simpanan` varchar(50) DEFAULT NULL,
@@ -983,8 +891,7 @@ CREATE TABLE IF NOT EXISTS `set_simpanan_log` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.status
-DROP TABLE IF EXISTS `status`;
+-- Dumping structure for table kopkardb.status
 CREATE TABLE IF NOT EXISTS `status` (
   `ID` int(11) DEFAULT NULL,
   `Status1` varchar(10) DEFAULT NULL
@@ -993,8 +900,7 @@ CREATE TABLE IF NOT EXISTS `status` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.sub_klasifikasi
-DROP TABLE IF EXISTS `sub_klasifikasi`;
+-- Dumping structure for table kopkardb.sub_klasifikasi
 CREATE TABLE IF NOT EXISTS `sub_klasifikasi` (
   `ID` int(11) DEFAULT NULL,
   `ID_Klasifikasi` int(11) DEFAULT NULL,
@@ -1006,8 +912,7 @@ CREATE TABLE IF NOT EXISTS `sub_klasifikasi` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for procedure setujudb.s_total_pinjaman
-DROP PROCEDURE IF EXISTS `s_total_pinjaman`;
+-- Dumping structure for procedure kopkardb.s_total_pinjaman
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_total_pinjaman`(IN `ID_Pi` INT)
 BEGIN
@@ -1016,8 +921,7 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for procedure setujudb.s_total_pinjaman_bayar
-DROP PROCEDURE IF EXISTS `s_total_pinjaman_bayar`;
+-- Dumping structure for procedure kopkardb.s_total_pinjaman_bayar
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_total_pinjaman_bayar`(IN `ID_Pinjaman` INT)
 BEGIN
@@ -1026,8 +930,7 @@ END//
 DELIMITER ;
 
 
--- Dumping structure for table setujudb.tipe_jurnal
-DROP TABLE IF EXISTS `tipe_jurnal`;
+-- Dumping structure for table kopkardb.tipe_jurnal
 CREATE TABLE IF NOT EXISTS `tipe_jurnal` (
   `ID` int(11) DEFAULT NULL,
   `Jenis` varchar(30) DEFAULT NULL,
@@ -1037,8 +940,7 @@ CREATE TABLE IF NOT EXISTS `tipe_jurnal` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.tipe_transaksi
-DROP TABLE IF EXISTS `tipe_transaksi`;
+-- Dumping structure for table kopkardb.tipe_transaksi
 CREATE TABLE IF NOT EXISTS `tipe_transaksi` (
   `ID` int(11) DEFAULT NULL,
   `Tipe` varchar(6) DEFAULT NULL
@@ -1047,8 +949,7 @@ CREATE TABLE IF NOT EXISTS `tipe_transaksi` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.tmp_kasir_transaksi_rekap
-DROP TABLE IF EXISTS `tmp_kasir_transaksi_rekap`;
+-- Dumping structure for table kopkardb.tmp_kasir_transaksi_rekap
 CREATE TABLE IF NOT EXISTS `tmp_kasir_transaksi_rekap` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_Jurnal` int(11) DEFAULT NULL,
@@ -1088,8 +989,7 @@ CREATE TABLE IF NOT EXISTS `tmp_kasir_transaksi_rekap` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.tmp_superuser_neraca_balance
-DROP TABLE IF EXISTS `tmp_superuser_neraca_balance`;
+-- Dumping structure for table kopkardb.tmp_superuser_neraca_balance
 CREATE TABLE IF NOT EXISTS `tmp_superuser_neraca_balance` (
   `unit` int(10) NOT NULL DEFAULT '0',
   `periode` date NOT NULL DEFAULT '0000-00-00',
@@ -1103,8 +1003,7 @@ CREATE TABLE IF NOT EXISTS `tmp_superuser_neraca_balance` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.tmp_superuser_total_shu
-DROP TABLE IF EXISTS `tmp_superuser_total_shu`;
+-- Dumping structure for table kopkardb.tmp_superuser_total_shu
 CREATE TABLE IF NOT EXISTS `tmp_superuser_total_shu` (
   `tglAwal` date DEFAULT NULL,
   `tglAkhir` date DEFAULT NULL,
@@ -1117,8 +1016,7 @@ CREATE TABLE IF NOT EXISTS `tmp_superuser_total_shu` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.tmp_superuser_transaksi_rekap
-DROP TABLE IF EXISTS `tmp_superuser_transaksi_rekap`;
+-- Dumping structure for table kopkardb.tmp_superuser_transaksi_rekap
 CREATE TABLE IF NOT EXISTS `tmp_superuser_transaksi_rekap` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_Jurnal` int(11) DEFAULT NULL,
@@ -1158,8 +1056,34 @@ CREATE TABLE IF NOT EXISTS `tmp_superuser_transaksi_rekap` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.tmp__transaksi_rekap
-DROP TABLE IF EXISTS `tmp__transaksi_rekap`;
+-- Dumping structure for table kopkardb.tmp__neraca_balance
+CREATE TABLE IF NOT EXISTS `tmp__neraca_balance` (
+  `unit` int(10) NOT NULL DEFAULT '0',
+  `periode` date NOT NULL DEFAULT '0000-00-00',
+  `Aktiva` double DEFAULT '0',
+  `Aktiva2` double DEFAULT '0',
+  `Pasiva` double DEFAULT '0',
+  `Pasiva2` double DEFAULT '0',
+  PRIMARY KEY (`periode`,`unit`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+
+
+-- Dumping structure for table kopkardb.tmp__total_shu
+CREATE TABLE IF NOT EXISTS `tmp__total_shu` (
+  `tglAwal` date DEFAULT NULL,
+  `tglAkhir` date DEFAULT NULL,
+  `saldo` double DEFAULT '0',
+  `saldo2` double DEFAULT '0',
+  `unit` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`unit`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- Data exporting was unselected.
+
+
+-- Dumping structure for table kopkardb.tmp__transaksi_rekap
 CREATE TABLE IF NOT EXISTS `tmp__transaksi_rekap` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_Jurnal` int(11) DEFAULT NULL,
@@ -1199,8 +1123,7 @@ CREATE TABLE IF NOT EXISTS `tmp__transaksi_rekap` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.transaksi
-DROP TABLE IF EXISTS `transaksi`;
+-- Dumping structure for table kopkardb.transaksi
 CREATE TABLE IF NOT EXISTS `transaksi` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_Jurnal` int(11) DEFAULT NULL,
@@ -1215,8 +1138,7 @@ CREATE TABLE IF NOT EXISTS `transaksi` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.transaksi_del
-DROP TABLE IF EXISTS `transaksi_del`;
+-- Dumping structure for table kopkardb.transaksi_del
 CREATE TABLE IF NOT EXISTS `transaksi_del` (
   `ID` int(11) DEFAULT NULL,
   `ID_Jurnal` int(11) DEFAULT NULL,
@@ -1239,8 +1161,7 @@ CREATE TABLE IF NOT EXISTS `transaksi_del` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.transaksi_log
-DROP TABLE IF EXISTS `transaksi_log`;
+-- Dumping structure for table kopkardb.transaksi_log
 CREATE TABLE IF NOT EXISTS `transaksi_log` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `ID_Trans` varchar(50) DEFAULT NULL,
@@ -1255,8 +1176,7 @@ CREATE TABLE IF NOT EXISTS `transaksi_log` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.transaksi_new
-DROP TABLE IF EXISTS `transaksi_new`;
+-- Dumping structure for table kopkardb.transaksi_new
 CREATE TABLE IF NOT EXISTS `transaksi_new` (
   `ID` int(11) DEFAULT NULL,
   `ID_Jurnal` int(11) DEFAULT NULL,
@@ -1279,8 +1199,7 @@ CREATE TABLE IF NOT EXISTS `transaksi_new` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.transaksi_rekap
-DROP TABLE IF EXISTS `transaksi_rekap`;
+-- Dumping structure for table kopkardb.transaksi_rekap
 CREATE TABLE IF NOT EXISTS `transaksi_rekap` (
   `ID` int(11) NOT NULL,
   `ID_Jurnal` int(11) DEFAULT NULL,
@@ -1320,8 +1239,7 @@ CREATE TABLE IF NOT EXISTS `transaksi_rekap` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.transaksi_temp
-DROP TABLE IF EXISTS `transaksi_temp`;
+-- Dumping structure for table kopkardb.transaksi_temp
 CREATE TABLE IF NOT EXISTS `transaksi_temp` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `ID_Unit` int(10) DEFAULT NULL,
@@ -1344,8 +1262,7 @@ CREATE TABLE IF NOT EXISTS `transaksi_temp` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.unit_jurnal
-DROP TABLE IF EXISTS `unit_jurnal`;
+-- Dumping structure for table kopkardb.unit_jurnal
 CREATE TABLE IF NOT EXISTS `unit_jurnal` (
   `ID` int(11) DEFAULT NULL,
   `Kode` varchar(2) DEFAULT NULL,
@@ -1355,8 +1272,7 @@ CREATE TABLE IF NOT EXISTS `unit_jurnal` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.useroto
-DROP TABLE IF EXISTS `useroto`;
+-- Dumping structure for table kopkardb.useroto
 CREATE TABLE IF NOT EXISTS `useroto` (
   `userid` varchar(50) NOT NULL DEFAULT '',
   `idmenu` varchar(50) NOT NULL DEFAULT '',
@@ -1371,8 +1287,7 @@ CREATE TABLE IF NOT EXISTS `useroto` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.users
-DROP TABLE IF EXISTS `users`;
+-- Dumping structure for table kopkardb.users
 CREATE TABLE IF NOT EXISTS `users` (
   `userid` varchar(50) NOT NULL DEFAULT '',
   `username` varchar(200) DEFAULT NULL,
@@ -1386,8 +1301,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.user_level
-DROP TABLE IF EXISTS `user_level`;
+-- Dumping structure for table kopkardb.user_level
 CREATE TABLE IF NOT EXISTS `user_level` (
   `idlevel` int(50) NOT NULL AUTO_INCREMENT,
   `nmlevel` varchar(150) DEFAULT NULL,
@@ -1397,8 +1311,7 @@ CREATE TABLE IF NOT EXISTS `user_level` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.v_dept_trans
-DROP TABLE IF EXISTS `v_dept_trans`;
+-- Dumping structure for table kopkardb.v_dept_trans
 CREATE TABLE IF NOT EXISTS `v_dept_trans` (
   `ID_Dept` int(10) NOT NULL DEFAULT '0',
   `ID_Klas` int(10) DEFAULT NULL,
@@ -1415,8 +1328,7 @@ CREATE TABLE IF NOT EXISTS `v_dept_trans` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.v_neraca
-DROP TABLE IF EXISTS `v_neraca`;
+-- Dumping structure for table kopkardb.v_neraca
 CREATE TABLE IF NOT EXISTS `v_neraca` (
   `ID_Head` int(10) DEFAULT NULL,
   `ID_Jenis` int(10) DEFAULT NULL,
@@ -1435,8 +1347,7 @@ CREATE TABLE IF NOT EXISTS `v_neraca` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.v_neraca_lajur
-DROP TABLE IF EXISTS `v_neraca_lajur`;
+-- Dumping structure for table kopkardb.v_neraca_lajur
 CREATE TABLE IF NOT EXISTS `v_neraca_lajur` (
   `ID_Dept` varchar(250) NOT NULL DEFAULT '',
   `SaldoAwal` double DEFAULT '0',
@@ -1452,8 +1363,7 @@ CREATE TABLE IF NOT EXISTS `v_neraca_lajur` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.v_superuser_neraca_lajur
-DROP TABLE IF EXISTS `v_superuser_neraca_lajur`;
+-- Dumping structure for table kopkardb.v_superuser_neraca_lajur
 CREATE TABLE IF NOT EXISTS `v_superuser_neraca_lajur` (
   `ID_Dept` varchar(250) NOT NULL DEFAULT '',
   `SaldoAwal` double DEFAULT '0',
@@ -1469,8 +1379,7 @@ CREATE TABLE IF NOT EXISTS `v_superuser_neraca_lajur` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.z_inv_konversi
-DROP TABLE IF EXISTS `z_inv_konversi`;
+-- Dumping structure for table kopkardb.z_inv_konversi
 CREATE TABLE IF NOT EXISTS `z_inv_konversi` (
   `ID` int(11) DEFAULT NULL,
   `Tanggal` datetime DEFAULT NULL,
@@ -1484,10 +1393,9 @@ CREATE TABLE IF NOT EXISTS `z_inv_konversi` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.z_inv_pemakaian
-DROP TABLE IF EXISTS `z_inv_pemakaian`;
+-- Dumping structure for table kopkardb.z_inv_pemakaian
 CREATE TABLE IF NOT EXISTS `z_inv_pemakaian` (
-  `ID` int(11) DEFAULT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Tanggal` datetime DEFAULT NULL,
   `Bulan` tinyint(4) DEFAULT NULL,
   `Tahun` smallint(6) DEFAULT NULL,
@@ -1495,14 +1403,14 @@ CREATE TABLE IF NOT EXISTS `z_inv_pemakaian` (
   `ID_Barang` int(11) DEFAULT NULL,
   `Jumlah` smallint(6) DEFAULT NULL,
   `Harga` float DEFAULT NULL,
-  `Keterangan` varchar(30) DEFAULT NULL
+  `Keterangan` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.z_inv_pemakaian_jenis
-DROP TABLE IF EXISTS `z_inv_pemakaian_jenis`;
+-- Dumping structure for table kopkardb.z_inv_pemakaian_jenis
 CREATE TABLE IF NOT EXISTS `z_inv_pemakaian_jenis` (
   `ID` int(11) DEFAULT NULL,
   `JenisPakai` varchar(10) DEFAULT NULL
@@ -1511,8 +1419,7 @@ CREATE TABLE IF NOT EXISTS `z_inv_pemakaian_jenis` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for table setujudb.z_t_inv_konversi
-DROP TABLE IF EXISTS `z_t_inv_konversi`;
+-- Dumping structure for table kopkardb.z_t_inv_konversi
 CREATE TABLE IF NOT EXISTS `z_t_inv_konversi` (
   `ID` int(11) DEFAULT NULL,
   `ID_Source` int(11) DEFAULT NULL,
@@ -1523,76 +1430,29 @@ CREATE TABLE IF NOT EXISTS `z_t_inv_konversi` (
 -- Data exporting was unselected.
 
 
--- Dumping structure for trigger setujudb.mst_kas_t_del
-DROP TRIGGER IF EXISTS `mst_kas_t_del`;
+-- Dumping structure for trigger kopkardb.pembelian_del
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
-CREATE TRIGGER `mst_kas_t_del` AFTER DELETE ON `mst_kas_harian` FOR EACH ROW BEGIN
-	delete from mst_kas_trans where id_trans=old.no_trans;
-END//
-DELIMITER ;
-SET SQL_MODE=@OLD_SQL_MODE;
-
-
--- Dumping structure for trigger setujudb.mst_kas_t_new
-DROP TRIGGER IF EXISTS `mst_kas_t_new`;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
-DELIMITER //
-CREATE TRIGGER `mst_kas_t_new` AFTER INSERT ON `mst_kas_harian` FOR EACH ROW BEGIN
-	insert into mst_kas_trans (id_trans,id_kas,tgl_trans,uraian_trans,saldo_kas)
-	values(New.no_trans,new.id_kas,new.tgl_kas,'Saldo Awal hari ini',new.sa_kas);
-END//
-DELIMITER ;
-SET SQL_MODE=@OLD_SQL_MODE;
-
-
--- Dumping structure for trigger setujudb.pembelian_del
-DROP TRIGGER IF EXISTS `pembelian_del`;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
-DELIMITER //
-CREATE TRIGGER `pembelian_del` AFTER DELETE ON `inv_pembelian_detail` FOR EACH ROW /*
-menjaga konsistensi data ketika data di detail pembelian dihapus data direkap 
-pembelian juga dihapus.
-dan update total pembelian (field ID_Bayar) karena ada item yng dihapus
-*/
-BEGIN
+CREATE TRIGGER `pembelian_del` AFTER DELETE ON `inv_pembelian_detail` FOR EACH ROW BEGIN
 	delete from inv_pembelian_rekap where ID=OLD.ID;
-	update inv_pembelian set ID_Bayar=(ID_Bayar-OLD.Jumlah) where
+	update inv_pembelian set ID_Bayar=(ID_Bayar-(OLD.Jumlah*OLD.Harga_Beli)) where
 	ID=OLD.ID_Beli;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.pembelian_new
-DROP TRIGGER IF EXISTS `pembelian_new`;
+-- Dumping structure for trigger kopkardb.pembelian_new
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `pembelian_new` AFTER INSERT ON `inv_pembelian_detail` FOR EACH ROW BEGIN
-	insert into inv_pembelian_rekap
-	(ID,Tanggal,Bulan,Tahun,ID_Beli,ID_Barang,Jml_Faktur,Jumlah,Harga_Beli,Keterangan,Batch)
-	values(  
-	(select ID from inv_pembelian_detail where ID=NEW.ID),
-	(select Tanggal from inv_pembelian where ID=NEW.ID_Beli),
-	(select Bulan from inv_pembelian where ID=NEW.ID_Beli),
-	(select Tahun from inv_pembelian where ID=NEW.ID_Beli),
-	(select ID_Beli from inv_pembelian_detail where ID=NEW.ID),
-	(select ID_Barang from inv_pembelian_detail where ID=NEW.ID),
-	(select Jml_Faktur from inv_pembelian_detail where ID=NEW.ID),
-	(select Jumlah from inv_pembelian_detail where ID=NEW.ID),
-	(select Harga_Beli from inv_pembelian_detail where ID=NEW.ID),
-	(select ID_Jenis from inv_pembelian where ID=NEW.ID_Beli),
-	(select Tahun from inv_pembelian_detail where ID=NEW.ID)
-	);
-	
-	update inv_pembelian set ID_Bayar=(ID_Bayar+NEW.Jumlah) where ID=NEW.ID_Beli;
+	insert into inv_pembelian_rekap select * from inv_pembelian_detail where ID=New.ID;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.pembelian_upd
-DROP TRIGGER IF EXISTS `pembelian_upd`;
+-- Dumping structure for trigger kopkardb.pembelian_upd
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `pembelian_upd` AFTER UPDATE ON `inv_pembelian_detail` FOR EACH ROW BEGIN
@@ -1610,8 +1470,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.pembelian_upd_bfr
-DROP TRIGGER IF EXISTS `pembelian_upd_bfr`;
+-- Dumping structure for trigger kopkardb.pembelian_upd_bfr
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `pembelian_upd_bfr` BEFORE UPDATE ON `inv_pembelian_detail` FOR EACH ROW BEGIN
@@ -1622,8 +1481,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.penjualan_del
-DROP TRIGGER IF EXISTS `penjualan_del`;
+-- Dumping structure for trigger kopkardb.penjualan_del
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `penjualan_del` AFTER DELETE ON `inv_penjualan_detail` FOR EACH ROW BEGIN
@@ -1633,21 +1491,17 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.penjualan_del_header
-DROP TRIGGER IF EXISTS `penjualan_del_header`;
+-- Dumping structure for trigger kopkardb.penjualan_del_header
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `penjualan_del_header` AFTER DELETE ON `inv_penjualan` FOR EACH ROW BEGIN
 	delete from inv_penjualan_detail where ID_Jual=OLD.ID;
-	
-
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.penjualan_new
-DROP TRIGGER IF EXISTS `penjualan_new`;
+-- Dumping structure for trigger kopkardb.penjualan_new
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `penjualan_new` AFTER INSERT ON `inv_penjualan_detail` FOR EACH ROW BEGIN
@@ -1673,8 +1527,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.penjualan_upd
-DROP TRIGGER IF EXISTS `penjualan_upd`;
+-- Dumping structure for trigger kopkardb.penjualan_upd
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `penjualan_upd` AFTER UPDATE ON `inv_penjualan_detail` FOR EACH ROW BEGIN
@@ -1685,22 +1538,18 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.penjualan_upd_header
-DROP TRIGGER IF EXISTS `penjualan_upd_header`;
+-- Dumping structure for trigger kopkardb.penjualan_upd_header
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `penjualan_upd_header` AFTER UPDATE ON `inv_penjualan` FOR EACH ROW BEGIN
-	replace into mst_bank (NamaBank,NoRek,Nama,Saldo) values
-	(NEW.Deskripsi,NEW.ID_Post,
-	(select Nama from mst_anggota where ID=NEW.ID_Anggota),NEW.Total);
-
+	update inv_penjualan_detail set ID_Jenis=NEW.ID_Jenis
+	where ID_Jual=NEW.ID;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.transaksi_tmp_del
-DROP TRIGGER IF EXISTS `transaksi_tmp_del`;
+-- Dumping structure for trigger kopkardb.transaksi_tmp_del
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `transaksi_tmp_del` AFTER DELETE ON `transaksi_temp` FOR EACH ROW BEGIN
@@ -1715,8 +1564,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.transaksi_tmp_upd
-DROP TRIGGER IF EXISTS `transaksi_tmp_upd`;
+-- Dumping structure for trigger kopkardb.transaksi_tmp_upd
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `transaksi_tmp_upd` AFTER UPDATE ON `transaksi_temp` FOR EACH ROW BEGIN
@@ -1731,14 +1579,10 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_alamat_new
-DROP TRIGGER IF EXISTS `t_alamat_new`;
+-- Dumping structure for trigger kopkardb.t_alamat_new
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
-CREATE TRIGGER `t_alamat_new` AFTER INSERT ON `mst_anggota` FOR EACH ROW /*
-Triger untuk membuat data perkiraan ketika ada anggota baru
-*/
-BEGIN
+CREATE TRIGGER `t_alamat_new` AFTER INSERT ON `mst_anggota` FOR EACH ROW BEGIN
 	replace into mst_kota(kota_anggota) values(New.Kota);
 	replace into mst_propinsi(prop_anggota) values(NEW.Propinsi);
 	/*buat akun perkiraan
@@ -1786,7 +1630,7 @@ BEGIN
 		(select ID_Calc from jenis_simpanan where ID='3'),
 		'3','0','0') ;
  
-  /*Pinjaman Uang   */
+  /*Pinjaman,Barang  */
 	insert into perkiraan
 		(ID_Klas,ID_SubKlas,ID_Dept,ID_Unit,ID_Laporan,ID_LapDetail,
 		 ID_Agt,ID_Calc,ID_Simpanan,NoUrut,SaldoAwal)
@@ -1801,7 +1645,7 @@ BEGIN
 		(select ID_Calc from jenis_simpanan where ID='4'),
 		'4','0','0') ;
  
-  /* Pinjaman Barang  */
+  /*Barang  */
 	insert into perkiraan
 		(ID_Klas,ID_SubKlas,ID_Dept,ID_Unit,ID_Laporan,ID_LapDetail,
 		 ID_Agt,ID_Calc,ID_Simpanan,NoUrut,SaldoAwal)
@@ -1822,20 +1666,18 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_alamat_upd
-DROP TRIGGER IF EXISTS `t_alamat_upd`;
+-- Dumping structure for trigger kopkardb.t_alamat_upd
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_alamat_upd` AFTER UPDATE ON `mst_anggota` FOR EACH ROW BEGIN
-	replace into mst_kota(kota_anggota) values(New.Kota);
-	replace into mst_propinsi(prop_anggota) values(NEW.Propinsi);
+	update mst_kota set kota_anggota=New.Kota where kota_anggota=OLD.Kota;
+	update mst_propinsi set prop_anggota=NEW.Propinsi where porp_anggota=OLD.Propinsi;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_barang_del
-DROP TRIGGER IF EXISTS `t_barang_del`;
+-- Dumping structure for trigger kopkardb.t_barang_del
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_barang_del` AFTER DELETE ON `inv_barang` FOR EACH ROW BEGIN
@@ -1845,8 +1687,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_barang_new
-DROP TRIGGER IF EXISTS `t_barang_new`;
+-- Dumping structure for trigger kopkardb.t_barang_new
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_barang_new` AFTER INSERT ON `inv_barang` FOR EACH ROW BEGIN
@@ -1857,8 +1698,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_barang_upd
-DROP TRIGGER IF EXISTS `t_barang_upd`;
+-- Dumping structure for trigger kopkardb.t_barang_upd
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_barang_upd` AFTER UPDATE ON `inv_barang` FOR EACH ROW BEGIN
@@ -1871,8 +1711,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_pinjaman_del
-DROP TRIGGER IF EXISTS `t_pinjaman_del`;
+-- Dumping structure for trigger kopkardb.t_pinjaman_del
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_pinjaman_del` AFTER DELETE ON `pinjaman` FOR EACH ROW BEGIN
@@ -1882,8 +1721,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_pinjaman_new
-DROP TRIGGER IF EXISTS `t_pinjaman_new`;
+-- Dumping structure for trigger kopkardb.t_pinjaman_new
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_pinjaman_new` AFTER INSERT ON `pinjaman` FOR EACH ROW BEGIN
@@ -1896,8 +1734,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_pinjaman_upd
-DROP TRIGGER IF EXISTS `t_pinjaman_upd`;
+-- Dumping structure for trigger kopkardb.t_pinjaman_upd
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_pinjaman_upd` AFTER UPDATE ON `pinjaman` FOR EACH ROW BEGIN
@@ -1911,8 +1748,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_setup_simpanan_log
-DROP TRIGGER IF EXISTS `t_setup_simpanan_log`;
+-- Dumping structure for trigger kopkardb.t_setup_simpanan_log
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_setup_simpanan_log` AFTER UPDATE ON `setup_simpanan` FOR EACH ROW BEGIN
@@ -1922,8 +1758,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_SimpSumDept_new
-DROP TRIGGER IF EXISTS `t_SimpSumDept_new`;
+-- Dumping structure for trigger kopkardb.t_SimpSumDept_new
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_SimpSumDept_new` AFTER INSERT ON `transaksi_new` FOR EACH ROW begin
@@ -1933,8 +1768,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_transaksi_del
-DROP TRIGGER IF EXISTS `t_transaksi_del`;
+-- Dumping structure for trigger kopkardb.t_transaksi_del
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_transaksi_del` AFTER DELETE ON `transaksi` FOR EACH ROW begin
@@ -1950,8 +1784,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_transaksi_new
-DROP TRIGGER IF EXISTS `t_transaksi_new`;
+-- Dumping structure for trigger kopkardb.t_transaksi_new
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_transaksi_new` AFTER INSERT ON `transaksi` FOR EACH ROW begin
@@ -1980,8 +1813,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_transaksi_new_del
-DROP TRIGGER IF EXISTS `t_transaksi_new_del`;
+-- Dumping structure for trigger kopkardb.t_transaksi_new_del
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_transaksi_new_del` AFTER DELETE ON `transaksi_new` FOR EACH ROW BEGIN
@@ -1994,8 +1826,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_transaksi_upd
-DROP TRIGGER IF EXISTS `t_transaksi_upd`;
+-- Dumping structure for trigger kopkardb.t_transaksi_upd
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_transaksi_upd` AFTER UPDATE ON `transaksi` FOR EACH ROW begin
@@ -2025,8 +1856,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_update_stat_pinjaman
-DROP TRIGGER IF EXISTS `t_update_stat_pinjaman`;
+-- Dumping structure for trigger kopkardb.t_update_stat_pinjaman
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_update_stat_pinjaman` AFTER INSERT ON `pinjaman_bayar` FOR EACH ROW BEGIN
@@ -2036,8 +1866,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_v_neraca_del
-DROP TRIGGER IF EXISTS `t_v_neraca_del`;
+-- Dumping structure for trigger kopkardb.t_v_neraca_del
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_v_neraca_del` AFTER DELETE ON `lap_subjenis` FOR EACH ROW BEGIN
@@ -2047,8 +1876,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_v_neraca_new
-DROP TRIGGER IF EXISTS `t_v_neraca_new`;
+-- Dumping structure for trigger kopkardb.t_v_neraca_new
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_v_neraca_new` AFTER INSERT ON `lap_subjenis` FOR EACH ROW BEGIN
@@ -2060,8 +1888,7 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 
 
--- Dumping structure for trigger setujudb.t_v_neraca_upd
-DROP TRIGGER IF EXISTS `t_v_neraca_upd`;
+-- Dumping structure for trigger kopkardb.t_v_neraca_upd
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
 CREATE TRIGGER `t_v_neraca_upd` AFTER UPDATE ON `lap_subjenis` FOR EACH ROW BEGIN

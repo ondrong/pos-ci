@@ -15,9 +15,9 @@ $(document).ready(function(e) {
 			$('span#v_'+id).show();
 			$('span:not(#v_'+id+')').hide();
 			$('#prs').val(id);
-		if(id=='adduser'){
-			$('#frm1 #userid').focus().select();
-		}
+				if(id=='adduser'){
+					$('#frm1 #userid').focus().select();
+				}
 
 	});
 	//$('#v_listuser table#ListTable thead th:nth-child(5)').hide();
@@ -50,7 +50,7 @@ $(document).ready(function(e) {
 	$('#frm1 #userid')
 		.keyup(function(){
 			pos_div(this);
-			auto_suggest2('get_userid',$(this).val(),$(this).attr('id')+'-frm1');
+			//auto_suggest2('get_userid',$(this).val(),$(this).attr('id')+'-frm1');
 		})
 		.focus().select();
 	$(':button').click(function(){
