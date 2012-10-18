@@ -58,6 +58,17 @@
 			echo " >";echo ($fieldforname=='')? $rw->$dst[1]:$addnm."</option>";	
 			}
 	}
+	
+	function selectTxt($section,$bariskosong=false,$path='asset/bin/zetro_beli.frm'){
+		$zn= new zetro_manager();$data='';
+		$countX=$zn->Count($section,$path);
+		$data=($bariskosong==true)?"<option value=''>&nbsp;</option>":'';
+			for ($i=1;$i<=$countX;$i++){
+				$content=explode(',',$zn->rContent($section,$i,$path));
+			  $data=$data."<option value='".$content[0]."'>".$content[1]."</option>";
+			}
+			return $data;
+	}
 	function lama_execute(){
 		$awal = microtime(true);
 		
@@ -269,10 +280,9 @@
 			 <img src='".base_url()."asset/images/no.png' id='gakjadi' onclick=\"batal_$frm();\" class='hapus'>
 			 </span>";
 	}
-	function tab_head($section='Menu Utama',$bg=''){
+	function tab_head($section='Menu Utama',$bg='',$file='asset/bin/zetro_menu.dll'){
 		$data=array();
 		$zn=new zetro_manager();
-		$file='asset/bin/zetro_menu.dll';
 		$jml=$zn->Count($section,$file);
 		for($i=1;$i<=$jml;$i++){
 			$mnu=explode("|",$zn->rContent($section,$i,$file));
@@ -325,4 +335,13 @@
 		$data= fread($find,1024);	
 		return $data;
 	}
+	function img_aksi($id='',$del=false,$only=''){
+		return ($del==false)? 
+				"<img src='".base_url()."asset/images/editor.png' id='simpan' onclick=\"images_click('".$id."','edit');\" class='simpan' title='Click to Edit stock'>":
+				($only=='del')?
+				"<img src='".base_url()."asset/images/no.png' id='simpan' onclick=\"images_click('".$id."','edit');\" class='simpan' title='Click to Edit stock'>":
+				"<img src='".base_url()."asset/images/editor.png' id='simpan' onclick=\"images_click('".$id."','edit');\" class='simpan' title='Click to Edit stock'>
+			    &nbsp;<img src='".base_url()."asset/images/no.png' id='hapus' onclick=\"images_click('".$id."','del');\" class='hapus' title='Click to Edit stock'>";
+	}
+
 //}

@@ -40,11 +40,11 @@ if($all_authorisation!=''){
 	$zfm->Start_form(true,'frm2');
 	$zfm->BuildForm('usergroup',false,'40%');
 	echo "<hr/>\n";
-	tab_head();
+	tab_head(base64_decode($this->session->userdata('menus')),'','asset/bin/zetro_menu.dll');
 	echo "<table id='usrmenu' style='border-collapse:collapse' width='70%'>\n
 		 <thead>
 		 <tr class='header' align='center'>
-		 <th class='kotak' width='30%'>Menu Name</th>
+		 <th class='kotak' width='30%'>".base64_decode($this->session->userdata('menus'))."</th>
 		 <th class='kotak' width='8%'>Input</th>
 		 <th class='kotak' width='8%'>Edit</th>
 		 <th class='kotak' width='8%'>View</th>

@@ -30,7 +30,7 @@ $(document).ready(function(e) {
 	//generate header transaksi
 	if($('#trans_new').val()==''){
 		_generate_nomor('GI','#frm1 input#no_transaksi');
-		_generate_faktur('#frm1 input#faktur_transaksi');
+		
 	}
 	lock('#no_transaksi,#kredit,#bayar');
 	//lock tanggal jika user bukan level adminstrator /superuser
@@ -88,11 +88,13 @@ $(document).ready(function(e) {
 											function(data){
 												var jm=$.parseJSON(data);
 												if($.trim(jm.stock)=='0'||jm.stock==null){
-													if(confirm('Stock '+result.data+' = 0 (Kosong)\nTransaksi akan dilanjutkan?')){
+/*													if(confirm('Stock '+result.data+' = 0 (Kosong)\nTransaksi akan dilanjutkan?')){
 														$('table#inform tr td#ist').html((jm.satuan==null)?'0 '+result.nm_satuan:'0 '+jm.satuan)
 													}else{
 														_kosongkan_field(id[0]);
 													}
+*/												alert('Stock '+result.data+' kosong (nol). tidak bisa dilakukan trasaksi\nSilahkan update dulu stocknya');
+												_kosongkan_field(id[0]);
 												}else{
 												$('table#inform tr td#ist').html(jm.stock+'  '+jm.satuan)
 												}
@@ -200,7 +202,7 @@ $(document).ready(function(e) {
 		var frm=(cb==1)?'#frm3':'#frm5';
 		var prs=(cb==1)?'pembayaran':'kredited';
 		var t_pos=(cb==1)?'25%':'17%';
-		(ppn==0)?lock('#ppn'):lock('#ppn');
+		(ppn==0)?unlock('#ppn'):unlock('#ppn');
 				$('#stat_sim').val(frm);
 				$('#nama').val(prs);
 				$('#pp-'+prs).css({'left':'28%','top':t_pos});
@@ -284,8 +286,8 @@ $(document).ready(function(e) {
 		}
 		
 		_simpan_pembayaran();//simpan data pembayaran
-		_print_struk($('#no_transaksi').val(),$('#tgl_transaksi').val());//print struk pembayaran
-		})
+/*		_print_struk($('#no_transaksi').val(),$('#tgl_transaksi').val());//print struk pembayaran
+*/		})
 		
 	$('#frm5 #saved-dikredit')
 		.click(function(){
@@ -298,8 +300,8 @@ $(document).ready(function(e) {
 		}
 		
 		_simpan_pembayaran();//simpan data pembayaran
-		_print_struk($('#no_transaksi').val(),$('#tgl_transaksi').val());//print struk pembayaran
-		})
+/*		_print_struk($('#no_transaksi').val(),$('#tgl_transaksi').val());//print struk pembayaran
+*/		})
 	//pilih cara pembayaran yang akan dilakukan	
 	$('#cbayare').change(function(){
 		if($(this).val()!=1 && $('#nm_nasabah').val()==''){
@@ -307,11 +309,10 @@ $(document).ready(function(e) {
 			$('#nm_nasabah').focus().select();
 			$(this).val('0').select();
 		}
-		if($(this).val()!=1&& $('#nm_nasabah').val()!=''){
-			$('table#b tr#nontunai').show();
-		}else{
-			$('table#b tr#nontunai').hide();
-		}
+		//if($(this).val()!=1&& $('#nm_nasabah').val()!=''){
+			_update_jenis_pembayaran();
+		//}
+		($(this).val()!=1)?	$('table#b tr#nontunai').show():$('table#b tr#nontunai').hide();
 	})
 	 //autosuggest nama bank
 	 $('#n_bank')
@@ -465,7 +466,6 @@ $(document).ready(function(e) {
 			'n_bank'	:$('#n_bank').val(),
 			'tgl_giro'	:$('#tgl_giro').val()
 		},function(result){
-			//alert(result);
 		})
 	}
 	
@@ -491,9 +491,22 @@ $(document).ready(function(e) {
 			'cbayar'		:jenis_bayar,
 			'tanggal'		:$('#tgl_transaksi').val()
 		},function(result){
-					//_simpan_header()
+			_update_stock($('#no_transaksi').val(),$('#tgl_transaksi').val());//print struk pembayaran
 					keluar();
 
+		})
+	}
+	function _update_stock(id,tgl,jml){
+		$.post('update_material_stock',{
+			'no_trans'	:id,
+			'tanggal'	:tgl,
+			'jumlah'	:jml
+		},function(result){
+			if(parseInt(result)<0){
+				_update_stock($('#no_transaksi').val(),$('#tgl_transaksi').val(),result);
+			}else{
+				_print_struk(id,tgl);//print struk pembayaran
+			}
 		})
 	}
 	//print struk
@@ -504,7 +517,7 @@ $(document).ready(function(e) {
 			'no_transaksi':id,
 			'tanggal'	  :tgl},
 			function(result){
-				document.location.href=path+'penjualan/index';
+				//document.location.href=path+'penjualan/index';
 			})
 	}
 	//membuat nomor transaksi otomatis berdasarkan jenis transaksi
@@ -513,14 +526,18 @@ $(document).ready(function(e) {
 		function(result){
 			$(field).val(result);
 			$('#trans_new').val('add');
+			_generate_faktur('#frm1 input#faktur_transaksi');
 		})
 	}
 	//membuat nomor faktur otomatis khusus untuk penjualan
 	function _generate_faktur(field){
-		$.post('nomor_faktur',{'tipe':'rnd'},
+/*		$.post('nomor_faktur',{'tipe':'rnd'},
 		function(result){
 			$(field).val(result);
 		})
+*/		var n_tran=$('#frm1 input#no_transaksi').val().substr(5,5);
+		var tahun=new Date()
+		$(field).val(n_tran+'-'+tahun.getFullYear())
 	}
 	
 	function _total_belanja(){

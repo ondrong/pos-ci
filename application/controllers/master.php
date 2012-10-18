@@ -12,6 +12,7 @@ class Master extends CI_Controller {
 		$this->load->model("Admin_model");
 		$this->load->model("control_model");
 		$this->load->model("akun_model");
+		$this->load->model("purch_model");
 		$this->load->library("zetro_auth");
 		$this->userid=$this->session->userdata('idlevel');
 	}
@@ -44,10 +45,15 @@ class Master extends CI_Controller {
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('master/master_kas_harian');
 	}
-	function vendor(){
-		$this->zetro_auth->menu_id(array('addvendor','listvendor'));
+	function vendor_n(){
+		$this->zetro_auth->menu_id(array('master__vendor_n','listvendor'));
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('master/master_vendor');
+	}
+	function vendor_l(){
+		$this->zetro_auth->menu_id(array('listvendor','master__vendor_n'));
+		$this->list_data($this->zetro_auth->auth('List'));
+		$this->View('master/master_vendor_list');
 	}
 	function general(){
 		$this->zetro_auth->menu_id(array('kas'));
@@ -195,7 +201,7 @@ class Master extends CI_Controller {
 //vendor transaction
 	function get_next_id(){
 		$data=0;
-		$data=$this->Admin_model->show_single_field('inv_pemasok','ID','order by ID desc limit 1');
+		$data=$this->Admin_model->show_single_field('mst_anggota','ID',"where ID_Jenis='2' order by ID desc limit 1");
 		$data=($data+1);
 		if(strlen($data)==1){
 			$data='000'.$data;
@@ -203,7 +209,7 @@ class Master extends CI_Controller {
 			$data='00'.$data;
 		}else if(strlen($data)==3){
 			$data='0'.$data;
-		}else if(strlen($data)==4){
+		}else if(strlen($data)>=4){
 			$data=$data;
 		}
 		echo $data;
@@ -211,26 +217,52 @@ class Master extends CI_Controller {
   	
 	function set_data_vendor(){
 		$data=array();
-		$data['ID']		=round($_POST['ID']);
-		$data['Pemasok']=addslashes(strtoupper($_POST['pemasok']));
-		$data['Alamat']	=ucwords(addslashes($_POST['alamat']));
-		$data['Kota']	=ucwords($_POST['kota']);
-		$data['Propinsi']=ucwords($_POST['propinsi']);
-		$data['Telepon']=$_POST['telepon'];
-		$data['cp_nama']=addslashes(strtoupper($_POST['cp_nama']));
-		$data['Status'] =$_POST['ID'];
-		$this->Admin_model->replace_data('inv_pemasok',$data);
+		$data['ID']			=round($_POST['ID']);
+		$data['Nama']		=addslashes(strtoupper($_POST['pemasok']));
+		$data['Alamat']		=empty($_POST['alamat'])?'':ucwords(addslashes($_POST['alamat']));
+		$data['Kota']		=empty($_POST['kota'])?'':ucwords($_POST['kota']);
+		$data['Propinsi']	=empty($_POST['propinsi'])?'':ucwords($_POST['propinsi']);
+		$data['Telepon']	=empty($_POST['telepon'])?'':$_POST['telepon'];
+		$data['Faksimili']	=empty($_POST['faksimili'])?'':$_POST['faksimili'];
+		$data['Status'] 	='aktif';
+		$data['ID_Jenis']	='2';
+		//print_r($data);
+		$this->Admin_model->replace_data('mst_anggota',$data);
 	}
 	function list_vendor(){
 		$data=array(); $n=0;
-		$nama=empty($_POST['nama'])?$where='':$where="where Pemasok like '%".$_POST['nama']."%'";
-		$data=$this->Admin_model->show_list('inv_pemasok',$where.' order by Pemasok');
+		$nama=empty($_POST['nama'])?$where="where ID_Jenis='2'":$where="where Nama like '%".$_POST['nama']."%' and ID_Jenis='2'";
+		$data=$this->Admin_model->show_list('mst_anggota',$where.' order by Nama');
 		foreach($data as $row){
-			$n++;
-			echo tr().td($n,'center').td($row->Status,'center').td($row->Pemasok).
+			$n++;//tr('xx\' onClick="_show_detail(\''.$row->ID.'\');" attr=\'ax').
+			$cek=rdb('inv_pembelian','ID_Pemasok','ID_Pemasok',"where ID_Pemasok='".$row->ID."'");
+			echo tr().
+				 td($n,'center').
+				 td($row->ID,'center').
+				 td($row->Nama,'xx\' onClick="_show_detail(\''.$row->ID.'\',\''.$row->Nama.'\');" attr=\'ax').
 				 td($row->Alamat).td($row->Kota).td($row->Propinsi).
-				 td($row->cp_nama).td($row->Telepon).td().
+				 td($row->Telepon).td($row->Faksimili).
+				 td(($cek=='')? img_aksi($row->ID,true,'del'):'','center').
 				 _tr();
 		}
+	}
+	
+	function vendor_detailed(){
+		$data=array();$n=0;$total=0;
+		$ID=$_POST['id'];
+		$data=$this->purch_model->detail_trans_vendor("where p.ID_Pemasok='".$ID."' order by p.Tanggal limit 500");
+		foreach($data as $r){
+		 $n++;
+		 echo tr().td($n,'center').
+		 		   td(tglfromSql($r->Tanggal)).
+				   td($r->Nomor).
+				   td($r->Nama_Barang).
+				   td(number_format($r->Jumlah,2),'right').
+				   td($r->Satuan).
+				   td(number_format(($r->Jumlah*$r->Harga_Beli),2),'right').
+				  _tr();	
+		$total=($total+($r->Jumlah*$r->Harga_Beli));
+		}
+		echo tr().td('<b>Total</b>','right\' colspan=\'6','kotak list_genap').td('<b>'.number_format($total,2).'</b>','right')._tr();
 	}
 }

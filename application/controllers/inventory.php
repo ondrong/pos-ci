@@ -31,7 +31,7 @@ class Inventory extends CI_Controller {
 		$this->Footer();
 	}
 	function index(){
-		$this->inv_model->auto_data();
+		//$this->inv_model->auto_data();
 		$this->zetro_auth->menu_id(array('add','list','unit','kunit','hargabeli'));
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('inventory/material_list');
@@ -267,26 +267,28 @@ class Inventory extends CI_Controller {
 		$id_jenis	=empty($_POST['id_jenis'])?'':"and id_jenis='".$_POST['id_jenis']."'";
 		$stat		=($_POST['stat']=='all')?'':"and status='".$_POST['stat']."'";
 		$cari		=empty($_POST['cari'])?'': "and Nama_Barang like '".$_POST['cari']."%'";
+		$group		="group by ms.batch,b.ID";
 		if($id!='' && $id_jenis!=''){
-			 $where="where ID_Kategori='$id' $id_jenis $stat $cari order by ID_Jenis,nama_barang";
+			 $where="where ID_Kategori='$id' $id_jenis $stat $cari $group order by ID_Jenis,nama_barang";
 		}else if ($id=='' && $id_jenis!=''){
-			 $where="where id_jenis='".$_POST['id_jenis']."' $stat $cari order by ID_Jenis,nama_barang";
+			 $where="where id_jenis='".$_POST['id_jenis']."' $stat $cari $group order by ID_Jenis,nama_barang";
 		}else if ($id=='' && $id_jenis==''){
-		 	 $where="where Nama_Barang like '".$_POST['cari']."%' $stat order by ID_Jenis,nama_barang";
+		 	 $where="where Nama_Barang like '".$_POST['cari']."%' $stat $group order by ID_Jenis,nama_barang";
 		}else if ($id!='' && $id_jenis==''){
-			 $where="where ID_Kategori='$id' $stat $cari order by ID_Jenis,nama_barang";
+			 $where="where ID_Kategori='$id' $stat $cari $group order by ID_Jenis,nama_barang";
 		}
 		/* echo $id.'='. $where; //for debug only*/
 		$data=$this->inv_model->list_barang($where);
 		foreach($data as $r){
 			$n++;$stock=0;
-			$stock=rdb('inv_material_stok','stock','sum(stock) as stock',"where id_barang='".$r->ID."'");
+			//$stock=rdb('inv_material_stok','stock','sum(stock) as stock',"where id_barang='".$r->ID."'");
 			echo tr('xx','nm-'.$r->ID).td($n,'center').td($r->Kategori,'kotak\' nowrap=\'nowrap' ).td($r->JenisBarang). td(strtoupper($r->Kode)).
 				 td(strtoupper($r->Nama_Barang)).td($r->Satuan).
-				 td(number_format($stock,2),'right').
-				 td(number_format($r->Harga_Beli,2),'right').
+				 td(number_format($r->stock,2),'right').
+				 td(number_format($r->harga_beli,2),'right').
 				 td(number_format($r->Harga_Jual,2),'right').td($r->minstok,'center');
 			echo ($this->zetro_auth->cek_oto('e','list')!='')?
+				($this->session->userdata('menus')=='QWNjb3VudGluZw==')?'':
 				 td(aksi('asset/images/editor.png','edit','Click for edit',"upd_barang('".$r->ID."');").'&nbsp;'.
 				 	aksi('asset/images/no.png','del','Click for delete',"delet_barang('".$r->ID."');"),'center'):'';
 			echo _tr();

@@ -1,56 +1,26 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-$zfm=new zetro_frmBuilder('asset/bin/zetro_beli.frm');
+$zfm=new zetro_frmBuilder('asset/bin/zetro_neraca.frm');
 $zlb=new zetro_buildlist();
-$zlb->config_file('asset/bin/zetro_beli.frm');
+$zlb->config_file('asset/bin/zetro_neraca.frm');
 $path='application/views/laporan/transaksi';
-$printer="<img src='".base_url()."asset/images/print.png' id='printsheet' class='menux' style='display:none' title='Print report'>";
 calender();
 link_css('jquery.coolautosuggest.css','asset/css');
 link_js('jquery.coolautosuggest.js','asset/js');
 link_js('auto_sugest.js,lap_jual.js,jquery.fixedheader.js','asset/js,'.$path.'/js,asset/js');
-panel_begin('Laporan','',','.$printer);
-panel_multi('laporanpenjualan','block',false);
-$fld="<input type='hidden' id='jtran' name='jtran' value=''>";
-$fld.="<input type='hidden' id='section' name='section' value='lapjuallist'>";
-$fld.="<input type='hidden' id='lap' name='lap' value='jual'>";
-$fld.="<input type='hidden' id='optional' name='optional' value=''>";
-$fld.="<input type='hidden' id='ID_Anggota' name='ID_Anggota' value=''>";
-if($all_trans_jual!=''){
-	$zfm->Addinput($fld);
-	$zfm->AddBarisKosong(true);
-	$zfm->Start_form(true,'frm1');
-	$zfm->BuildForm('lapjual',true,'60%');
-	$zfm->BuildFormButton('Process','filter','button',2);
-}else{
-	no_auth();
-}
-panel_multi_end();
-$fld2="<input type='hidden' id='jtran' name='jtran' value=''>";
-$fld2.="<input type='hidden' id='section' name='section' value='lapjuallist'>";
-$fld2.="<input type='hidden' id='lap' name='lap' value='resep'>";
-$fld2.="<input type='hidden' id='optional' name='optional' value=''>";
-panel_multi('transaksiresep');
-if($all_trans_resep!=''){
-	$zfm->Addinput($fld2);
-	$zfm->AddBarisKosong(false);
-	$zfm->Start_form(true,'frm2');
-	$zfm->BuildForm('lapjualresep',true,'60%');
-	$zfm->BuildFormButton('Process','resep','button',2);
-}else{
-	no_auth();
-}
-panel_multi_end();
-$fld3="<input type='hidden' id='jtran' name='jtran' value=''>";
-$fld3.="<input type='hidden' id='section' name='section' value='lapjuallist'>";
-$fld3.="<input type='hidden' id='lap' name='lap' value='topjual'>";
-$fld3.="<input type='hidden' id='optional' name='optional' value=''>";
-panel_multi('toppenjualan');
-if($all_trans_top!=''){
-	$zfm->Addinput($fld3);
-	$zfm->AddBarisKosong(true);
-	$zfm->Start_form(true,'frm3');
-	$zfm->BuildForm('lapjualtop',true,'60%');
-	$zfm->BuildFormButton('Process','topjual','button',2);
+panel_begin('Rekap Penjualan Tunai');
+panel_multi('rekappenjualantunai','block',false);
+if($all_rekappenjualantunai!=''){
+	echo "<form id='frm1' name='frm1' method='post' action=''>";
+	addText(array('Periode :',' s/d ','Kategori','Jenis',''),
+	array("<input type='text' id='dari_tgl' name='dari_tgl' value=''>",
+		  "<input type='text' id='sampai_tgl' name='sampai_tgl' value=''>",
+		  "<select id='kategori' name='kategori'></select>",
+		  "<select id='id_jenis' name='id_jenis'></select>",
+		  "<input type='button' value='OK' id='okelah'/>
+		  <input type='hidden' value='1' id='jenis_beli' name='jenis_beli'/>"));
+	echo "</form>";
+	echo "</tbody></table>";
+	echo "<table id='xx' width='100%'><tbody><tr><td>&nbsp;</td></tr></tbody></table>";
 }else{
 	no_auth();
 }
@@ -58,12 +28,10 @@ panel_multi_end();
 auto_sugest();
 panel_end();
 ?>
+
 <script language="javascript">
 $(document).ready(function(e) {
-    $('#printsheet').click(function(){
-		$('#frm1').attr('action','print_laporan');
-		document.frm1.submit();
-		//document.location.href='http://localhost/apotek/index.php/report/countsheet';
-	})
+	$('#kategori').html("<option value='' selected>Semua</option><? dropdown('inv_barang_kategori','ID','Kategori','','');?>");
+	$('#id_jenis').html("<option value='' selected>Semua</option><? dropdown('inv_barang_jenis','ID','JenisBarang','','');?>");
 });
 </script>

@@ -8,15 +8,13 @@ $(document).ready(function(e) {
     $('#okelah').click(function(){
 		_show_data()
 	})
-	_show_data();
 });
 
 function _show_data(){
 	show_indicator('newTable',8)
 	$.post('laporan_pembelian',{
 		'dari_tanggal'	:$('#dari_tanggal').val(),
-		'smp_tanggal'	:$('#smp_tanggal').val(),
-		'nm_vendor'		:$('#id_vendor').val()
+		'smp_tanggal'	:$('#smp_tanggal').val()
 	},function(result){
 		$('table#newTable tbody').html(result);
 		$('table#newTable').fixedHeader({width:(screen.width-30),height:(screen.height-320)});

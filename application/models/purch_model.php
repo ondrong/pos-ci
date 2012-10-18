@@ -8,11 +8,11 @@ class Purch_model extends CI_Model {
 	}
 	function  get_pemasok($str,$limit){
 		$data=array();
-		$sql="select * from inv_pemasok where Pemasok like '%".$str."%' order by Pemasok limit $limit";
+		$sql="select * from mst_anggota where Nama like '".$str."%' and ID_Jenis='2' order by Nama limit $limit";
 		$rs=mysql_query($sql) or die(mysql_error());
 		while($row=mysql_fetch_object($rs)){
-				$data[]=array('data'		=>$row->Pemasok,
-							  'description' =>'No. Urut : '.$row->Status.'<br>'.$row->Alamat." ".$row->Kota." ".$row->Propinsi,
+				$data[]=array('data'		=>$row->Nama,
+							  'description' =>$row->Alamat." ".$row->Kota." ".$row->Propinsi,
 							  'id_pemasok'	=>$row->ID
 							  );
 		}
@@ -41,6 +41,20 @@ class Purch_model extends CI_Model {
 			 left join inv_pembelian_detail as pd
 			 on pd.ID_Beli=p.ID
 			 where p.NoUrut='$notrans' and p.Tanggal='".tgltoSql($tanggal)."'";
+		$data=$this->db->query($sql);
+		return $data->result();
+	}
+	function detail_trans_vendor($where){
+		$sql="select b.Nama_Barang,bs.Satuan,b.Kode,pd.Jumlah,pd.Harga_Beli,p.Tanggal,p.Nomor from
+			  inv_pembelian as p
+			  left join inv_pembelian_detail as pd
+			  on pd.ID_Beli=p.ID
+			  left join inv_barang as b
+			  on b.ID=pd.ID_Barang
+			  left join inv_barang_satuan as bs
+			  on bs.ID=b.ID_Satuan
+			  $where";
+			  
 		$data=$this->db->query($sql);
 		return $data->result();
 	}

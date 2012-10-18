@@ -10,7 +10,7 @@ link_css('jquery.coolautosuggest.css','asset/css');
 link_js('jquery.coolautosuggest.js','asset/js');
 link_js('jquery.fixedheader.js','asset/js');
 link_js('material_jual.js,jquery_terbilang.js,jquery.sumfield.js',$path.'/js,asset/js,asset/js');
-panel_begin('Toko');
+panel_begin('Transaksi');
 panel_multi('penjualan','block',false);
 if($c_penjualan__index!=''){
 	echo "<table id='frame' width='99%'>
@@ -42,7 +42,7 @@ if($c_penjualan__index!=''){
 		  	<tr><td width='40%' class='kotak'>In line Stock</td>
 		  	  	<td class='kotak' id='ist'></td>
 			</tr>
-		  	<tr><td width='40%' class='kotak'>Modal</td>
+		  	<tr style='display:'><td width='40%' class='kotak'>Modal</td>
 		  	  	<td class='kotak' id='mdl'></td>
 			</tr>
 		  	<tr><td class='kotak'>PPN 10%</td><td class='kotak' id='xst'>
@@ -143,7 +143,7 @@ terbilang();
 <input type='hidden' id='aktif_user' value='<?=$this->session->userdata('idlevel');?>'/>
 <script language="javascript">
 $(document).ready(function(e) {
-    $('#cbayare').html("<? dropdown('inv_penjualan_jenis','ID','Jenis_Jual','order by ID','1');?>");
+    $('#cbayare').html("<? dropdown('inv_penjualan_jenis','ID','Jenis_Jual',"where ID not in ('5') order by ID",'1');?>");
 	//$('#frm2 table#ListTable').fixedHeader({width:(screen.width-300),height:(screen.height-450)})
 });
 </script>

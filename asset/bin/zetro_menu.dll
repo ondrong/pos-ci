@@ -1,50 +1,49 @@
 [Menu Utama]
-1|Home|admin/index|y|home.png|admin/index
-2|Pelanggan||y||
-3|Transaksi||n||
-4|Toko||y|kasir.png|penjualan/index
-5|Gudang||y|inventory.png|inventory/index
-;5|Inventory||y|inventory.png|inventory/index
-6|Accounting||n||
-7|Laporan||y||
-8|Master||y|admin.png|controlpanel/userlist
-;9|TODO|admin/todo|n||
-	
-	[About]
-	1|Info|admin/about|
-	
-	[Todo]
-	1|TODO List|todolist|y||
-;Home =============================================================	
-	[Home]
-	1|Ganti Password|controlpanel/change_password||
-	2|Log Out|admin/logout||
-	
-	[Ganti Password]
-	1|Change Password|changepassword|y|
-;Master ===========================================================		
-	[Master]
+1|Kasir||y|kasir.png|Kasir
+2|Inventory||y|inventory.png|Inventory
+3|Laporan||y|laporan.png|Laporan
+
+[Kasir]
+1|File||y|
+2|Transaksi||y|
+3|Inventori||y|
+4|Pelanggan||y|
+5|Help|||
+
+	[File]
 	1|User Account|controlpanel/userlist||
-	2|Data Akun|master/general|||
+	2|Ganti Password|controlpanel/change_password||
 	3|<hr>|x||
-	4|Vendor|master/vendor||
-	5|<hr>|x||
-	6|About|admin/about|n|
-		
-		[Vendor]
-		1|Add Vendor|addvendor|y|zce
-		2|List Vendor|listvendor|y|zce
-		
-		[Data General]
-		;1|Departement|data_dept|y|zcev
-		;2|Klasifikasi|data_class|y|zcev
-		;3|Sub Klasifikasi|data_sub_class|y|zcev
-		1|Data Akun|dataakun|y|zcev
+	4|Log Out|admin/logout||
+	5|Home|admin/index||
+
+		[Ganti Password]
+		1|Change Password|changepassword|y|
 	
-	[User Account]
-	1|Add User|adduser|y|zce
-	2|List User|listuser|y|zev
-	3|Authorisation|authorisation|y|zcv
+	[Transaksi]
+	1|Penjualan|penjualan/index|y|zce
+	2|Return Penjualan|penjualan/return_jual||zce
+	3|<hr>|x||
+	4|Kas Harian Toko|master/kas_harian||
+	5|<hr>|x||
+	6|Print Faktur Penjualan|laporan/faktur||zp
+
+		[Kas Harian Toko]
+		1|Setup Saldo Kas|kas_harian|y|zce
+		2|Operasional Toko|kas_keluar|y|zce
+		
+		[Print Faktur]
+		1|Print Faktur Penjualan|faktur|y|zp
+		
+		[Return Penjualan]
+		1|Return Jual|return_jual|y|zce
+
+	[Inventori]
+	1|List Stock|stock/stock_barang||
+	2|List Barang Terjual|||
+	
+	[Help]
+	1|Info|admin/about|
 	
 ;Keanggotaan ======================================================
 	[Pelanggan]
@@ -59,51 +58,47 @@
 			[Member Detail]
 			1|Data Pelanggan|memberdata|y|
 			;2|Member Trans|membertrans|y|
-;Laporan===========================================================			
-		[Laporan]
-			1|Laporan Penjualan|report/jual|y|zvp|
-			2|Laporan Pembelian|report/beli|||
-			3|<hr>|x||
-			4|Laporan Kas|report/kas|||
-			5|Laporan Piutang|report/piutang|||
-			6|Laporan Hutang|report/hutang|||
-			7|<hr>|x||
-			8|Grafik Penjualan|report/grafik|||
-			9|Grafik Pendapatan|report/grafik_kas|||
-			
 
+;menu inventory====================================================
+	
+[Inventory]
+1|File||y||
+2|Pembelian||y||
+3|Gudang||y||
+4|Vendor||y||
+5|Master||y||
+5|Help||||
+
+	[Master]
+	1|Data Akun|master/general|||
+	
+	[Pembelian]
+	1|Pembelian Barang|pembelian/index||
 			
-				[Laporan Pembelian]
-				1|Laporan Pembelian|laporanpembelian|y|zvp|
-				
-				[Laporan Kas]
-				1|Laporan Kas|laporankas|y|zvp
+		[Pembelian Barang]
+		1|Input Pembelian|pembelian/index|y|zce
 		
-;Inventory =====================================================	
-	[Inventory]
-	1|Kategori Barang|inventory/general||
-	2|<hr>|x||
-	3|Data Barang|inventory/index||
-	4|Stock Barang|stock/index||
-	5|<hr>|x||
-	6|Stock Opname|stock/counting||
+		[Return Pembelian]
+		1|Return pembelian|pembelian/return_beli|y|zce
+
+	[Vendor]
+	1|Add Vendor|master/vendor_n|y|zce
+	2|List Vendor|master/vendor_l||zevp
 	
-	;[Kategori Barang]
-	;1|Kategori Barang|kategoribarang|y|zcev|
-	;2|Jenis Barang|jenisbarang|y|zcev|
+		[List Vendor]
+		1|List Vendor|listvendor|y|zevp
+		
+		[Data General]
+		;1|Departement|data_dept|y|zcev
+		;2|Klasifikasi|data_class|y|zcev
+		;3|Sub Klasifikasi|data_sub_class|y|zcev
+		1|Data Akun|dataakun|y|zcev
 	
-	[Master Barang]
-	;1|Tambah Data|add|y|zce
-	1|List Barang|list|y|zevp
-	;3|Satuan|unit|y|zcev
-	;4|Unit Konversi|kunit|y|zcev
-	;5|Harga Beli|hargabeli|y|zcev
-	
-	[Stock Inventory]
-	1|Stock Overview|stockoverview|y|zvp
-	2|List Stock|liststock|y|zvp
-	
-;Gudang ================================================================
+	[User Account]
+	1|Add User|adduser|y|zce
+	2|List User|listuser|y|zev
+	3|Authorisation|authorisation|y|zcv
+
 	[Gudang]
 	1|Tambah Barang|gudang/index|y|zcev
 	2|Daftar Barang|gudang/list_barang||
@@ -130,95 +125,57 @@
 		1|Konversi Satuan|konversisatuan|y|zcev
 		
 		
-;Toko ==================================================================	
-	[Toko]
-	1|Penjualan|penjualan/index|y|zce
-	;2|Pembuatan Resep|penjualan/resep_std||zce
-	2|Return Penjualan|penjualan/return_jual||zce
-	3|<hr>|x||
-	4|Pembelian Barang|pembelian/index||
-	5|<hr>|x||
-	6|Kas Harian Toko|master/kas_harian||
-	7|<hr>|x||
-	8|Print Faktur Penjualan|laporan/faktur||zp
-	;8|Return Pembelian|pembelian/retur||
-	
-		[Kas Harian Toko]
-		1|Setup Saldo Kas|kas_harian|y|zce
-		2|Operasional Toko|kas_keluar|y|zce
-		
-		[Print Faktur]
-		1|Print Faktur Penjualan|faktur|y|zp
-		
-		[Pembelian]
-		1|Input Pembelian|pembelian/index|y|zce
-		2|List Pembelian|pembelian/list_beli|y|zce
-		;3|Vendor List|pembelian/vendor||
-	
-	
-		[Return Jual]
-		1|Return Jual|return_jual|y|zce
-		
-		[Pembelian Barang]
-		1|Input Pembelian|pembelian/index|y|zce
-		
-		[Return Pembelian]
-		1|Return pembelian|pembelian/return_beli|y|zce
-		
+;Laporan===============================================
 		[Print Preview]
 		1|Print Preview|pp|y
+
+[Laporan]
+1|File|||
+2|Stock||y||
+3|Lap.Penjualan||y||
+4|Lap.Pembelian||y||
+5|Lap.Kas||y||
+
 	
-	[Stock Opname]
-	1|Count Sheet|countsheet|y|zvp
-	;2|Record Count|record|n
-	;3|Stock Balance|balance|n
-	2|Stock Adjustment|adjust|y|zce
+	[Stock]
+	1|Stock Overview|stock/index|y|zvp
+	2|List Stock|stock/stock_barang||zvp
+	3|<hr>|x|
+	4|Stock Opname|stock/counting||
+	5|<hr>|x|
+	6|Stock Limit|stock/limit||
 	
-;Acounting =====================================================
-	[Accounting]
-	1|Jurnal Umum|akuntansi/jurnal|||
-	2|Buku Besar|akuntansi/buku_besar|||
+		[List Stock]
+		1|List Stock|liststock|y|zvp
+		
+		[Stock Opname]
+		1|Count Sheet|countsheet|y|zvp
+		;2|Stock Adjustment|adjust|y|zce
+		
+		[Stock Limit]
+		1|Stock Limit|stocklimit|y|zvp
+		
+	[Lap.Penjualan]
+	1|Rekap Penjualan Tunai|||
+	2|Rekap Penjualan Kredit|||
+	3|Rekap Barang Terjual|||
+	4|<hr>|x|
+	5|Penjualan Per Pelanggan|||
+	6|Grafik Penjualan |||
+	
+	[Lap.Pembelian]
+	1|Rekap Pembelian|||
+	2|Pembelian per Vendor|||
+	3|<hr>|x|
+	4|Grafik Pembelian|||
+	
+	[Lap.Kas]
+	1|Cash Flow||||
+	2|Laba Rugi||||
 	3|<hr>|x||
-	4|Klasifikasi|akuntansi/klass_akun|y|zcev
-	5|Sub Klasifikasi|akuntansi/subklass_akun||
-	6|Perkiraan|akuntansi/akun||
-	
-	[Sub Klasifikasi]
-	1|Sub Klasifikasi|subklasifikasi|y|zcev
-
-	[Perkiraan]
-	1|Add Perkiraan|addperkiraan|y|zce|
-	2|Perkiraan|perkiraan|y|zevp|
-	
-	[Jurnal Umum]
-	1|Add Jurnal|addjurnal|y|zce|
-	2|List Jurnal Umum|listjurnalumum|y|zvp|
-	
-	[Buku Besar]
-	1|Buku Besar|bukubesar|y|zcevp|
-	
-;Transaksi =====================================================	
-	[Transaksi]
-	1|Simpanan|simpanan/t_simpanan||
-	2|Pinjaman|simpanan/t_pinjaman||
-	3|<hr/>|x||
-	4|List Transaksi|simpanan/list_transaksi||
-	
-		[Transaksi Anggota]
-		1|Simpanan|simpanan|y|zvp
-		2|Pinjaman|pinjaman|y|zvp
-		3|SHU|shu|y|zvp
-
-	[Simpanan]
-	1|Transaksi Simpanan|transaksisimpanan|y|zce
-	
-	[Pinjaman]
-	1|Pinjaman|pinjaman|y|zce
-	2|setoran Pinjaman|setoranpinjaman|y|zce
-	
-	[List Transaksi]
-	1|List Transaksi|listransaksi|y|zevp|
-	
-	
-	
+	4|Penerimaan Harian||||
+	5|Operasional Harian|||
+	6|<hr>|x|
+	7|Grafik Cash Flow|||
+	8|Grafik Laba Rugi|||
 	

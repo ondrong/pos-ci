@@ -24,7 +24,9 @@ $(document).ready(function(e) {
 				}
 			}
 	});
-
+	$('#frm2 #okelah').click(function(){
+		$('#p-0').click();
+	})
 	$('#frm1 input#nm_barang')
 		.keyup(function(){
 			pos_div('#frm1 input#nm_barang');

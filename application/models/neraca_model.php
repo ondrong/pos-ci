@@ -40,13 +40,26 @@ class Neraca_model extends CI_Model {
 		$data=$this->db->query($sdata);
 		return $data->result();
 	}
-
-	function get_nc_lajure($periode,$id_dept='2'){
+	function get_rekap_dept($periode,$where){
 		$this->build_data($periode);
-		$sql="select ID_P,id_agt,ID_Klas,ID_SubKlas,ID_Unit,ID_Dept,id_simpanan,ID_Calc,sum(kredit) as Kredit,sum(debet) as Debet
+		$sql="select n.Bulan,Sum(Debet) as Debet, Sum(Kredit) as Kredit 
+			from tmp_".$this->user."_transaksi_rekap as p
+			left join mst_bulan as n
+			on n.ID=month(p.Tanggal)
+			$where
+			group by p.ID_Dept";
+		echo $sql;
+		$data=$this->db->query($sql);
+		return $data->result();
+	}
+	function get_nc_lajure($periode,$where=''){
+		$this->build_data($periode);
+		$sql="select ID_P,ID_Agt,ID_Klas,ID_SubKlas,ID_Unit,ID_Dept,ID_Simpanan,ID_Calc,sum(kredit) as Kredit,sum(debet) as Debet
 			  from tmp_".$this->user."_transaksi_rekap 
-			  where id_dept='$id_dept' and id_agt not in('0') group by concat(id_simpanan,id_agt)
+			  where id_agt not in('0') $where
+			  group by concat(id_simpanan,id_agt)
 			  order by concat(id_agt,ID_Klas,ID_SubKlas,ID_Unit,ID_Dept)";
+			// echo $sql;
 				$data=$this->db->query($sql);
 				return $data->result();
 		

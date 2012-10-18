@@ -36,32 +36,45 @@ class Stock extends CI_Controller{
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('inventory/material_stock');
 	}
-	
+	function stock_barang(){
+		$this->zetro_auth->menu_id(array('liststock'));
+		$this->list_data($this->zetro_auth->auth());
+		$this->View('warehouse/material_stocklist');
+	}
+
 	function list_stock(){
-		$data=array();$n=0;
+		$data=array();$n=0;$jml=0;$harga=0;
 		$id=$_POST['nm_barang'];
 		$data=$this->inv_model->get_detail_stock($id);
 		foreach($data as $row){
 			$n++;
-			echo tr().td($n,'center').td($row->batch,'center').td(number_format($row->stock,2),'right').
-				td(number_format($row->blokstok,2),'right').td(rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".$row->nm_satuan."'"),'center').
-				td($row->expired,'center').
-				_tr();	
+			echo tr().td($n,'center').td($row->batch,'center').
+				td(number_format($row->stock,2),'right').
+				td(rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".$row->nm_satuan."'"),'center').
+				td(number_format(($row->stock*$row->harga_beli),2),'right').
+				_tr();
+			$jml=($jml+$row->stock);
+			$harga=($harga+($row->stock*$row->harga_beli));
 		}
+		echo tr('list_genap').td('<b>Jumlah</b>','right\' colspan=\'2').
+				 td('<b>'.number_format($jml,2).'</b>','right').
+				 td('').
+				 td('<b>'.number_format($harga,2).'</b>','right').
+				 _tr();
 	}
 	
 	function get_bacth(){
 		$data=array();
 		$id=$_POST['id_barang'];
-		$data=$this->inv_model->get_detail_stocked($id);	
+		$data=$this->inv_model->get_detail_stocked($id,'desc');	
 		echo (count($data)>0)?json_encode($data[0]):'{"batch":""}';
 	}
 	function list_filtered(){
 		$nmj=array(); $data='';$valfld='';$n=0;
 		$section=$_POST['section'];
-		empty($_POST['nm_kategori'])?$kat	='':$kat	=$_POST['nm_kategori'];
-		empty($_POST['stat_barang'])?$stat	='':$stat	=$_POST['stat_barang'];
-		empty($_POST['nam_barang'])?$cari='':$cari=$_POST['nam_barang'];
+		$kat	=empty($_POST['nm_kategori'])?'':$_POST['nm_kategori'];
+		$stat	=empty($_POST['stat_barang'])?'':$_POST['stat_barang'];
+		$cari	=empty($_POST['nam_barang'])?'':$_POST['nam_barang'];
 		if($kat=='' && $stat==''){
 			$where='';
 		}else if($stat=='' && $kat!=''){
@@ -103,21 +116,6 @@ class Stock extends CI_Controller{
 		($stok=='')?'0':$stok;
 		echo json_encode($data[0]);
 	}
-	function data_material(){
-		$str=addslashes($_POST['str']);
-		$induk=$_POST['induk'];
-		$fld='nm_barang';
-		$this->inv_model->tabel('inv_material');
-		$this->inv_model->field($fld);
-		$datax=$this->inv_model->auto_sugest($str);
-		if($datax->num_rows>0){
-			echo "<ul>";
-				foreach ($datax->result() as $lst){
-					echo '<li onclick="suggest_click(\''.$lst->$fld.'\',\'nm_barang\',\''.$induk.'\');">'.$lst->$fld."</li>";
-				}
-			echo "</ul>";
-		}		
-	}
 	function data_hgb(){
 		$data=array();
 		$nm_barang=$_POST['nm_barang'];
@@ -140,36 +138,73 @@ class Stock extends CI_Controller{
 		$data=array();
 		$data['bln']=date('F');
 		$data['thn']=date('Y');
-		$nmj=array(); $datax='';$valfld='';
-		if ($this->input->post('ID_jenis')!='') $nmj['nm_jenis']=$this->input->post('nm_jenis');
-		if ($this->input->post('ID_kategori')!='')$nmj['nm_kategori']=$this->input->post('nm_kategori');
-		//if ($this->input->post('nm_golongan')!='')$nmj['nm_golongan']=$this->input->post('nm_golongan');
-		foreach(array_keys($nmj) as $nfield){
-			$datax .=$nfield.",";	
-		}
-		foreach(array_values($nmj) as $valfield){
-			$valfld .=$valfield;
-		}
-		$datax=substr($datax,0,(strlen($datax)-1));
-		!empty($datax)?$where="where concat($datax)='$valfld'":$where='';
-		$data['temp_rec']=$this->inv_model->set_stock($where);
+		$where=($this->input->post('Kategori')=='')?'':"where b.ID_Kategori='".$this->input->post('Kategori')."'";
+		$orderby=($this->input->post('orderby'))?'':"order by concat(".str_replace('-',',',$this->input->post('orderby')).")";
+		$orderby.=($this->input->post('urutan'))?'':' '.$this->input->post('urutan');
+		$data['temp_rec']=$this->inv_model->set_stock($where,$orderby);
 		$this->zetro_auth->menu_id(array('trans_beli'));
 		$this->list_data($data);
 		$this->View("inventory/countsheet_print");
 	}
-	
+	function get_stock(){
+		$data=array();$n=0;
+		$where=empty($_POST['kategori'])?'':"where im.ID_Kategori='".$_POST['kategori']."'";
+		$where.=empty($_POST['stat'])?'':" and Status='".$_POST['stat']."'";
+		$orderby=empty($_POST['orderby'])?'':"order by concat(".str_replace('-',',',$_POST['orderby']).")";
+		$orderby.=empty($_POST['urutan'])?'':' '.$_POST['urutan'];
+		$sesi=$this->session->userdata('menus');	
+		$data=$this->report_model->stock_list($where,'stock',$orderby);
+		foreach($data as $r){
+			$n++;
+			echo tr().td($n,'center').
+					  td(strtoupper($r->Kode)).
+					  td($r->Nama_Barang).
+					  td(rdb('inv_barang_kategori','Kategori','Kategori',"where ID='".$r->ID_Kategori."'")).
+					  td(number_format($r->stock,2),'right').
+					  td(rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".$r->ID_Satuan."'")).
+					  td(number_format($r->harga_beli,2),'right').
+					  td($r->Status);
+				 if($sesi=='SW52ZW50b3J5'){echo td(img_aksi($r->ID.':'.$r->batch),'center');}
+				echo  _tr();	 
+		}
+	}
+	function print_stock(){
+		$data=array();$n=0;
+		$where=($this->input->post('Kategori')=='')?'':"where im.ID_Kategori='".$this->input->post('Kategori')."'";
+		$where.=($this->input->post('Stat')=='')?'':" and Status='".$this->input->post('Stat')."'";
+		$orderby=($this->input->post('orderby'))?'':"order by concat(".str_replace('-',',',$this->input->post('orderby')).")";
+		$orderby.=($this->input->post('urutan'))?'':' '.$this->input->post('urutan');
+		$data['kategori']=rdb('inv_barang_kategori','Kategori','Kategori',"where ID='".$this->input->post('Kategori')."'");
+		$data['status']	=$this->input->post('Stat');
+		$data['temp_rec']=$this->report_model->stock_list($where,'stock',$orderby);
+			$this->zetro_auth->menu_id(array('trans_beli'));
+			$this->list_data($data);
+			$this->View("laporan/transaksi/lap_stock_print");
+/**/	}
+	function edit_stock(){
+		$data=array();
+		$id=explode(':',$_POST['ID']);
+		$where=($id[1]=='')?"where im.ID='".$id[0]."'":"where im.ID='".$id[0]."' and batch='".$id[1]."'";
+		$data=$this->report_model->stock_list($where,'edit');
+		echo json_encode($data[0]);
+	}
 	function update_adjust(){
 		$data=array();
-		$nm_barang=str_replace('_',' ',$_POST['nm_barang']);
-		$stock=$_POST['stock'];
-		$total_stock=$this->inv_model->total_stock("where nm_barang='$nm_barang'");
-		$batch=$this->Admin_model->show_single_field('inv_material_stok','batch',"where nm_barang='$nm_barang'");
-		$adjust=($stock-$total_stock);
-		$stock_batch=$this->inv_model->total_stock("where nm_barang='$nm_barang' and batch='$batch'");
-		
-		$data['nm_barang']=$nm_barang;
-		$data['batch']=$batch;
-		$data['stock']=($stock_batch+$adjust);
-		$this->Admin_model->replace_data('inv_material_stok',$data);
+		$ID		=$_POST['id'];
+		$batch	=$_POST['batch'];
+		$stock	=$_POST['stock'];
+		$cek=rdb('inv_material_stok','id_barang','id_barang',"where id_barang='".$ID."' and batch='".$batch."'");
+		if($cek!=''){
+			$this->Admin_model->upd_data('inv_material_stok',"set stock='".$stock."'","where id_barang='".$ID."' and batch='".$batch."'");
+		}else{
+			$data['id_barang']	=$_POST['id'];
+			$data['nm_barang']	=rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$ID."'");
+			$data['batch']		=date('yz').'-'.rand(0,9);
+			$data['stock']		=$stock;
+			$data['nm_satuan']	=rdb('inv_barang','ID_Satuan','ID_Satuan',"where ID='".$ID."'");
+			$data['harga_beli']	=$_POST['harga'];
+			$data['created_by']	=$this->session->userdata('userid');
+			$this->Admin_model->replace_data('inv_material_stok',$data);
+		}
 	}
 }

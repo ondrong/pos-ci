@@ -5,34 +5,40 @@
 	$z_config='asset/bin/zetro_config.dll';
 ?>
 <table width="100%" border='0'>
+<tr><td colspan="" align="center"><img src='<?=base_url();?>asset/img/PoS.png' /></td><td>&nbsp;</td></td></tr>
 <tr valign="bottom" align="" style="padding:20px">
-<td width='100%'><img src='<?=base_url();?>asset/img/PoS.png' /></td></tr>
-</table>
-<hr />
-<br />
-<table width='70%' border="0">
-<tr align="center">
-<? $mnu=$zz->Count('Menu Utama',$file);
-$x=0;
-	for ($i=1;$i<=$mnu;$i++ ){
-		$gbr=explode('|',$zz->rContent('Menu Utama',$i,$file));
-		if($gbr[3]!=''){
-			$x++;
-			if($x> 3){
-				echo tr().
-				td("<img src='".base_url()."asset/img/".$gbr[3]."' onclick=\"kliked('".$gbr[4]."');\">",'center','menux\' height=\'69px\' valign=\'middle').
-				_tr();
-			}else{
-			echo td("<img src='".base_url()."asset/img/".$gbr[3]."' onclick=\"kliked('".$gbr[4]."');\">",'','menux\' height=\'69px\' valign=\'middle');
-			}
-		}else{
-			echo '';
-		}
-	}
-	
-?>
+<td width='40%' align="center" valign="middle"><img src='<?=base_url();?>asset/img/about2.png' /></td>
+<td width='60%' valign="top">
+    <table width='70%' border="0">
+    <tr align="center" valign="middle">
+    <? $mnu=$zz->Count('Menu Utama',$file);
+    $x=0;
+        for ($i=1;$i<=$mnu;$i++ ){
+            $gbr=explode('|',$zz->rContent('Menu Utama',$i,$file));
+            if($gbr[3]!=''){
+                $x++;
+                if($x> 1){
+                    echo tr('').
+                    td("<img src='".base_url()."asset/img/".$gbr[3]."' class='menux' onclick=\"kliked('".base64_encode($gbr[4])."');\">",'left',' \' height=\'69px\' valign=\'middle').
+                    _tr();
+                }else{
+                echo td("<img src='".base_url()."asset/img/".$gbr[3]."' class='menux' onclick=\"kliked('".base64_encode($gbr[4])."');\">",'left',' \' height=\'69px\' valign=\'middle');
+                }
+            }else{
+                echo '';
+            }
+        }
+        
+    ?>
+    </tr>
+    </table>
+</td>
 </tr>
 </table>
+<hr />
+<div id='xxx' align="right">
+ <img src='<?=base_url();?>asset/img/logout.png' onclick="logout();" width="50" height="50" style='cursor:pointer' />
+</div>
 <? //echo (no_ser()=='6953b843f6cb0cd37e11d1cc485d2d79')?
 	?>
 <input type='hidden' id='lcs' value='<?=empty($serial)?'x2cdg':$serial;?>' />
@@ -45,6 +51,10 @@ $x=0;
     });
 		function kliked(id){
 			var path=$('#path').val();
-			document.location.href=path+id;	
+			document.location.href=path+'admin/masuk?id='+id;
 		}
+     function logout(){
+			var path=$('#path').val();
+			document.location.href=path+'admin/logout';
+	 }
 </script>

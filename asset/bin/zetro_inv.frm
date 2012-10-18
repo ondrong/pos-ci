@@ -52,11 +52,12 @@
 ;4|Sub Kategori,input,text n,nm_golongan,w70,,10%,
 
 [stokoverlist]
-1|Batch,input,text n,batch,w35,,12%
-2|Stock,input,text d,stock,w35,,10%
-3|Block Stock,input,text d,blokstok,w35,,10%
-4|Satuan,input,text n,nm_satuan,w35,,5%
-5|Expired,input,text t,expired,w35,,8%
+1|Batch,input,text n,batch,w35,,10%
+2|Stock,input,text d,stock,w35,,12%
+;3|Block Stock,input,text d,blokstok,w35,,10%
+3|Satuan,input,text n,nm_satuan,w35,,8%
+4|Value,input,text t,expired,w35,,12%
+;5|Harga Jual,input,text t,expired,w35,,8%
 
 [stoklist filter]
 1|Jenis Barang,select,text n,nm_jenis,S50,,10%,RD,inv_barang_jenis-ID-JenisBarang-order by JenisBarang

@@ -8,6 +8,8 @@ class Admin extends CI_Controller {
 		$this->zm='asset/bin/zetro_menu.dll';
 	}
     function index() {
+		$data=array('menus'=>0);
+		$this->session->unset_userdata($data);
 		$this->cek_db_user();
 	}
 	function about(){
@@ -222,5 +224,16 @@ class Admin extends CI_Controller {
 	function dropdown_usr(){
 		echo dropdown('users','userid','username',"where idlevel<>'1' order by username",$this->session->userdata('userid'));
 	}
+	
+	function masuk(){
+		$data=array();
+		$data['menus']=$_GET['id'];
+		$sesmenu=array('menus'=>$_GET['id']);
+		$this->session->set_userdata($sesmenu);
+			$this->load->view('admin/header',$data);
+			$this->load->view('admin/dashboard',$data);
+			$this->load->view('admin/footer');
+	}
+
 }
 ?>

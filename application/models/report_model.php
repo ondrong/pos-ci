@@ -5,14 +5,6 @@ class Report_model extends CI_Model {
         parent::__construct();
     }
 
-	function show_lap_spb($bln='',$thn=''){
-		($bln=='')? $bln=date('m'):$bln=$bln;
-		($thn=='')? $thn=date('Y'):$thn=$thn;
-		$sql="select * from spb where month(tgl_spb)='$bln' and year(tgl_spb)='$thn' order by no_spb";
-		
-		return $this->db->query($sql);
-	}
-
 	function countsheet($where){
 		$sql="select im.nm_jenis as nm_jenis,
 					  im.nm_kategori as nm_kategori,
@@ -28,53 +20,44 @@ class Report_model extends CI_Model {
 		return $this->db->query($sql);
 	}
 	function select_trans($where,$rpt='No'){
-		$sql="select dt.*,p.ID_Anggota,p.ID_Jenis,a.Nama from inv_penjualan_detail as dt 
-			 	left join inv_barang as im
-				on im.ID=dt.ID_Barang
-				left join inv_penjualan as p
-				on p.ID=dt.ID_Jual
-				left join mst_anggota as a
-				on a.ID=p.ID_Anggota
-				$where";
-		//echo $sql;
-		
-		return ($rpt=='No')?$sql:$this->db->query($sql);
-	}
-	function select_trans_beli($where,$rpt='No'){
-		$sql="select dt.*,p.ID_Pemasok,p.NoUrut,p.Nomor,p.ID_Jenis,v.Pemasok from inv_pembelian_detail as dt 
-			 	left join inv_barang as im
-				on im.ID=dt.ID_Barang
-				left join inv_pembelian as p
-				on p.ID=dt.ID_Beli
-				left join inv_pemasok as v
-				on v.ID=p.ID_Pemasok
+		$sql="select dt.*,dt.expired as expired,im.id_barang from detail_transaksi as dt 
+			 	left join inv_material as im
+				on im.nm_barang=dt.nm_barang
 				$where";
 		echo $sql;
 		
 		return ($rpt=='No')?$sql:$this->db->query($sql);
 	}
-	function stock_list($where,$tipe,$orderby='order by im.nm_barang'){
+	function stock_list($where,$tipe,$orderby='order by im.Nama_Barang'){
 		switch($tipe){
 			case "stock":	
-			$sql="select im.nm_jenis,im.nm_kategori,
-				  im.id_barang,im.nm_satuan,im.nm_barang,
-				  sum(ms.stock) as stock,
-				  sum(if(stock>0,(harga_beli*stock),null)) as harga_beli
-				  from inv_material as im
+			$sql="select im.ID_Kategori,im.ID,im.ID_Satuan,im.Nama_Barang,im.Kode,
+				  sum(ms.stock) as stock,im.Status,s.Satuan,k.Kategori,
+				  sum(ms.harga_beli) as harga_beli,ms.batch
+				  from inv_barang as im
 				  left join inv_material_stok as ms
-				  on ms.nm_barang=im.nm_barang
+				  on ms.id_barang=im.ID
+				  left join inv_barang_satuan as s
+				  on s.ID=im.ID_Satuan
+				  left join inv_barang_kategori as k
+				  on k.ID=im.ID_Kategori
 				  $where 
-				  group by im.nm_barang
+				  group by im.ID,ms.batch
 				  $orderby";
 			break;
-			case "expired":
-			$sql="select im.nm_jenis,im.nm_kategori,im.id_barang,
-				  im.nm_barang,ms.stock,ms.expired,ms.harga_beli,
-				  ms.nm_satuan
-				  from inv_material as im
+			case "edit":
+			$sql="select im.ID,im.Nama_Barang,im.Kode,im.Status,
+				  sum(ms.stock) as stock,ms.harga_beli,ms.batch,
+				  k.Kategori,s.Satuan
+				  from inv_barang as im
 				  left join inv_material_stok as ms
-				  on ms.nm_barang=im.nm_barang
-				  $where 
+				  on ms.id_barang=im.ID
+				  left join inv_barang_satuan as s
+				  on s.ID=im.ID_Satuan
+				  left join inv_barang_kategori as k
+				  on k.ID=im.ID_Kategori
+				  $where
+				  group by im.ID,ms.batch
 				  $orderby";
 			break;
 			case 'stocklimit':
@@ -94,7 +77,8 @@ class Report_model extends CI_Model {
 			break;
 		}
 		//echo $sql;
-		return $this->db->query($sql);	
+		$data=$this->db->query($sql);	
+		return $data->result();
 	}
 	
 	function create_tmp_table(){
@@ -148,19 +132,6 @@ class Report_model extends CI_Model {
 	function laporan_faktur($no_trans){
 		$sql="select * from detail_transaksi where no_transaksi='$no_trans' order by id_transaksi";
 		return $this->db->query($sql);	
-	}
-	
-	function get_cash_flow($where,$groupby=''){
-		$sql="select j.Tanggal,(sum(abs(j.Jumlah)*j.harga))as penjualan,(sum(k.jumlah)) as Kredit,sum(p.Jumlah) as Debet
-				from inv_penjualan_detail as j
-				left join inv_pembelian_detail as p
-				on p.Tanggal=j.Tanggal
-				left join mst_kas_trans as k
-				on k.tgl_trans=j.Tanggal
-				$where
-				$groupby";
-				//echo $sql;
-		return $this->db->query($sql);
 	}
 	
 }

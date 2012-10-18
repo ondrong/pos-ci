@@ -14,7 +14,7 @@ $cari="<input id='plh_cari' name='plh_cari' class='w100 cari'>";
 link_css('jquery.coolautosuggest.css','asset/css');
 link_js('jquery.coolautosuggest.js,jquery_terbilang.js','asset/js,asset/js');
 link_js('jquery.fixedheader.js,material_list.js','asset/js,'.$path.'/js');
-panel_begin('Master Barang');
+panel_begin('Daftar Barang');
 panel_multi('listbarang','block',false);
 if($e_list!='' || $v_list!=''){
 addText(array('Filter by Kategori :',' Jenis :','Status',' Cari by nama'),array($kateg,$jenis,$stats,$cari));

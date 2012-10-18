@@ -6,23 +6,34 @@
 [pembelian]
 1|No. ID,input,text n,no_transaksi,w50 upper,,10%
 2|Tanggal,input,date t,tgl_transaksi,w35,,8%
-3|No.Faktur,input,text n,faktur_transaksi,w70 upper,,12%
-4|Vendor Name,input,text n,nm_produsen,w70 upper,,15%,,,AB,
-5|Cara Bayar,select,text n,cara_bayar,S25,,5%,RD,inv_pembelian_jenis-ID-Jenis_Beli-
+3|No.Faktur Pembelian,input,text n,faktur_transaksi,w70 upper,,12%
+4|Nama Pemasok,input,text n,nm_produsen,w90 upper,,15%
+5|No. PO,input,text n,po_pembelian,w70 upper,,10%
+6|Jenis Pembelian,select,text n,cara_bayar,S50,,5%,RD,inv_pembelian_jenis-ID-Jenis_Beli-,
 
 [pembelianlist]
-1|Nama Barang,input,text n,nm_barang,w100 upper,,25%
-2|Satuan,select,text n,nm_satuan,S100 upper,,10%
-3|Jumlah,input,text d,jml_transaksi,w100 angka,,12%
-;4|Expired,input,text t,expired,w100,,15%
-4|Harga Beli,input,text d,harga_beli,100 angka,,12%
-5|Keterangan,input,text n,ket_transaksi,w100,,20%
+1|Kode Barang,input,text t,id_barang,w100,,15%
+2|Nama Barang,input,text n,nm_barang,w100 upper,,30%
+3|Satuan,select,text n,nm_satuan,S100 upper,,12%
+4|Jumlah,input,text d,jml_transaksi,w100 angka,,12%
+5|Harga Beli/Satuan,input,text d,harga_beli,100 angka,,12%
+6|Total Harga,input,text n,ket_transaksi,w100 angka,,15%
+
+[lappembelian]
+1|No. Transaksi,,,,,,15%,,
+2|Tanggal,,,,,,10%,,
+;3|Kode Barang,input,text t,id_barang,w100,,15%
+3|Nama Barang,input,text n,nm_barang,w100 upper,,25%
+4|Satuan,select,text n,nm_satuan,S100 upper,,8%
+5|Jumlah,input,text d,jml_transaksi,w100 angka,,8%
+6|Harga Beli,input,text d,harga_beli,100 angka,,15%
+7|Sub Total,input,text n,ket_transaksi,w100,,12
 
 [jualan]
 1|No. ID,input,text n,no_transaksi,w50 upper,,10%
 2|Tanggal,input,date t,tgl_transaksi,w35,,8%
 3|No.Faktur,input,text n,faktur_transaksi,w70 upper,,12%
-4|Nama Pelanggan,input,text n,nm_nasabah,w70 upper,,15%,,,
+4|Nama Anggota,input,text n,nm_nasabah,w70 upper,,15%,,,
 ;5|Cara Bayar,select,text n,cara_bayar,S25,,5%,RS,Carabeli
 
 [penjualanlist]
@@ -43,7 +54,7 @@
 
 [bayaran]
 1|Sub Total ,input,text d,total_belanja,w90 angka big,,
-2|PPN (10%),input,text d,ppn,w90 angka big,0,
+2|Corting,input,text d,ppn,w90 angka big,0,
 3|Total Bayar,input,text d,total_bayar,w90 angka big,,
 4|Di Bayar,input,text d,dibayar,w90 angka big,,
 5|Kembali,input,text d,kembalian,w90 angka big,,
@@ -121,6 +132,11 @@
 5|Jml_Faktur-Nama_Barang,Jumlah dan Nama Barang
 6|Jumlah,Harga Beli
 
+[SusunanStock]
+1|Nama_Barang,Nama Barang
+2|k.Kategori-Nama_Barang,Kategori dan Nama Barang
+3|Nama_Barang-ms.stock,Nama Barang dan Stock
+
 [Urutan]
 1|asc,Kecil ke Besar (A-Z)
 2|desc,Besar ke Kecil (Z-A)
@@ -138,7 +154,7 @@
 
 [kredite]
 1|Sub Total ,input,text d,total_belanja,w90 angka big,,
-2|PPN (10%),input,text d,ppn,w90 angka big,0,
+2|Korting,input,text d,ppn,w90 angka big,0,
 3|Total Bayar,input,text d,total_bayar,w90 angka big,,
 4|Uang Muka,input,text d,dibayar,w90 angka big,0,
 5|Sisa,input,text d,kembalian,w90 angka big,,
