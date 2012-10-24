@@ -15,25 +15,77 @@ class Kasir_model extends CI_Model {
 		$data=$this->db->query($sql);
 		return $data->result();
 	}
-	
+	function get_tahun($bln=false,$tbl='pembelian'){
+		$sql=($bln==false)?
+		"select distinct(Tahun) as Tahun from inv_$tbl order by Tahun":
+		"select distinct(month(Tanggal)) as Bulan from inv_$tbl order by month(Tanggal)";
+		$data=$this->db->query($sql);
+		return $data->result();
+	}
 	function rekap_trans_beli($where,$group='',$order='order by p.Tanggal'){
-		$sql="select p.Tanggal,sum(dt.Jumlah*dt.Harga_Beli) as Harga_Beli,p.Nomor,v.Nama
+		$sql="select p.ID_Pemasok,p.Tanggal,sum(dt.Jumlah*dt.Harga_Beli) as Harga_Beli,p.Nomor,
+			 a.Nama,pj.Jenis_Beli,a.Catatan,a.Alamat,a.Kota
 			 from inv_pembelian as p
 			 left join inv_pembelian_detail as dt
 			 on dt.ID_Beli=p.ID
-			 left join mst_anggota as v
-			 on v.ID=p.ID_Pemasok
+			 left join mst_anggota as a
+			 on a.ID=p.ID_Pemasok 
+			 left join inv_pembelian_jenis as pj
+			 on pj.ID=p.ID_Jenis
 			 $where $group $order";
-		//echo $sql;
+		//	echo $sql;//debug only
+		$data=$this->db->query($sql);
+		return $data->result();
+	}
+	function detail_trans_beli($where,$group='',$order='order by p.Tanggal'){
+		$sql="select p.Tanggal,dt.ID_Barang,dt.Jumlah,dt.Harga_Beli,b.Nama_Barang,s.Satuan,
+			 a.Nama,p.Nomor,j.Jenis_Beli,a.Catatan,a.Alamat,a.Kota
+			 from inv_pembelian as p
+		     left join inv_pembelian_detail as dt
+			 on dt.ID_Beli=p.ID
+			 right join inv_barang as b
+			 on b.ID=dt.ID_Barang
+			 left join inv_barang_satuan as s
+			 on s.ID=b.ID_Satuan
+			 left join mst_anggota as a
+			 on a.ID=p.ID_Pemasok
+			 left join inv_pembelian_jenis as j
+			 on j.ID=p.ID_Jenis
+			 $where $group $order";
+		echo $sql;
 		$data=$this->db->query($sql);
 		return $data->result();
 	}
 	function rekap_trans_jual($where,$group='',$order='order by p.Tanggal'){
-		$sql="select dt.ID_Barang,sum(Jumlah) as Jumlah,dt.Harga from inv_penjualan as p
+		$sql="select p.Tanggal,p.ID_Anggota,dt.ID_Barang,sum(Jumlah) as Jumlah,dt.Harga,a.Nama,
+			 a.Alamat,a.Kota,a.Catatan
+			 from inv_penjualan as p
 		     left join inv_penjualan_detail as dt
 			 on dt.ID_Jual=p.ID
 			 right join inv_barang as b
 			 on b.ID=dt.ID_Barang
+			 left join mst_anggota as a
+			 on a.ID=p.ID_Anggota
+			 $where $group $order";
+		echo $sql;
+		$data=$this->db->query($sql);
+		return $data->result();
+	}
+	function detail_trans_jual($where,$group='',$order='order by p.Tanggal'){
+		$sql="select dt.ID_Jual,p.Tanggal,dt.ID_Barang,b.Kode,dt.Jumlah,dt.Harga,b.Nama_Barang,s.Satuan,
+			 a.Nama,p.Nomor,j.Jenis_Jual,a.Catatan,a.Alamat,a.Kota,p.Tgl_Cicilan,p.ID_Post,
+			 p.Deskripsi,p.ID_Anggota
+			 from inv_penjualan as p
+		     left join inv_penjualan_detail as dt
+			 on dt.ID_Jual=p.ID
+			 right join inv_barang as b
+			 on b.ID=dt.ID_Barang
+			 left join inv_barang_satuan as s
+			 on s.ID=b.ID_Satuan
+			 left join mst_anggota as a
+			 on a.ID=p.ID_Anggota
+			 left join inv_penjualan_jenis as j
+			 on j.ID=p.ID_Jenis
 			 $where $group $order";
 		//echo $sql;
 		$data=$this->db->query($sql);

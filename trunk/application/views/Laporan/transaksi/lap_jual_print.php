@@ -5,19 +5,20 @@
 		  //$a->Header();
 		  $a->setKriteria("transkip");
 		  $a->setNama("REKAP PENJUALAN ".strtoupper($judul));
-		  $a->setSection("rekapjualtunai");
-		  $a->setFilter(array($dari ." s/d ".$sampai,$Kategori,$Jenis));
-		  $a->setReferer(array('Periode','Kategori','Jenis Barang'));
+		  $a->setSection(($orient=='P')?"rekapjualtunai":"detailjual");
+		  $a->setFilter(array($dari ." s/d ".$sampai,$Kategori));
+		  $a->setReferer(array('Periode','Kategori'));
 		  $a->setFilename($nfile);
 		  $a->AliasNbPages();
-		  $a->AddPage("P","A4");
+		  $a->AddPage($orient,"A4");
 	
 		  $a->SetFont('Arial','',10);
 		  //echo $a->getColWidth();
 		  // set lebar tiap kolom tabel transaksi
-		  $a->SetWidths(array(10,60,30,20,18,25,25));
+		  		$a->SetWidths(array(10,30,60,20,18,25,25));
+				//$a->SetWidths();
 		  // set align tiap kolom tabel transaksi
-		  $a->SetAligns(array("C","L","L","R","L","R","R"));
+		  		$a->SetAligns(array("C","L","L","R","L","R","R"));
 		  $a->SetFont('Arial','B',10);
 		  $a->SetFont('Arial','',9);
 		  //$rec = $temp_rec->result();
@@ -25,14 +26,20 @@
 		  foreach($temp_rec as $r)
 		  {
 			$n++;
+		  ($orient=='P')?
 			$a->Row(array($n,
-						  rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$r->ID_Barang."'"),
 						  rdb('inv_barang','Kode','Kode',"where ID='".$r->ID_Barang."'"),
+						  rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$r->ID_Barang."'"),
 						  number_format($r->Jumlah,2),
 						  rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".rdb('inv_barang','ID_Satuan','ID_Satuan',"where ID='".$r->ID_Barang."'")."'"),
 						  number_format($r->Harga,2),
 						  number_format(($r->Jumlah*$r->Harga),2)
-						  ));
+						  )):
+			$a->Row(array($n,$r->Nama_Barang,number_format($r->Jumlah,2),
+						  $r->Satuan,number_format($r->Harga,2),
+						  number_format(($r->Jumlah*$r->Harga),2),
+						  $r->Nama,
+						  $r->Jenis_Jual." - ".$r->Nomor));
 			//sub tlot
 			$jml	=($jml+$r->Jumlah);
 			$hargaj	=($hargaj+$r->Harga);

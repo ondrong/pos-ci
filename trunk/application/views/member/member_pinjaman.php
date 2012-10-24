@@ -3,11 +3,12 @@ $zfm=new zetro_frmBuilder('asset/bin/zetro_member.frm');
 $zlb=new zetro_buildlist();
 $zlb->config_file('asset/bin/zetro_member.frm');
 $path='application/views/member';
+calender();
 link_css('jquery.coolautosuggest.css','asset/css');
 link_js('jquery.coolautosuggest.js,auto_sugest.js','asset/js,asset/js');
 link_js('jquery.fixedheader.js,jquery_terbilang.js,member_pinjaman.js','asset/js,asset/js,'.$path.'/js');
-panel_begin('Pinjaman');
-panel_multi('pinjaman');
+panel_begin('Pembayaran Tagihan');
+panel_multi('pinjaman','none',false);
 if($all_pinjaman!=''){
 $fld="<input type='hidden' value='' id='ID_Perkiraan'>";
 	$zfm->Addinput($fld);
@@ -26,16 +27,19 @@ $fld="<input type='hidden' value='' id='ID_Perkiraane'>";
 	$zfm->AddBarisKosong();
 	$zfm->Start_form(true,'frm2');
 	$zfm->BuildForm('setoranpinjaman',false,'60%');
-	//$zfm->BuildFormButton('Simpan','setoran');
+	
 	echo "$fld.<br><hr/><div id='dat_pinjm' style='width:70%;display:none;padding:5px;'>";
 	echo "<table id='dat_simp' width='100%' style='border-collapse:collapse'>";
-	echo "<thead><tr class='headere' align='center'>
-				<th class='kotak' width='5%'>&nbsp;</th>
-				<th class='kotak' width='30%'>Cicilan Ke </th>
-				<th class='kotak' width='15%'>Besarnya</th>
-				<th class='kotak' width='15%'>Saldo</th>
-				<th class='kotak' width='20%'>Keterangan</th>
-				</tr></thead><tbody>";
+		echo "<thead>
+			<tr class='headere' align='center'>
+				<th class='kotak' width='5%'>No.</th>
+				<th class='kotak' width='15%'>Tanggal </th>
+				<th class='kotak' width='20%'>Tagihan</th>
+				<th class='kotak' width='20%'>Pembayaran</th>
+				<th class='kotak' width='25%'>Saldo</th>
+				<th class='kotak' width='30%'>Keterangan</th>
+				</tr>
+		</thead><tbody>";
 
 	echo "</tbody></table></div>";
 }else{
@@ -43,6 +47,9 @@ $fld="<input type='hidden' value='' id='ID_Perkiraane'>";
 }
 panel_multi_end();
 panel_end();
-echo "<div id='kekata' class='infox'></div><input type='hidden' id='baris' value=''>";
+echo "<div id='kekata' class='infox'></div>
+	<input type='hidden' id='baris' value=''>
+	<input type='hidden' id='Tahun' value=''>";
 inline_edit('frm2');
+terbilang();
 ?>	

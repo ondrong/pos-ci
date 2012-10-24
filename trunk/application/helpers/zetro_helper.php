@@ -275,7 +275,7 @@
 	
 	function inline_edit($frm=''){
 		echo "<span id='ild' style='display:none'>
-			 <input type='text' id='inedit-$frm' value='' style='width:70%; height:20px' class='angka'>
+			 <input type='text' id='inedit_$frm' value='' style='width:70%; height:20px' class='angka'>
 			 <img src='".base_url()."asset/images/Save.png' id='saved-$frm' onclick=\"simpan_$frm('inedit-$frm');\" class='simpan'>
 			 <img src='".base_url()."asset/images/no.png' id='gakjadi' onclick=\"batal_$frm();\" class='hapus'>
 			 </span>";
@@ -308,18 +308,20 @@
 		 	<img src='".base_url()."asset/images/ajax-loader.gif' /></div>
 			<div id='lock' class='black_overlay'></div>";	
 	}
-	function addText($label,$field,$hr=true){
+	function addText($label,$field,$hr=true,$frm=''){
 	echo ($hr==true)?"":"<hr>\n";
+	echo ($frm=='')?'':"<form id='$frm' name='$frm' method='post' action=''>\n";
 	 echo "<table style='border-collapse:collapse' id='addtxt'><tr>\n";
 	 $n=0;
 		foreach($label as $lbl){
 			($lbl=='')?$width="5":$width=(strlen($lbl)*5+20);
-			echo "<td id='c1-$n' width='".$width."px' align='' valign='middle' >".$lbl."</td>
+			echo "<td id='c1-$n' width='".$width."px' align='' valign='middle' nowrap>".$lbl."</td>
 				  <td id='c2-$n'>".$field[$n]."</td>\n";
 			echo (count($label)>1 && ($n+1)<count($label))?"<td width='10px' align='center' style='background: url(".base_url()."asset/images/on_bg.png) repeat-y center' >&nbsp;</td>\n":"";
 				$n++;
 		}
 		echo "</tr>\n</table>";
+	 echo ($frm=='')?'':"</form>\n";
 		echo ($hr==true)?"<hr>\n":"";
 	}
 	function popup_full($include=''){
@@ -336,12 +338,16 @@
 		return $data;
 	}
 	function img_aksi($id='',$del=false,$only=''){
-		return ($del==false)? 
-				"<img src='".base_url()."asset/images/editor.png' id='simpan' onclick=\"images_click('".$id."','edit');\" class='simpan' title='Click to Edit stock'>":
-				($only=='del')?
-				"<img src='".base_url()."asset/images/no.png' id='simpan' onclick=\"images_click('".$id."','edit');\" class='simpan' title='Click to Edit stock'>":
-				"<img src='".base_url()."asset/images/editor.png' id='simpan' onclick=\"images_click('".$id."','edit');\" class='simpan' title='Click to Edit stock'>
+		$data='';
+		 if($del==false){ 
+		   $data="<img src='".base_url()."asset/images/editor.png' id='simpan' onclick=\"images_click('".$id."','edit');\" class='simpan' title='Click to Edit stock'>";
+		 }else if ($del==true && $only=='del'){
+		   $data="<img src='".base_url()."asset/images/no.png' id='simpan' onclick=\"images_click('".$id."','edit');\" class='simpan' title='Click to Edit stock'>";
+		 }else if($del==true && $only==''){
+		   $data="<img src='".base_url()."asset/images/editor.png' id='simpan' onclick=\"images_click('".$id."','edit');\" class='simpan' title='Click to Edit stock'>
 			    &nbsp;<img src='".base_url()."asset/images/no.png' id='hapus' onclick=\"images_click('".$id."','del');\" class='hapus' title='Click to Edit stock'>";
+		 }
+		 return $data;
 	}
 
 //}

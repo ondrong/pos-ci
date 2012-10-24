@@ -8,7 +8,7 @@ link_css('autosuggest.css','asset/css');
 link_js('auto_sugest.js,jquery.fixedheader.js,master_kas_harian.js,jquery_terbilang.js','asset/js,asset/js,'.$path.'/js,asset/js');
 tab_select('');
 panel_begin('Kas Harian Toko');
-panel_multi('setupsaldokas');
+panel_multi('setupsaldokas','none',false);
 if($all_kas_harian!=''){
 	$zfm->AddBarisKosong(true);
 	$zfm->Start_form(true,'frm1');
@@ -25,7 +25,7 @@ if($all_kas_harian!=''){
 	no_auth();
 }
 panel_multi_end();
-panel_multi('operasionaltoko','block');
+panel_multi('operasionaltoko','block',false);
 if($all_kas_keluar!=''){
 	$zfm->AddBarisKosong(false);
 	$zfm->Start_form(true,'frm2');

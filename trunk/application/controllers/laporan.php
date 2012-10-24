@@ -9,6 +9,7 @@ class Laporan extends CI_Controller{
 		$this->load->model("report_model");
 		$this->load->helper("print_report");
 		$this->load->model("akun_model");
+		$this->load->library("zetro_terbilang");
 		$this->load->library("zetro_auth");
 		$this->userid=$this->session->userdata('idlevel');
 	  }
@@ -120,22 +121,33 @@ class Laporan extends CI_Controller{
 	
 	}
 	function last_no_transaksi(){
-		$data=$this->Admin_model->penomoran('GI');
-		echo $data;	
+		$data=array();
+		$where=(empty($_POST['sampai_tgl']))? 
+			"where Tanggal='".tglToSql($_POST['dari_tgl'])."'":
+			"where Tanggal between '".tglToSql($_POST['dari_tgl'])."' and '".tglToSql($_POST['sampai_tgl'])."'";
+		$where.=empty($_POST['id_anggota'])?'':" and a.Nama like '%".$_POST['id_anggota']."%'";
+		$data=$this->report_model->get_no_trans($where);
+		foreach($data as $r){
+			echo "<option value='".$r->NoUrut."'>".$r->NoUrut."-".$r->Nama." [".$r->Catatan."]</option>";
+		}
+			
 	}
 	function print_faktur(){
 		$data=array();
 		$no_trans=$this->input->post('no_transaksi');
-		$data['nm_nasabah']	=$this->Admin_model->show_single_field("detail_transaksi",'nm_produsen',"where no_transaksi='$no_trans'");
-		$data['alamat']		=$this->Admin_model->show_single_field("mst_pelanggan",'alm_pelanggan',"where nm_pelanggan='".$this->Admin_model->show_single_field("detail_transaksi",'nm_produsen',"where no_transaksi='$no_trans'")."'");
-		$data['telp']		=$this->Admin_model->show_single_field("mst_pelanggan",'telp_pelanggan',"where nm_pelanggan='".$this->Admin_model->show_single_field("detail_transaksi",'nm_produsen',"where no_transaksi='$no_trans'")."'");
+		$data['nm_nasabah']	=rdb('mst_anggota','Nama','Nama',"where ID='".rdb("inv_penjualan",'ID_Anggota','ID_Anggota',"where NoUrut='$no_trans' and Tahun='".date('Y')."'")."'");
+		$data['alamat']		=rdb('mst_anggota','Alamat','Alamat',"where ID='".rdb("inv_penjualan",'ID_Anggota','ID_Anggota',"where NoUrut='$no_trans' and Tahun='".date('Y')."'")."'");
+		$data['telp']		=rdb('mst_anggota','Telepon','Telepon',"where ID='".rdb("inv_penjualan",'ID_Anggota','ID_Anggota',"where NoUrut='$no_trans' and Tahun='".date('Y')."'")."'");
+		$data['Company']	=rdb('mst_anggota','Catatan','Catatan',"where ID='".rdb("inv_penjualan",'ID_Anggota','ID_Anggota',"where NoUrut='$no_trans' and Tahun='".date('Y')."'")."'");
+		$data['faktur']		=rdb("inv_penjualan",'Nomor','Nomor',"where NoUrut='$no_trans' and Tahun='".date('Y')."'");
+		$data['tanggal']	=tglfromSql(rdb("inv_penjualan",'Tanggal','Tanggal',"where NoUrut='$no_trans' and Tahun='".date('Y')."'"));
+		//$data['terbilang']	=$this->zetro_terbilang->terbilang(rdb("inv_penjualan",'Total','Total',"where NoUrut='$no_trans' and Tahun='".date('Y')."'"));
 		$data['temp_rec']	=$this->report_model->laporan_faktur($no_trans);
-		$data['terbilang']	=$this->Admin_model->show_single_field('bayar_transaksi',"terbilang","where no_transaksi='$no_trans'");
 		$this->zetro_auth->menu_id(array('trans_beli'));
 		$this->list_data($data);
 		$this->View("laporan/lap_".$this->input->post('lap')."_print");
 	}
-
+	
 }
 
 

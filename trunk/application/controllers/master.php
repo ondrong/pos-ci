@@ -86,6 +86,12 @@ class Master extends CI_Controller {
 		$datax['nomor']=$_POST['no_trans'];
 		$datax['jenis_transaksi']	='D';
 		$this->Admin_model->replace_data('nomor_transaksi',$datax);
+		//proses to jurnal
+		$this->no_transaksi($_POST['no_trans']);
+		$this->tanggal(tgltoSql($_POST['tgl_kas']));
+		$this->JenisBayar('7');
+
+		$this->process_to_jurnal('0',$_POST['harga_beli'],'');
 		$this->list_kas_harian();
 	}
 	function simpan_kas_keluar(){
@@ -105,8 +111,80 @@ class Master extends CI_Controller {
 		//print_r($datax);
 			$this->Admin_model->replace_data('nomor_transaksi',$datax);
 			$this->Admin_model->replace_data('mst_kas_trans',$data);
+		//proses to jurnal
+		$this->no_transaksi($_POST['no_transaksi']);
+		$this->tanggal($_POST['tgl_transaksi']);
+		$this->JenisBayar('7');
+			$this->process_to_jurnal('0',$_POST['harga_beli'],ucwords($_POST['ket_transaksi']));
+
 			$this->list_kas_trans();
+			
 	}
+	function no_transaksi($no_trans){
+		$this->no_trans=$no_trans;
+	}
+	function tanggal($tgl){
+		$this->tgl=$tgl;
+	}
+	function JenisBayar($id_jenis){
+		$this->id_jenis=$id_jenis;	
+	}
+	
+	function process_to_jurnal($id_anggota,$total,$ket=''){
+	/* membuat data untuk diposting dalam jurnal
+	  simpan penjualan barang secara kredit
+	  inputnya adalah ID anggota yng melakukan pembelian secara kredit
+	  dapatkan ID_Perkiraan dari table perkiraan based on ID_Anggota
+	  extract data perkiraan menjadi klass, sub klass dan jenis simpanan dalam hal ini
+	  jenis simpanan adalah barang [id:4]
+	  data yang dihasilkan akan ditampung di table transaksi_temp
+	 
+		$data=array();$akun='';
+		//get ID_perkiraan
+		$akun=rdb('perkiraan','ID','ID',"where ID_Agt='$id_anggota' and ID_Simpanan='".$this->id_jenis."'");
+		//echo $akun;
+		if($akun==''){
+			//update database perkiraan
+			$this->_update_perkiraan($id_anggota,$this->id_jenis);	
+		}
+*/		$data['ID_Perkiraan']	='25';//rdb('perkiraan','ID','ID',"where ID_Agt='$id_anggota' and ID_Simpanan='".$this->id_jenis."'");
+		$data['ID_Unit']		=rdb('jenis_simpanan','ID_Unit','ID_Unit',"where ID='".$this->id_jenis."'");
+		$data['ID_Klas']		=rdb('jenis_simpanan','ID_Klasifikasi','ID_Klasifikasi',"where ID='".$this->id_jenis."'");
+		$data['ID_SubKlas']		=rdb('jenis_simpanan','ID_SubKlas','ID_SubKlas',"where ID='".$this->id_jenis."'");
+		$data['ID_Dept']		='1';//rdb('mst_anggota','ID_Dept','ID_Dept',"where ID='".$id_anggota."'");
+		if($ket==''){
+			$data['Kredit']		=$total;//rdb('inv_penjualan','Total','Total',"where ID_Anggota='".$id_anggota."' and NoUrut='".$this->no_trans."'");
+		}else{
+			$data['Debit']		=$total;
+		}
+		$data['ID_CC']			='4';
+		$data['Keterangan']		=($ket=='')?'Saldo Kas Harian':$ket;
+		$data['tanggal']		=tgltoSql($this->tgl);
+		$data['ID_Bulan']		=substr($this->tgl,3,2);
+		$data['Tahun']			=substr($this->tgl,6,4);
+		$data['created_by']		=$this->session->userdata('userid');
+		//print_r($data);
+		 $this->Admin_model->replace_data('transaksi_temp',$data);
+		// $this->_set_pinjaman($id_anggota);
+	}
+	
+	function _update_perkiraan($ID_Agt,$ID_Simpanan){
+		$datax=array();
+		$datax['ID_Unit']		=rdb('jenis_simpanan','ID_Unit','ID_Unit',"where ID='".$this->id_jenis."'");
+		$datax['ID_Klas']		=rdb('jenis_simpanan','ID_Klasifikasi','ID_Klasifikasi',"where ID='".$this->id_jenis."'");
+		$datax['ID_SubKlas']	=rdb('jenis_simpanan','ID_SubKlas','ID_SubKlas',"where ID='".$this->id_jenis."'");
+		$datax['ID_Dept']		=rdb('mst_anggota','ID_Dept','ID_Dept',"where ID='".$ID_Agt."'");
+		$datax['ID_Simpanan']	=$ID_Simpanan;
+		$datax['ID_Agt']		=$ID_Agt;
+		$datax['ID_Calc']		=rdb('jenis_simpanan','ID_Calc','ID_Calc',"where ID='".$this->id_jenis."'");
+		$datax['ID_Laporan']	=rdb('jenis_simpanan','ID_Laporan','ID_Laporan',"where ID='".$this->id_jenis."'");
+		$datax['ID_LapDetail']	=rdb('jenis_simpanan','ID_LapDetail','ID_LapDetail',"where ID='".$this->id_jenis."'");
+		echo $this->Admin_model->replace_data('perkiraan',$datax);
+		//print_r($datax);
+	}
+
+
+
 	function get_datakas(){
 		$data=array();
 		$data=$this->Admin_model->show_single_field('mst_kas','id_kas',' order by id_kas');
@@ -217,15 +295,17 @@ class Master extends CI_Controller {
   	
 	function set_data_vendor(){
 		$data=array();
-		$data['ID']			=round($_POST['ID']);
+		$data['NoUrut']		=round($_POST['ID']);
+		$data['No_Agt']		=($_POST['ID']);
 		$data['Nama']		=addslashes(strtoupper($_POST['pemasok']));
 		$data['Alamat']		=empty($_POST['alamat'])?'':ucwords(addslashes($_POST['alamat']));
 		$data['Kota']		=empty($_POST['kota'])?'':ucwords($_POST['kota']);
 		$data['Propinsi']	=empty($_POST['propinsi'])?'':ucwords($_POST['propinsi']);
 		$data['Telepon']	=empty($_POST['telepon'])?'':$_POST['telepon'];
 		$data['Faksimili']	=empty($_POST['faksimili'])?'':$_POST['faksimili'];
-		$data['Status'] 	='aktif';
+		$data['Status'] 	='0';
 		$data['ID_Jenis']	='2';
+		$data['ID_Aktif']	='1';
 		//print_r($data);
 		$this->Admin_model->replace_data('mst_anggota',$data);
 	}
@@ -238,7 +318,7 @@ class Master extends CI_Controller {
 			$cek=rdb('inv_pembelian','ID_Pemasok','ID_Pemasok',"where ID_Pemasok='".$row->ID."'");
 			echo tr().
 				 td($n,'center').
-				 td($row->ID,'center').
+				 td($row->No_Agt,'center').
 				 td($row->Nama,'xx\' onClick="_show_detail(\''.$row->ID.'\',\''.$row->Nama.'\');" attr=\'ax').
 				 td($row->Alamat).td($row->Kota).td($row->Propinsi).
 				 td($row->Telepon).td($row->Faksimili).

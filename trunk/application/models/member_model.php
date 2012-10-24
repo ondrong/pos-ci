@@ -53,7 +53,7 @@ class Member_model extends CI_Model{
 								  'ID_Dept'		=>$row->ID_Dept,
 								  'PhotoLink'	=>$row->PhotoLink,
 								  'Thumbnail'	=>'../uploads/member/'.$row->PhotoLink,
-								  'description'	=>rdb('mst_departemen','Departemen','Departemen',"where ID='".$row->ID_Dept."'")
+								  'description'	=>$row->Catatan."<br>".$row->Alamat." ".$row->Kota
 								  );
 			}
 			return $data;
@@ -188,23 +188,48 @@ class Member_model extends CI_Model{
 		}
 		return $data;
 	}
+	function data_total_pinjm($ID_Agt){
+		$sql="select sum(debet)as debet,sum(kredit)as kredit,(sum(debet)-sum(kredit))as saldo
+				from pinjaman as p
+				left join pinjaman_bayar as b
+				on b.ID_Pinjaman=p.ID
+				where p.ID_Agt='".$ID_Agt."' 
+				group by p.ID_Agt";	
+
+		$data=$this->db->query($sql);
+		return $data->result();
+	}
 	function data_pinjaman($ID_Agt){
 		$data=array();
-		$sql="select ID_Pinjaman,sum(debet) as pinjam, sum(kredit) as bayar,keterangan
-			 from pinjaman_bayar where ID_Agt='$ID_Agt'";
-		$rs=mysql_query($sql) or die(mysql_error());
-		while ($r=mysql_fetch_object($rs)){
-			if($r->pinjam >$r->bayar){
-				$sql2="select * from pinjaman where ID='".$r->ID_Pinjaman."'";
-				$data=$this->db->query($sql2);
-			}
-		}
+		$sql="select p.*,sum(Kredit) as Kredit,(sum(Debet)-sum(Kredit)) as Saldo
+				from pinjaman_bayar as pb 
+				left join pinjaman as p
+				on p.ID=pb.ID_pinjaman
+				where p.ID_Agt='$ID_Agt' and p.stat_pinjaman='0'
+				group by pb.ID_pinjaman order by p.ID";
+		$data=$this->db->query($sql);
+		return $data->result();
+	}
+	function get_data_pinjaman($where,$orderby=''){
+		$data=array();
+		$sql="select p.*,sum(Debet) as Debet,sum(Kredit) as Kredit,
+			 (sum(Debet)-sum(Kredit)) as Saldo,
+			  a.Nama,a.Alamat,a.Kota,a.Catatan
+				from pinjaman_bayar as pb 
+				left join pinjaman as p
+				on p.ID=pb.ID_pinjaman
+				left join mst_anggota as a
+				on a.ID=p.ID_Agt
+				$where group by pb.ID_Agt
+				$orderby";
+		//echo $sql;
+		$data=$this->db->query($sql);
 		return $data->result();
 	}
 	function data_setoran($ID_Agt,$ID){
 		$data=array();
 		$sql="select * from pinjaman_bayar where ID_Pinjaman='$ID' and ID_Agt='$ID_Agt' 
-			 and debet !=saldo order by ID_Bulan,Tahun";
+			 and kredit!=0 order by ID_Pinjaman,Tanggal,Tahun";
 		$data=$this->db->query($sql);
 		return $data->result();
 	}

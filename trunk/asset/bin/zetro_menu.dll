@@ -40,16 +40,22 @@
 
 	[Inventori]
 	1|List Stock|stock/stock_barang||
-	2|List Barang Terjual|||
-	
+	2|List Barang Terjual|report/penjualan||
+		
+		[List Barang Terjual]
+		1|List Barang Terjual|listbarangterjual|y|zvp
+		
 	[Help]
 	1|Info|admin/about|
+	2|TO DO|admin/todo|
 	
 ;Keanggotaan ======================================================
 	[Pelanggan]
 	1|Pelanggan Baru|member/index||
 	2|Daftar Pelanggan|member/member_list|y|cevp
-	;3|Simpanan Anggota|member/member_saving||
+	3|<hr>|x|
+	4|Pembayaran Tagihan|simpanan/t_pinjaman||
+	5|Tagihan Pelanggan|report/tagihan||
 	
 		[Pelanggan Baru]
 		1|Pelanggan Baru|pelangganbaru|y|zce
@@ -58,12 +64,19 @@
 			[Member Detail]
 			1|Data Pelanggan|memberdata|y|
 			;2|Member Trans|membertrans|y|
+			
+	[Pembayaran Tagihan]
+	1|Pembayaran Tagihan|pembayarantagihan|y|zce
+	
+	[Tagihan Pelanggan]
+	1|List Tagihan|listtagihan|y|zvp
+	
 
 ;menu inventory====================================================
 	
 [Inventory]
 1|File||y||
-2|Pembelian||y||
+2|Penerimaan||y||
 3|Gudang||y||
 4|Vendor||y||
 5|Master||y||
@@ -72,10 +85,10 @@
 	[Master]
 	1|Data Akun|master/general|||
 	
-	[Pembelian]
-	1|Pembelian Barang|pembelian/index||
+	[Penerimaan]
+	1|Penerimaan Barang|pembelian/index||
 			
-		[Pembelian Barang]
+		[Penerimaan Barang]
 		1|Input Pembelian|pembelian/index|y|zce
 		
 		[Return Pembelian]
@@ -130,11 +143,13 @@
 		1|Print Preview|pp|y
 
 [Laporan]
-1|File|||
+1|File||y|
 2|Stock||y||
-3|Lap.Penjualan||y||
-4|Lap.Pembelian||y||
-5|Lap.Kas||y||
+3|Lap Penjualan||y||
+4|Lap Pembelian||y||
+5|Lap Kas||y||
+6|Help||||
+;6|Lap.Pelanggan||y||
 
 	
 	[Stock]
@@ -142,8 +157,8 @@
 	2|List Stock|stock/stock_barang||zvp
 	3|<hr>|x|
 	4|Stock Opname|stock/counting||
-	5|<hr>|x|
-	6|Stock Limit|stock/limit||
+	;5|<hr>|x|
+	;6|Stock Limit|stock/limit||
 	
 		[List Stock]
 		1|List Stock|liststock|y|zvp
@@ -152,30 +167,84 @@
 		1|Count Sheet|countsheet|y|zvp
 		;2|Stock Adjustment|adjust|y|zce
 		
-		[Stock Limit]
+		[Sugest Pembelian]
 		1|Stock Limit|stocklimit|y|zvp
 		
-	[Lap.Penjualan]
-	1|Rekap Penjualan Tunai|||
-	2|Rekap Penjualan Kredit|||
-	3|Rekap Barang Terjual|||
+	[Lap Penjualan]
+	1|Rekap Penjualan|report/penjualan||
+	2|Detail Penjualan|report/penjualan_detail||
+	3|Penjualan per Pelanggan|report/penjualan_kon||
 	4|<hr>|x|
-	5|Penjualan Per Pelanggan|||
-	6|Grafik Penjualan |||
+	5|Top Penjualan|||
+	6|Grafik Penjualan|report/penjualan_graph||
+		
+		[Rekap Penjualan]
+		1|Rekap Penjualan|rekappenjualan|y|zvp
+		
+		[Detail Penjualan]
+		1|Detail Penjualan|detailpenjualan|y|zvp
+		
+		[Penjualan per Pelanggan]
+		1|Penjualan per Pelanggan|penjualanperpelanggan|y|zvp
+		
+		[Top Penjualan]
+		1|Top Barang Terjual|topbarangterjual|y|zvp
+		
+		[Grafik Penjualan]
+		1|Grafik Penjualan|grafikpenjualan|y|zvp
+		
+
+	[Lap Pembelian]
+	1|Rekap Pembelian|report/beli||
+	2|Detail Pembelian|report/beli_detail||
+	3|Pembelian per Vendor|report/beli_vend||
+	4|<hr>|x|
+	5|Sugest Pembelian|stock/stock_limit|||
+	6|Grafik Pembelian|report/beli_graph||
+		
+		[Rekap Pembelian]
+		1|Daftar Pembelian|daftarpembelian|y|zvp
+
+		[Detail Pembelian]
+		1|Detail Pembelian|detailpembelian|y|zvp
+		
+		[Pembelian per Vendor]
+		1|Pembelian per Vendor|pembelianpervendor|y|zvp
+		
+		[Grafik Pembelian]
+		1|Grafik Pembelian|grafikpembelian|y|zvp
+		
 	
-	[Lap.Pembelian]
-	1|Rekap Pembelian|||
-	2|Pembelian per Vendor|||
-	3|<hr>|x|
-	4|Grafik Pembelian|||
-	
-	[Lap.Kas]
-	1|Cash Flow||||
-	2|Laba Rugi||||
+	[Lap Kas]
+	1|Cash Flow|laptransaksi/cash_flow|||
+	2|Laba Rugi|laptransaksi/laba_rugi|||
 	3|<hr>|x||
 	4|Penerimaan Harian||||
 	5|Operasional Harian|||
 	6|<hr>|x|
-	7|Grafik Cash Flow|||
-	8|Grafik Laba Rugi|||
+	7|Grafik Kas|||
+	;8|Grafik Laba Rugi|||
+	
+		[Cash Flow]
+		1|Aliran Kas|alirankas|y|zvp|
+		
+		[Laba Rugi]
+		1|Laba Rugi|labarugi|y|zvp|
+		
+		[Penerimaan Harian]
+		1|Laporan Kas Masuk|laporankasmasuk|y|zvp
+		
+		[Operasional Harian]
+		1|Operasional Harian|operasionalharian|y|zvp
+		
+		[Grafik]
+		1|Cash Flow|cashflow|y|zvp
+		2|Laba Rugi|labarugi|y|zvp
+	
+	[Lap.Pelanggan]
+	1|Rekap Pembelian||||
+	
+	
+	
+	
 	

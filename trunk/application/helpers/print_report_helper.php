@@ -104,7 +104,7 @@ function Header()
 	$fax	=$zn->rContent('InfoCo','Fax',$nfile);
 	$BH		=$zn->rContent('InfoCo','BH',$nfile);
 	   $this->Ln(2);
-	   $this->Image(base_url().'asset/img/about.jpg',10,6,70,15);
+	   $this->Image(base_url().'asset/img/about.jpg',10,6,50,15);
 	   $this->Ln(2);
 	   //$this->SetFont('Arial','B',15);
 	  // $this->Cell(5);
@@ -156,7 +156,6 @@ function Header()
 		$npwp	=$zn->rContent('InfoCo','NPWP',$nfile);
 		$nppkp	=$zn->rContent('InfoCo','NPPKP',$nfile);
 		
-		   $this->Ln(2);
 		   $this->SetFont('Arial','B',14);
 		   $this->Cell(110,4,$co,0,0,'L');
 		   $this->SetFont('Arial','',10);
@@ -164,13 +163,17 @@ function Header()
 		   $this->Cell(110,6,$address." ". $kota,0,0,'L');
 		   $this->Cell(120,6,'Customer :',0,1,'L');
 		   $this->Cell(110,6,$telp." ". $fax,0,0,'L');
-		   $this->Cell(120,6,$this->refer,0,1,'L');
+		   $this->SetFont('Arial','IB',10);
+		   $this->Cell(120,6,'   '.$this->refer,0,1,'L');
+		   $this->SetFont('Arial','',10);
 		   $this->Cell(110,6,$npwp,0,0,'L');
-		   $this->Cell(120,6,$this->filter,0,1,'L');
+		   $this->SetFont('Arial','IB',10);
+		   $this->Cell(125,6,'   '.$this->filter,0,1,'L');
+		   $this->SetFont('Arial','',10);
 		   $this->Cell(110,6,$nppkp,0,0,'L');
 		   $this->Cell(120,6,'NPWP :',0,1,'L');
-		   $this->Cell(110,4,'Nomor Seri faktur: '.date('zYmd-Hs'),0,0,'L');
-		   $this->Cell(120,6,'Tanggal : '.date('d F Y'),0,1,'L');
+		   $this->Cell(110,4,'Nomor Seri faktur: '.$this->nofaktur,0,0,'L');
+		   $this->Cell(120,6,'Tanggal : '.$this->dataset,0,1,'L');
 		   $this->SetFont('Arial','B',10);
 		   $this->SetLineWidth(0.4);
 		   $this->Line(10,50,197,50);
@@ -198,21 +201,22 @@ function Header()
 	$fax	=$zn->rContent('InfoCo','Fax',$nfile);
 	$BH		=$zn->rContent('InfoCo','BH',$nfile);
 	   $this->Ln(2);
-	   $this->SetFont('Arial','B',15);
-	   $this->Image(base_url().'asset/img/logo100.jpg',5,7,25,25);
-	   $this->SetFont('Arial','B',15);
-	   $this->Cell(25.5);
-	   $this->MultiCell(120,5,$co,0,1,'L');
-	   $this->Cell(25.5);
-	   $this->SetFont('Arial','B',11);
-	   $this->MultiCell(100,5,$BH,0,1,'C');
-	   $this->SetFont('Arial','',10);
-	   $this->Cell(25.5);
-	   $this->MultiCell(0,6,$address." ". $kota." ". $prop,0,1,'C');
-	   $this->SetFont('Arial','',10);
-	   $this->Cell(25.5);
-	   $this->MultiCell(0,4,$telp." ". $fax,0,1,'C');
+	   $this->Image(base_url().'asset/img/about.jpg',10,6,50,15);
 	   $this->Ln(2);
+	   //$this->SetFont('Arial','B',15);
+	  // $this->Cell(5);
+	  // $this->MultiCell(120,5,$co,0,1,'L');
+	   //$this->Cell(5);
+	   $this->SetFont('Arial','B',11);
+	   //$this->MultiCell(100,5,$BH,0,1,'C');
+	   $this->SetFont('Arial','',10);
+	   //$this->Cell(3);
+	   $this->MultiCell(0,6,"",0,1,'C');
+	   $this->SetFont('Arial','',10);
+	   //$this->Cell(5);
+	   $this->MultiCell(0,6,$address." ". $kota." ". $prop,0,1,'C');
+	   $this->MultiCell(0,4,$telp." ". $fax,0,1,'C');
+	   $this->Ln(5);
 	   $this->SetFont('Arial','B',10);
 	   ($this->CurOrientation=='P')?
 	   $this->MultiCell(0,4,str_repeat("_",95),0,1,'C'):
@@ -259,6 +263,13 @@ public function getKriteria(){
   return $this->kriteria;
 }
 
+public function setNoFaktur($n){
+ $this->nofaktur=$n;	
+}
+
+public function getNoFaktur(){
+  return $this->nofaktur;
+}
 public function setNama($n){
   $this->nama=$n;
 }

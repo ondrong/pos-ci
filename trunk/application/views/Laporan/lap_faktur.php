@@ -3,8 +3,10 @@ $zfm=new zetro_frmBuilder('asset/bin/zetro_master.frm');
 $zlb=new zetro_buildlist();
 $zlb->config_file('asset/bin/zetro_master.frm');
 $path='application/views/laporan';
-link_css('autosuggest.css','asset/css');
-link_js('jquery.fixedheader.js,lap_faktur.js,auto_sugest.js,jquery_terbilang.js','asset/js,'.$path.'/js,asset/js,asset/js');
+calender();
+link_css('jquery.coolautosuggest.css','asset/css');
+link_js('jquery.coolautosuggest.js','asset/js');
+link_js('lap_faktur.js,jquery_terbilang.js',$path.'/js,asset/js');
 panel_begin('Print Faktur');
 panel_multi('printfakturpenjualan','block');
 if($all_faktur!=''){

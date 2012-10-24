@@ -125,6 +125,7 @@ function get_biodata(){
 				$('#frm1 #Telepon').val(obj.Telepon);
 				$('#frm1 #Faksimili').val(obj.Faksimili);
 				$('#frm1 #Status').val(obj.Status);
+				$('#frm2 #TanggalMasuk').val(tglFromSql(obj.TanggalMasuk));
 			})
 	
 }

@@ -1,8 +1,13 @@
 // JavaScript Document
 $(document).ready(function(e){
 	var path=$('#path').val();
-	$('#setoranpinjaman').removeClass('tab_button');
-	$('#setoranpinjaman').addClass('tab_select');
+	//hide field cara pembayaran -- not used but can't deleted
+	$('#frm2 table#fmrTable tr td#c14').hide();
+	$('#frm2 table#fmrTable tr td#c24').hide();
+	$('#frm2 table#fmrTable tr td#c34').hide();
+	//end field
+	$('#pembayarantagihan').removeClass('tab_button');
+	$('#pembayarantagihan').addClass('tab_select');
 	var tday=new Date;
 	$('table#panel tr td:not(.flt,.plt)').click(function(){
 		var id=$(this).attr('id');
@@ -16,9 +21,8 @@ $(document).ready(function(e){
 	})
 	//transaksi pinjaman
 	//inisilisasi dropdown bulan/tahun
-	$('#frm1 #ID_Bulan')
-		.html("<option value='1-"+tday.getFullYear()+"'>Januari-"+tday.getFullYear()+"</option><option value='2-"+tday.getFullYear()+"'>Februari-"+tday.getFullYear()+"</option><option value='3-"+tday.getFullYear()+"'>Maret-"+tday.getFullYear()+"</option><option value='4-"+tday.getFullYear()+"'>April-"+tday.getFullYear()+"</option><option value='5-"+tday.getFullYear()+"'>Mei-"+tday.getFullYear()+"</option><option value='6-"+tday.getFullYear()+"'>Juni-"+tday.getFullYear()+"</option><option value='7-"+tday.getFullYear()+"'>Juli-"+tday.getFullYear()+"</option><option value='8-"+tday.getFullYear()+"'>Agustus-"+tday.getFullYear()+"</option><option value='9-"+tday.getFullYear()+"'>September-"+tday.getFullYear()+"</option><option value='10-"+tday.getFullYear()+"'>Oktober-"+tday.getFullYear()+"</option><option value='11-"+tday.getFullYear()+"'>November-"+tday.getFullYear()+"</option><option value='12-"+tday.getFullYear()+"'>Desember-"+tday.getFullYear()+"</option>")
-		.val((tday.getMonth()+1)+'-'+tday.getFullYear()).select();
+	tglNow('#Tanggal');
+	$('#Tanggal').dynDateTime();
 	$('#frm1 #ID_Jenis')
 		.val('1').select()
 		.attr('disabled','disabled')
@@ -31,12 +35,9 @@ $(document).ready(function(e){
 		})
 	})
 	//call autosugest nama anggota on keyup
-	$('#frm1 #ID_Agt').focus(function(){
-	var dept=$('#ID_Dept').val();
-		if(dept!=''){
-			$('#frm1 #ID_Agt')
+	$('#frm1 #ID_Agt')
 				.coolautosuggest({
-				url				:path+'member/get_anggota?limit=10&dept=1&str=',
+				url				:path+'member/get_anggota?limit=10&dept=&str=',
 				width			:290,
 				showThumbnail	:false,
 				showDescription	:true,
@@ -45,11 +46,8 @@ $(document).ready(function(e){
 						$('#frm1 #pinjaman').focus().select();
 							
 					}
-				})
-		}else{
-			alert('Tentukan departement nya terlebih dahulu');
-		}
 	})
+	
 	$('#frm1 #pinjaman')
 		.click(function(){		
 		})
@@ -139,9 +137,6 @@ $(document).ready(function(e){
 			})
 	})
 	//transaksi setoran pinjaman
-	$('#frm2 #ID_Bulan')
-		.html("<option value='1-"+tday.getFullYear()+"'>Januari-"+tday.getFullYear()+"</option><option value='2-"+tday.getFullYear()+"'>Februari-"+tday.getFullYear()+"</option><option value='3-"+tday.getFullYear()+"'>Maret-"+tday.getFullYear()+"</option><option value='4-"+tday.getFullYear()+"'>April-"+tday.getFullYear()+"</option><option value='5-"+tday.getFullYear()+"'>Mei-"+tday.getFullYear()+"</option><option value='6-"+tday.getFullYear()+"'>Juni-"+tday.getFullYear()+"</option><option value='7-"+tday.getFullYear()+"'>Juli-"+tday.getFullYear()+"</option><option value='8-"+tday.getFullYear()+"'>Agustus-"+tday.getFullYear()+"</option><option value='9-"+tday.getFullYear()+"'>September-"+tday.getFullYear()+"</option><option value='10-"+tday.getFullYear()+"'>Oktober-"+tday.getFullYear()+"</option><option value='11-"+tday.getFullYear()+"'>November-"+tday.getFullYear()+"</option><option value='12-"+tday.getFullYear()+"'>Desember-"+tday.getFullYear()+"</option>")
-		.val((tday.getMonth()+1)+'-'+tday.getFullYear()).select();
 	$('#frm2 #ID_Jenis')
 		.val('2').select()
 		.attr('disabled','disabled')
@@ -157,34 +152,32 @@ $(document).ready(function(e){
 	$('#frm2 #ID_Agt').click(function(){
 		$('div#dat_pinjm').hide();
 	})
-	$('#frm2 #ID_Agt').focus(function(){
-	var dept=$('#frm2 #ID_Dept').val();
-		if(dept!=''){
-			$('#frm2 #ID_Agt')
+	
+	$('#frm2 #ID_Agt')
+				.focus().select()
 				.coolautosuggest({
-				url				:path+'member/get_anggota?limit=10&dept=1&str=',
+				url				:path+'member/get_anggota?limit=10&dept=&str=',
 				width			:290,
 				showThumbnail	:false,
 				showDescription	:true,
 					onSelected:function(result){
 						$('#ID_Perkiraane').val(result.ID);
-						$.post('data_pinjaman',{'ID_Agt':result.ID},
-						function(data){
-							$('#dat_pinjm table#dat_simp tbody').html('');
-							$('#dat_pinjm table#dat_simp tbody').html(data);
-							$('div#dat_pinjm').show();
-							$('#dat_pinjm table#dat_simp').fixedHeader({width:(screen.width-350),height:265});
-						})
-							
-					}
+						$('#capem').val('par').select();
+						$.post('data_pinjaman',{
+							'ID_Agt':result.ID,
+							'cBayar':$('#frm2 #capem').val()},
+							function(data){
+								$('#dat_pinjm table#dat_simp tbody').html('');
+								$('#dat_pinjm table#dat_simp tbody').html(data);
+								$('div#dat_pinjm').show();
+								$('#dat_pinjm table#dat_simp').fixedHeader({width:(screen.width-200),height:(screen.Height-330)});
+							})
+						}
 				})
-		}else{
-			alert('Tentukan departement nya terlebih dahulu');
-		}
-	})
+							
 	$('#frm2 #pinjaman')
 		.focus(function(){
-			$.post('get_total_pinjaman',{'ID_Agt':$('#frm2 #ID_Perkiraan').val()},
+			$.post('get_total_pinjaman',{'ID_Agt':$('#ID_Perkiraane').val()},
 			function(result){
 				var hsl=$.parseJSON(result);
 				var ccl=(hsl.cicilanke=='1')?'1':(parseInt(hsl.cicilanke)+1)
@@ -194,18 +187,61 @@ $(document).ready(function(e){
 				$('#frm2 #keterangan').val('Angs. ke '+ccl+' bulan '+ $('#frm2 #ID_Bulan option:selected').text());
 			})
 		})
+	$('#frm2 #capem')
+		.change(function(){
+			$.post('data_pinjaman',{
+				'ID_Agt'	:$('#ID_Perkiraane').val(),
+				'cBayar':$('#frm2 #capem').val()},
+			function(data){
+				//$('#dat_pinjm table#dat_simp tbody').html('');
+				$('#dat_pinjm table#dat_simp tbody').html(data);
+				$('div#dat_pinjm').show();
+				//$('#dat_pinjm table#dat_simp').fixedHeader({width:(screen.width-350),height:265});
+			})
+		})
 	//simpan angsuran
 	$('#saved-setoran').click(function(){
 		//$.post('set_bayar_pinjaman',{
 			
 	})
+	$('#inedit_frm2')
+		.keyup(function(){
+			kekata(this);
+			alert(kekata(this))
+		})
+		.focusout(function(){
+			kekata_hide();
+		})
+		.keypress(function(e){
+			if(e.which==13){
+				kekata_hide();
+			}
+		})
 })
 
-function bayar(row){
+function bayar(row,thn){
 	$('img#g-'+row).hide();
 	$('#baris').val(row);
+	$('#Tahun').val(thn);
+	$('#inedit_frm2').val($('#dat_pinjm table#dat_simp tbody tr#r-'+row+' td:nth-child(4)').html());
 	$('#dat_pinjm table#dat_simp tbody tr#r-'+row+' td:nth-child(5)').append($('#ild').html());
-	$('#inedit-frm2').val($('#dat_pinjm table#dat_simp tbody tr#r-'+row+' td:nth-child(3)').html());
+	$('#inedit_frm2')
+		.focus().select()
+		.keyup(function(){
+			kekata(this);
+		})
+		.focusout(function(){
+			kekata_hide();
+		})
+//	$('div#ild').css({'left':(pos.left+2),'top':pos.top,'position':'fixed'});//.html($('#ild').contents())
+//	$('div#ild').show();
+}
+function bayarAll(row,thn){
+	$('img#g-'+row).hide();
+	$('#ID_Perkiraane').val(row);
+	$('#Tahun').val(thn);
+	$('#inedit-frm2').val($('#dat_pinjm table#dat_simp tbody tr#r-'+row+' td:nth-child(4)').html());
+	$('#dat_pinjm table#dat_simp tbody tr#r-'+row+' td:nth-child(5)').append($('#ild').html());
 	$('#inedit-frm2').focus().select();
 	
 //	$('div#ild').css({'left':(pos.left+2),'top':pos.top,'position':'fixed'});//.html($('#ild').contents())
@@ -214,34 +250,40 @@ function bayar(row){
 
 function batal_frm2(){
 	var ID=$('#ID_Perkiraane').val();
-	$.post('data_pinjaman',{'ID_Agt':ID},
-	function(data){
-		$('#dat_pinjm table#dat_simp tbody').html('');
-		$('#dat_pinjm table#dat_simp tbody').html(data);
-		$('div#dat_pinjm').show();
-		$('#dat_pinjm table#dat_simp').fixedHeader({width:(screen.width-450),height:265});
-	})
+			$.post('data_pinjaman',{
+				'ID_Agt':ID,
+				'cBayar':$('#frm2 #capem').val()},
+			function(data){
+				$('#dat_pinjm table#dat_simp tbody').html('');
+				$('#dat_pinjm table#dat_simp tbody').html(data);
+				$('div#dat_pinjm').show();
+				//$('#dat_pinjm table#dat_simp').fixedHeader({width:(screen.width-250),height:265});
+			})
 }
 
 function simpan_frm2(){
-	var bln=$('#frm2 #ID_Bulan').val().split('-')
+	var bln=$('#frm2 #Tanggal').val().split('/')
 	$.post('set_bayar_pinjaman',{
 		'ID_Unit'		:$('#frm2 #ID_Unit').val(),
 		'ID_Dept'		:$('#frm2 #ID_Dept').val(),
-		'ID_Pinj'		:$('#ID_Pinj').val(),
+		'ID_Pinj'		:$('#baris').val(),
 		'ID_Pinjaman'	:$('#frm2 #ID_Simpanan').val(),
 		'ID_Agt'		:$('#ID_Perkiraane').val(),
-		'ID_Bulan'		:bln[0],
-		'Tahun'			:bln[1],
-		'Kredit'		:to_number($('#inedit-frm2').val()),
+		'Tanggal'		:$('#frm2 #Tanggal').val(),
+		'Tahun'			:bln[2],
+		'ThnAsal'		:$('#Tahun').val(),
+		'Kredit'		:to_number($('#inedit_frm2').val()),
 		'Keterangan'	:$('#dat_pinjm table#dat_simp tbody tr#r-'+$('#baris').val()+' td:nth-child(2)').html()
 	},function(result){
-		$.post('data_pinjaman',{'ID_Agt':$('#ID_Perkiraane').val()},
-		function(data){
-			$('#dat_pinjm table#dat_simp tbody').html('');
-			$('#dat_pinjm table#dat_simp tbody').html(data);
-			$('div#dat_pinjm').show();
-			$('#dat_pinjm table#dat_simp').fixedHeader({width:(screen.width-350),height:265});
-		})
+			$.post('data_pinjaman',{
+				'ID_Agt':$('#ID_Perkiraane').val(),
+				'cBayar':$('#frm2 #capem').val()},
+				function(data){
+					$('#dat_pinjm table#dat_simp tbody').html('');
+					$('#dat_pinjm table#dat_simp tbody').html(data);
+					$('div#dat_pinjm').show();
+					//$('#baris').val('');
+					//$('#dat_pinjm table#dat_simp').fixedHeader({width:(screen.width-250),height:265});
+				})
 	})
 }

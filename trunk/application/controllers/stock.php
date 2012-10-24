@@ -148,9 +148,9 @@ class Stock extends CI_Controller{
 	}
 	function get_stock(){
 		$data=array();$n=0;
-		$where=empty($_POST['kategori'])?'':"where im.ID_Kategori='".$_POST['kategori']."'";
-		$where.=empty($_POST['stat'])?'':" and Status='".$_POST['stat']."'";
-		$orderby=empty($_POST['orderby'])?'':"order by concat(".str_replace('-',',',$_POST['orderby']).")";
+		$where=empty($_POST['kategori'])?'':"where im.ID_Kategori='".$_POST['kategori']."' and ms.Stock<>'0'";
+		$where.=empty($_POST['stat'])?'':" and Status='".$_POST['stat']."' and ms.Stock<>'0'";
+		$orderby=empty($_POST['orderby'])?'':"order by ".str_replace('-',',',$_POST['orderby'])." ";
 		$orderby.=empty($_POST['urutan'])?'':' '.$_POST['urutan'];
 		$sesi=$this->session->userdata('menus');	
 		$data=$this->report_model->stock_list($where,'stock',$orderby);
@@ -170,9 +170,9 @@ class Stock extends CI_Controller{
 	}
 	function print_stock(){
 		$data=array();$n=0;
-		$where=($this->input->post('Kategori')=='')?'':"where im.ID_Kategori='".$this->input->post('Kategori')."'";
-		$where.=($this->input->post('Stat')=='')?'':" and Status='".$this->input->post('Stat')."'";
-		$orderby=($this->input->post('orderby'))?'':"order by concat(".str_replace('-',',',$this->input->post('orderby')).")";
+		$where=($this->input->post('Kategori')=='')?'':"where im.ID_Kategori='".$this->input->post('Kategori')."' and ms.Stock<>'0'";
+		$where.=($this->input->post('Stat')=='')?'':" and Status='".$this->input->post('Stat')."' and ms.Stock<>'0'";
+		$orderby=($this->input->post('orderby'))?'':"order by ".str_replace('-',',',$this->input->post('orderby'))." ";
 		$orderby.=($this->input->post('urutan'))?'':' '.$this->input->post('urutan');
 		$data['kategori']=rdb('inv_barang_kategori','Kategori','Kategori',"where ID='".$this->input->post('Kategori')."'");
 		$data['status']	=$this->input->post('Stat');
@@ -207,4 +207,22 @@ class Stock extends CI_Controller{
 			$this->Admin_model->replace_data('inv_material_stok',$data);
 		}
 	}
+	function stock_limit(){
+		$this->zetro_auth->menu_id(array('stocklimit'));
+		$this->list_data($this->zetro_auth->auth());
+		$this->View('warehouse/material_stock_limit');
+	}
+	
+	function get_stock_limit(){
+		$data=array();$n=0;
+		$where=($this->input->post('Kategori')=='')?'':"where im.ID_Kategori='".$this->input->post('Kategori')."' and ms.Stock<>'0'";
+		$orderby=($this->input->post('orderby'))?'':"order by ".str_replace('-',',',$this->input->post('orderby'))." ";
+		$orderby.=($this->input->post('urutan'))?'':' '.$this->input->post('urutan');
+		$data['kategori']=rdb('inv_barang_kategori','Kategori','Kategori',"where ID='".$this->input->post('Kategori')."'");
+		$data['temp_rec']=$this->report_model->stock_list($where,'stocklimit',$orderby);
+			$this->zetro_auth->menu_id(array('trans_beli'));
+			$this->list_data($data);
+			$this->View("laporan/transaksi/lap_stock_limit_print");
+	}
+
 }

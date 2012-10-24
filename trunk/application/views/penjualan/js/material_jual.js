@@ -62,7 +62,7 @@ $(document).ready(function(e) {
 					if(parseInt(id[0])>1){
 						unlock('#bayar');
 						if($('#frm2 #'+(parseInt(id[0])-1)+'__nm_barang').val()!=''){
-						_simpan_detail((parseInt(id[0])-1));
+						_simpan_detail((parseInt($('#aktif').val())-1));
 						}
 					
 					}
@@ -76,9 +76,6 @@ $(document).ready(function(e) {
 									{
 										if(result){
 										$('#frm2 input#'+id[0]+'__nm_satuan').val(result.nm_satuan)
-										$('#frm2 input#'+id[0]+'__jml_transaksi')
-											.val('1')
-											.focus().select()
 										$('#frm2 input#'+id[0]+'__harga_jual').val(result.hargajual)
 										$('#'+id[0]+'__harga_total').val(result.hargajual);
 										total_harga();
@@ -96,6 +93,9 @@ $(document).ready(function(e) {
 */												alert('Stock '+result.data+' kosong (nol). tidak bisa dilakukan trasaksi\nSilahkan update dulu stocknya');
 												_kosongkan_field(id[0]);
 												}else{
+												$('#frm2 input#'+id[0]+'__jml_transaksi')
+													.val('1')
+													.focus().select()
 												$('table#inform tr td#ist').html(jm.stock+'  '+jm.satuan)
 												}
 												$.post(path+'stock/get_bacth',{
@@ -125,6 +125,12 @@ $(document).ready(function(e) {
 							$('#frm2 input#'+id[0]+'__harga_jual').focus().select()	
 							}
 						})
+						.focus(function(){
+							$('#aktif').val(id[0]);
+						})
+						.focusout(function(){
+							//_simpan_detail($('#aktif').val());
+						})
 					//harga jual sesuai dengan data dalam databas
 					//jika diinput manual akan membuat subtotal	
 					$('#frm2 input#'+id[0]+'__harga_jual')
@@ -144,6 +150,12 @@ $(document).ready(function(e) {
 								$('#frm2 input#'+next_fld+'__nm_barang').focus().select():
 								$('#bayar').focus();	
 							}
+						})
+						.focusout(function(){
+							//_simpan_detail($('#aktif').val());
+						})
+						.focus(function(){
+							$('#aktif').val(id[0]);
 						})
 			})
 			
@@ -190,11 +202,15 @@ $(document).ready(function(e) {
 			'tanggal'	:$('#tgl_transaksi').val()},
 		function(result){
 			lock('#no_transaksi');
+			$('#frm3 input').val('')
+			$('#frm5 input').val('')
 			document.location.reload();
-			
 		})
 	})
 	$('#bayar').click(function(){
+		//simpan/update input terakhir untuk mencegah inkonsistensi data
+		_simpan_detail($('#aktif').val())
+		//popup bayar show
 		var cb=$('#cbayare').val();
 		var tb=$('#prs').val();
 		var pakai_ppn=($('#ppne').is(':checked'));
@@ -202,7 +218,8 @@ $(document).ready(function(e) {
 		var frm=(cb==1)?'#frm3':'#frm5';
 		var prs=(cb==1)?'pembayaran':'kredited';
 		var t_pos=(cb==1)?'25%':'17%';
-		(ppn==0)?unlock('#ppn'):unlock('#ppn');
+		(ppn==0)?unlock('#ppn'):lock('#ppn');
+		(cb==2 || cb==3)? lock('#frm5 #dibayar'): unlock('#frm5 #dibayar')
 				$('#stat_sim').val(frm);
 				$('#nama').val(prs);
 				$('#pp-'+prs).css({'left':'28%','top':t_pos});
@@ -213,19 +230,26 @@ $(document).ready(function(e) {
 				$(frm+' #ppn').val(format_number(ppn.toFixed(0)));
 				$('#lock').show();
 				$('#pp-'+prs).show('slow');
-				$('#frm5 #kembalian').val(parseInt(tb)+parseInt(ppn));
+				if(cb==2||cb==3){
+					$('#frm5 #dibayar').val(format_number(parseInt(tb)+parseInt(ppn)))
+					$('#frm5 #kembalian').val(0);
+				}else{
+					$('#frm5 #kembalian').val(parseInt(tb)+parseInt(ppn));
+				}
 				$('#kekata').show('slow');
-				$(frm+'  input#dibayar').focus().select();
+				$(frm+' input#ppn').focus().select();
 	})
 	
 	//button bayar di tekan
-	var frm=$('#stat_sim').val();
-	$(frm+' #dibayar')
+	//keyup pada input pembayaran
+	//=================untuk pembayaran tunai
+	$('#frm3 #dibayar')
+		.focus().select()
 		.keyup(function(){
 			$(this).terbilang({'awalan':'Di Bayar :','output_div':'kekata','akhiran':'rupiah'})
-			var ttb=to_number($(frm+' #total_bayar').val())
+			var ttb=to_number($('#frm3 #total_bayar').val())
 			var sisa=parseInt($(this).val())-parseInt(ttb)
-			$(frm+' #kembalian').val(format_number(sisa))
+			$('#frm3 #kembalian').val(format_number(sisa))
 			$('#jmlbayar').val(sisa);
 		})
 		.focusout(function(){
@@ -234,29 +258,84 @@ $(document).ready(function(e) {
 		.keypress(function(e){
 			if(e.which==13){
 				$(this).focusout();
-				$(frm+' #saved-dibayar').focus()
+				$('#frm3 #saved-dibayar').focus()
 			 $('#jmlbayar').terbilang({'awalan':'Kembalian :','output_div':'kekata','akhiran':'rupiah'})
 			}
 		})
 	//jika ppn tidak ada dengan klik field ppn otomatis berubah nol dan 
 	// dengan double klik akan kembali ke semula
-	$(frm+'#ppn')
+	$('#frm3 #ppn')
 	  .focus(function(){
-		$(frm+'#total_bayar').val($(frm+'#total_belanja').val())
-		$('#jmlbayar').val(to_number($(frm+'#total_belanja').val()));
+		$('#frm3 #total_bayar').val($('#frm3 #total_belanja').val())
+		$('#jmlbayar').val(to_number($('#frm3 #total_belanja').val()));
 		$('#jmlbayar').terbilang({'awalan':'Kembalian :','output_div':'kekata','akhiran':'rupiah'})
 		$(this).val('0');
-	 	$(this).attr('title','Double click for add ppn 10%');
-		$(frm+'#dibayar').val(0);$(frm+'#kembalian').val(0);
+	 	//$(this).attr('title','Double click for add ppn 10%');
+		$('#frm3 #dibayar').val(0);$('#frm3 #kembalian').val(0);
+		$(this).select()
 	 })
-	 .dblclick(function(){
+	 .keyup(function(){
 		var tb=$('#prs').val();
-		var ppn=(parseInt(tb)*10)/100;
-		 $(this).val(format_number(ppn.toFixed(0)));
-		$(frm+'#total_bayar').val(format_number(parseInt(tb)+parseInt(ppn)))
-		$('#jmlbayar').val(parseInt(tb)+parseInt(ppn));
+		var pakai_ppn=($('#ppne').is(':checked'));
+		var ppn=(pakai_ppn==true)?(parseInt(tb)*10)/100:$(this).val();
+		var total=(pakai_ppn==true)?parseInt(tb)+parseInt(ppn):parseInt(tb)-parseInt(ppn);
+		// $(this).val(format_number(ppn.toFixed(0)));
+		$('#frm3 #total_bayar').val(format_number(total))
+		$('#jmlbayar').val(total);
 		$('#jmlbayar').terbilang({'awalan':'Kembalian :','output_div':'kekata','akhiran':'rupiah'})
 	 })
+	//=========================untuk kredit=============================
+	  $('#frm5 #dibayar')
+		.keyup(function(){
+			$(this).terbilang({'awalan':'Di Bayar :','output_div':'kekata','akhiran':'rupiah'})
+			var ttb=to_number($('#frm5 #total_bayar').val())
+			var sisa=parseInt($(this).val())-parseInt(ttb)
+			$('#frm5 #kembalian').val(format_number(sisa))
+			$('#jmlbayar').val(sisa);
+		})
+		.focusout(function(){
+		$('#jmlbayar').terbilang({'awalan':'Kembalian :','output_div':'kekata','akhiran':'rupiah'})
+		})
+		.keypress(function(e){
+			if(e.which==13){
+				$(this).focusout();
+				$('#frm5 #saved-dibayar').focus()
+			 $('#jmlbayar').terbilang({'awalan':'Kembalian :','output_div':'kekata','akhiran':'rupiah'})
+			}
+		})
+	//jika ppn tidak ada dengan klik field ppn otomatis berubah nol dan 
+	// dengan double klik akan kembali ke semula
+	$('#frm5 #ppn')
+	  .focus(function(){
+		var cb=$('#cbayare').val();
+		$('#frm5 #total_bayar').val($('#frm5 #total_belanja').val())
+		$('#jmlbayar').val(to_number($('#frm5 #total_belanja').val()));
+		$('#jmlbayar').terbilang({'awalan':'Kembalian :','output_div':'kekata','akhiran':'rupiah'})
+		$(this).val('0');
+	 	//$(this).attr('title','Double click for add ppn 10%');
+		(cb==3 || cb==2)?$('#frm5 #dibayar').val(to_number($('#frm5 #total_belanja').val())):$('#frm5 #dibayar').val('0');
+		//$('#frm5 #kembalian').val(0);
+		$(this).select()
+	 })
+	 .keyup(function(){
+		var cb=$('#cbayare').val();
+		var tb=$('#prs').val();
+		var pakai_ppn=($('#ppne').is(':checked'));
+		var ppn=(pakai_ppn==true)?(parseInt(tb)*10)/100:$(this).val();
+		var total=(pakai_ppn==true)?parseInt(tb)+parseInt(ppn):parseInt(tb)-parseInt(ppn);
+		// $(this).val(format_number(ppn.toFixed(0)));
+		$('#frm5 #total_bayar').val(format_number(total))
+		if(cb!=4){
+		$('#frm5 #dibayar').val((pakai_ppn==true)?'0':format_number(total));
+		$('#frm5 #kembalian').val(0);
+		}else{
+		$('#frm5 #dibayar').val(0);$('#frm5 #kembalian').val(format_number(total))
+		}
+		$('#jmlbayar').val(total);
+		$('#jmlbayar').terbilang({'awalan':'Kembalian :','output_div':'kekata','akhiran':'rupiah'})
+	 })
+    //=======================================end ==========================
+	
 	//jika F1 di tekan muncul popup stock overview
 	//autosugest nama_barang akan muncul data stock
 	$('#frm4 input#nm_barang')
@@ -282,7 +361,8 @@ $(document).ready(function(e) {
 		//jika focus out langsung ke button simpan atau ke field lain
 		//makan lakukan penyimpanan data di baris terakhir
 		if($('#'+$('#aktif').val()+'__nm_barang').val()!=''){
-			_simpan_detail($('#aktif').val()); 
+			//_simpan_detail($('#aktif').val()); 
+			//sudah dilakukan pada saat tekan tombol bayar $('#bayar').click();
 		}
 		
 		_simpan_pembayaran();//simpan data pembayaran
@@ -296,7 +376,8 @@ $(document).ready(function(e) {
 		//jika focus out langsung ke button simpan atau ke field lain
 		//makan lakukan penyimpanan data di baris terakhir
 		if($('#'+$('#aktif').val()+'__nm_barang').val()!=''){
-			_simpan_detail($('#aktif').val()); 
+			//_simpan_detail($('#aktif').val()); 
+			//sudah dilakukan pada saat tekan tombol bayar $('#bayar').click();
 		}
 		
 		_simpan_pembayaran();//simpan data pembayaran
@@ -349,11 +430,11 @@ $(document).ready(function(e) {
 				})
 		}else if(e.keyCode==114){// button F3
 			return false
-		}else if(e.keyCode==115){ //tombol F4 popup komposisi resep show
-			($('#ppne').is(':checked'))?
+		}else if(e.keyCode==115){ //tombol F4 ppn activate and deactivate
+/*			($('#ppne').is(':checked'))?
 				$('#ppne').removeAttr('checked'):
 				$('#ppne').attr('checked','checked');
-			return false
+*/			return false
 			//tidak di fungsikan
 			var id=focusID.split('__')
 			if($('#frm2 input#'+id[0]+'__nm_barang').val()=='RESEP DOKTER'){;
@@ -422,7 +503,7 @@ $(document).ready(function(e) {
 			'tanggal'		:$('#tgl_transaksi').val(),
 			'faktur'		:$('#faktur_transaksi').val(),
 			'member'		:$('#id_member').val(),
-			'total'			:$(frm+' #total_bayar').val(),
+			'total'			:to_number($(frm+' #total_bayar').val()),
 			'cicilan'		:$(frm+' #cicilan').val(),
 			'cbayar'		:$('#cbayare').val()			
 		},function(result){
@@ -443,12 +524,15 @@ $(document).ready(function(e) {
 			'harga_jual'	:$('#'+id+'__harga_jual').val(),
 			'ket_trans'		:$('#'+id+'__harga_total').val(),
 			'expired'		:$('#'+id+'__expired').val(),
-			'no_id'			:$('#aktif').val(),
-			'batch'			:$('#'+id+'__expired').val()
+			'no_id'			:id,
+			'batch'			:$('#'+id+'__expired').val(),
+			'id_post'		:($('#ppne').is(':checked'))?'1':'0'
 		},function(result){
 			lock('#no_transaksi,#tgl_transaksi')
 			if($('#aktif_user').val()<=2) unlock('#tgl_transaksi');
-			//$('#stat_sim').val(id+'-'+result);
+			//lakukan update stock pada barang yang dimaksud
+			//_update_stock($('#no_transaksi').val(),$('#tgl_transaksi').val());//print struk pembayaran
+			
 		})
 	}
 	function _update_jenis_pembayaran(){
@@ -492,7 +576,7 @@ $(document).ready(function(e) {
 			'tanggal'		:$('#tgl_transaksi').val()
 		},function(result){
 			_update_stock($('#no_transaksi').val(),$('#tgl_transaksi').val());//print struk pembayaran
-					keluar();
+					keluar();//
 
 		})
 	}
@@ -517,7 +601,7 @@ $(document).ready(function(e) {
 			'no_transaksi':id,
 			'tanggal'	  :tgl},
 			function(result){
-				//document.location.href=path+'penjualan/index';
+				document.location.href=path+'penjualan/index';
 			})
 	}
 	//membuat nomor transaksi otomatis berdasarkan jenis transaksi

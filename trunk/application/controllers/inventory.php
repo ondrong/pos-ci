@@ -268,14 +268,15 @@ class Inventory extends CI_Controller {
 		$stat		=($_POST['stat']=='all')?'':"and status='".$_POST['stat']."'";
 		$cari		=empty($_POST['cari'])?'': "and Nama_Barang like '".$_POST['cari']."%'";
 		$group		="group by ms.batch,b.ID";
+		$withoutZero=" and ms.Stock <>'0'";
 		if($id!='' && $id_jenis!=''){
-			 $where="where ID_Kategori='$id' $id_jenis $stat $cari $group order by ID_Jenis,nama_barang";
+			 $where="where ID_Kategori='$id' $id_jenis $stat $cari $withoutZero $group order by ID_Jenis,nama_barang";
 		}else if ($id=='' && $id_jenis!=''){
-			 $where="where id_jenis='".$_POST['id_jenis']."' $stat $cari $group order by ID_Jenis,nama_barang";
+			 $where="where id_jenis='".$_POST['id_jenis']."' $stat $withoutZero $cari $group order by ID_Jenis,nama_barang";
 		}else if ($id=='' && $id_jenis==''){
-		 	 $where="where Nama_Barang like '".$_POST['cari']."%' $stat $group order by ID_Jenis,nama_barang";
+		 	 $where="where Nama_Barang like '".$_POST['cari']."%' $withoutZero $stat $group order by ID_Jenis,nama_barang";
 		}else if ($id!='' && $id_jenis==''){
-			 $where="where ID_Kategori='$id' $stat $cari $group order by ID_Jenis,nama_barang";
+			 $where="where ID_Kategori='$id' $stat $withoutZero $cari $group order by ID_Jenis,nama_barang";
 		}
 		/* echo $id.'='. $where; //for debug only*/
 		$data=$this->inv_model->list_barang($where);
@@ -314,10 +315,11 @@ class Inventory extends CI_Controller {
 	}
 	
 	function hapus_inv(){
-		$fld=$_POST['fld'];
+/*		$fld=$_POST['fld'];
 		$tbl=$_POST['tbl'];
 		$where=str_replace('_',' ',$_POST['id']);
 		$this->Admin_model->hapus_table($tbl,$fld,$where);
+*/		$this->Admin_model->hps_data('inv_material_stok',"where ID_Barang='".$_POST['id']."' and batch='".$_POST['batch']."'");
 		echo $_POST['id'];
 	}
 	function hapus_konversi(){

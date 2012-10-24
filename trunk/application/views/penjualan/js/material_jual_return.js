@@ -481,7 +481,7 @@ $(document).ready(function(e) {
 		var ppn				=$(frm+' #ppn').val();
 		var total_bayar		=$(frm+' #total_bayar').val();
 		var dibayar			=$(frm+' #dibayar').val();
-		var kembalian		=$(frm+' #kembalian').val();
+		var kembalian		='0.0';//$(frm+' #kembalian').val();
 		var terbilang		=$(frm+' #huruf').val();
 		$.post('simpan_bayar',{
 			'no_transaksi'	:(no_transaksi),

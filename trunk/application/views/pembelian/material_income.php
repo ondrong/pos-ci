@@ -9,7 +9,7 @@ link_js('jquery.coolautosuggest.js','asset/js');
 link_js('jquery.fixedheader.js','asset/js');
 link_js('material_income_list.js',$path.'/js');
 link_js('material_income.js,jquery_terbilang.js',$path.'/js,asset/js');
-panel_begin('Pembelian Barang');
+panel_begin('Penerimaan Barang');
 panel_multi('inputpembelian','block',false);
 if($c_pembelian__index!=''){
 	$zfm->AddBarisKosong(false);

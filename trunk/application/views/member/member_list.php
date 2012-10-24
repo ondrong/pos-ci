@@ -24,7 +24,7 @@ addText(array('Cari Berdasarkan Nama'),
 			  <img src='".base_url()."asset/img/Icon_210.ico' id='cari' style='cursor:pointer'></div>"));
 	$n=0;
 		$zlb->section($section);
-		$zlb->aksi(false);
+		$zlb->aksi(true);
 		$zlb->Header('100%');
 		$zlb->icon();
 		echo "</tbody></table>";
