@@ -13,8 +13,8 @@
 9|Limit Kredit,input,text n,Status,w35 angka,,
 
 [biodata]
-1|Tanggal Masuk,input,text t,TanggalMasuk,w35,,
-2|Tanggal Keluar,input,text t,TanggalKeluar,w35,,
+1|Tanggal Terdaftar,input,text t,TanggalMasuk,w35,,
+;2|Tanggal Keluar,input,text t,TanggalKeluar,w35,,
 
 [Sex]
 1|1,Laki-Laki
@@ -36,7 +36,7 @@
 1|No.ID,input,text n,no_anggota,w35 upper,,8%,
 2|Nama Lengkap,input,text n,nm_anggota,w90 upper,,15%,
 3|Perusahaan,select,text n,Catatan,S70,,15%,
-4|Alamat,input,text n,alm_anggota,w90,,25%,
+4|Alamat,input,text n,alm_anggota,w90,,30%,
 5|Telepon,select,text n,telp_anggota,s50,,12%,
 6|Kredit Limit ,input,text n,status_anggota,w50,,12%,
 
@@ -97,12 +97,17 @@
 13|Keterangan Pinjamaan,textarea,text n,keterangan,t90,,
 
 [setoranpinjaman]
-1|Bulan,select,text n,ID_Bulan,S50,,
+1|Tanggal,input,text n,Tanggal,S50,,
 2|Tipe Transaksi,select,text n,ID_Jenis,S35,,,RD,tipe_transaksi-ID-Tipe-
-3|Unit,select,text n,ID_Unit,S35,,,RD,unit_jurnal-ID-unit-
-4|Jenis Pinjaman,select,text n,ID_Simpanan,S50,,,RD,jenis_simpanan-ID-Jenis-where ID_Klasifikasi ='1'
-5|Departemen,select,text n,ID_Dept,S90,,,RD,mst_departemen-ID-Kode+Departemen-order by Kode
-6|Nama Anggota,input,text n,ID_Agt,w90 cari,,
+;3|Unit,select,text n,ID_Unit,S35,,,RD,unit_jurnal-ID-unit-
+;4|Jenis Pinjaman,select,text n,ID_Simpanan,S50,,,RD,jenis_simpanan-ID-Jenis-where ID_Klasifikasi ='1'
+;5|Departemen,select,text n,ID_Dept,S90,,,RD,mst_departemen-ID-Kode+Departemen-order by Kode
+3|Nama Anggota,input,text n,ID_Agt,w90 cari,,
+4|Cara Pembayaran,select,text n,capem,S50,,,RS,cBayar
+
+[cBayar]
+1|all,Semua
+2|par,Sebagian
 
 [listpinjaman]
 7|Total Pinjaman,input,text n,pinjaman,w35 angka,,
@@ -118,4 +123,32 @@
 5|Kredit,,,,,,12%,
 6|Keterangan,,,,,,20%,
 
+[TagihanKredit]
+1|Nama Pelanggan,,,,,,40%,,,90
+2|Total Tagihan,,,,,,12%,,,25
+3|Total Bayar,,,,,,18%,,,25
+4|Saldo Tagihan,,,,,,15%,,,25
+5|Jatuh Tempo,,,,,,15%,,,18
 
+[TagihanKreditPdf]
+1|Nama Pelanggan,,,,,,40%,,,90
+2|Tagihan,,,,,,12%,,,25
+3|Pembayaran,,,,,,18%,,,25
+4|Saldo,,,,,,15%,,,25
+5|J.Tempo,,,,,,15%,,,18
+
+[SusunanKredit]
+1|a.Nama,Nama Pelanggan
+2|pb.Saldo,Saldo Tagihan
+3|sum(p.jml_pinjaman),Total Tagihan
+4|p.mulai_bayar, Tanggal Jatuh Tempo
+
+[susunanjual]
+1|a.Nama,Nama Pelanggan
+2|p.Tanggal,Tanggal Penjualan
+3|sum(Jumlah*Harga),Total Penjualan
+
+[susunanbeli]
+1|a.Nama,Nama Vendor
+2|p.Tanggal,Tanggal Pembelian
+3|Harga_Beli,Total Pembelian

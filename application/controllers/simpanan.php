@@ -173,70 +173,118 @@ class Simpanan extends CI_Controller{
 		$data=$this->member_model->total_pinjaman($ID_Agt);
 		echo json_encode($data);
 	}
+	function get_tot_pinjm(){
+		$data=array();
+		$ID_Agt=$_POST['ID_Agt'];	
+		$data=$this->member_model->data_total_pinjm($ID_Agt);
+		//echo count($data);
+		echo(count($data)>0)?json_encode($data[0]):json_encode("{'debet':'0','saldo':'0'}");	
+	}
 	function set_bayar_pinjaman(){
 		$data=array();
-			$debet=rdb("pinjaman_bayar","sum(Debet) as Debet","Debet","where ID_Pinjaman='".$_POST['ID_Pinj']."'");
-			//$kredit=rdb("pinjaman_bayar","sum(Kredit) as Kredit","Kredit","where ID_Pinjaman='".$_POST['ID_Pinj']."'");
+		$id_jenis=rdb('inv_penjualan','ID_Jenis','ID_Jenis',"where NoUrut='".$_POST['ID_Pinj']."' and Tahun='".$_POST['ThnAsal']."'");
+			$debet=rdb("pinjaman_bayar","Saldo","(sum(Debet)-sum(Kredit)) as Saldo","where ID_Pinjaman='".$_POST['ID_Pinj']."' and Tahun='".$_POST['ThnAsal']."' group by ID_Pinjaman");
+			echo $debet."<br>";
 			$data['ID_Pinjaman']=$_POST['ID_Pinj'];
 			$data['ID_Agt']		=$_POST['ID_Agt'];
-			$data['ID_Bulan']	=$_POST['ID_Bulan'];
+			$data['Tanggal']	=tglToSql($_POST['Tanggal']);
 			$data['Tahun']		=$_POST['Tahun'];
 			$data['Kredit']		=$_POST['Kredit'];
 			$data['Keterangan']	=$_POST['Keterangan'];
-			$data['saldo']		=($debet-$_POST['Kredit']);
+			$data['saldo']		=((int)$debet-(int)$_POST['Kredit']);
 			$data['created_by']	=$this->session->userdata('userid');
-				echo $this->Admin_model->replace_data('pinjaman_bayar',$data);
+				 $this->Admin_model->replace_data('pinjaman_bayar',$data);
+			//update lama cicilan jika masih ada sisa hutang
+			$cekSaldo=rdb("pinjaman_bayar","Saldo","(sum(Debet)-sum(Kredit)) as Saldo","where ID_Pinjaman='".$_POST['ID_Pinj']."' and Tahun='".$_POST['ThnAsal']."'");
+			$lama=rdb("pinjaman","lama_cicilan","lama_cicilan","where ID='".$_POST['ID_Pinj']."' and Tahun='".$_POST['ThnAsal']."'");
+			($cekSaldo==0)?
+			$this->Admin_model->upd_data('pinjaman',"set stat_pinjaman='1'","where ID='".$_POST['ID_Pinj']."' and Tahun='".$_POST['ThnAsal']."'"):
+			$this->Admin_model->upd_data('pinjaman',"set lama_cicilan='".($lama+1)."'","where ID='".$_POST['ID_Pinj']."' and Tahun='".$_POST['ThnAsal']."'");
 			//simpan kredit to table transaksi_temp / jurnal temporary
-			$datax['ID_Unit']	=$_POST['ID_Unit'];
-			$datax['ID_Dept']	=$_POST['ID_Dept'];
-			$datax['ID_Klas']	=rdb('perkiraan','ID_Klas','ID_Klas',"where ID_Agt='".$_POST['ID_Agt']."' and ID_Simpanan='".$_POST['ID_Pinjaman']."'");
-			$datax['ID_SubKlas']=rdb('perkiraan','ID_SubKlas','ID_SubKlas',"where ID_Agt='".$_POST['ID_Agt']."' and ID_Simpanan='".$_POST['ID_Pinjaman']."'");
-			$datax['ID_Perkiraan']=rdb('perkiraan','ID','ID',"where ID_Agt='".$_POST['ID_Agt']."' and ID_Simpanan='".$_POST['ID_Pinjaman']."'");
+			$datax['ID_Unit']	=rdb('jenis_simpanan','ID_Unit','ID_Unit',"where ID='".$id_jenis."'");
+			$datax['ID_Dept']	='1';//rdb('jenis_simpanan','ID_Dept','ID_Dept',"where ID='".$id_jenis."'");
+			$datax['ID_Klas']	=rdb('jenis_simpanan','ID_Klasifikasi','ID_Klasifikasi',"where ID='".$id_jenis."'");
+			$datax['ID_SubKlas']=rdb('jenis_simpanan','ID_SubKlas','ID_SubKlas',"where ID='".$id_jenis."'");
+			$datax['ID_Perkiraan']=rdb('perkiraan','ID','ID',"where ID_Agt='".$_POST['ID_Agt']."' and ID_Simpanan='".$id_jenis."'");
 			$datax['Kredit']	=$_POST['Kredit'];
 			$datax['keterangan']=$_POST['Keterangan'];
-			$datax['ID_Bulan']	=$_POST['ID_Bulan'];
+			$datax['ID_Bulan']	=substr($_POST['Tanggal'],3,2);
 			$datax['Tahun']		=$_POST['Tahun'];
 				$datax['created_by']	=$this->session->userdata('userid');
-				echo $this->Admin_model->replace_data('transaksi_temp',$datax);
+				$this->Admin_model->replace_data('transaksi_temp',$datax);
 	}
 	function data_pinjaman(){
 		$data=array();$detail=array();$n=0;$x=0;$stat='';$saldo=0;
 		$ID_Agt=$_POST['ID_Agt'];
 		$data=$this->member_model->data_pinjaman($ID_Agt);
-		foreach ($data as $r){
-			$n++;
-			echo "<tr class='list_genap' id='n-".$r->ID."'>
-				<td class='kotak' colspan='2'><b>$n.&nbsp;&nbsp;".$r->keterangan." ".nBulan($r->ID_Bulan)."-".$r->Tahun."</b></td>
-				<td class='kotak'  align='right'><b>".number_format($r->pinjaman,2)."</b></td>
-				<td class='kotak' colspan='2'><input type='hidden' id='ID_Pinj' value='".$r->ID."'></td>
-				</tr>";
-				$detail=$this->member_model->data_setoran($ID_Agt,$r->ID);
-				foreach($detail as $d){
-					$x++;	
-					$saldo=($r->pinjaman-($saldo+$d->Kredit));
-				echo "<tr class='xx'>
-					<td class='kotak' width='5%' align='center'>$x</td>
-					<td class='kotak' width='30%'>Angsuran Ke $x</td>
-					<td class='kotak' width='15%' align='right'>".number_format($d->Kredit,2)."<input type='hidden' class='w70 angka' value='".$d->Kredit."'></td>
-					<td class='kotak' width='15%' align='right'>".number_format($saldo,2)."</td>
-					<td class='kotak' width='20%'>".$d->doc_date."</td>
-					</tr>";
-					($d->Kredit==0)?$stat=number_format($d->Kredit,2) : $stat='';
+		if($_POST['cBayar']=='par'){
+			if(count($data)>0){
+				foreach ($data as $r){
+					$n++;$x=0;
+					echo "<tr class='list_genap' id='n-".$r->ID."'>
+						<td class='kotak' colspan='2' nowrap ><b>$n.&nbsp;&nbsp; Tanggal : ".tglfromSql($r->Tanggal)." - No. Faktur :".rdb('inv_penjualan','Nomor','Nomor',"where NoUrut='".$r->ID."' and Tanggal='".$r->Tanggal."'")."</b></td>
+						<td class='kotak'  align='right'><b>".number_format($r->jml_pinjaman,2)."</b></td>
+						<td class='kotak'></td>
+						<td class='kotak'></td>
+						<td class='kotak' colspan='1' nowrap >".$r->keterangan."
+						<input type='hidden' id='ID_Pinj' value='".$r->ID."'></td>
+						</tr>";
+						$detail=$this->member_model->data_setoran($ID_Agt,$r->ID);
+						$stat='';
+						foreach($detail as $d){
+							$x++;	
+							$saldo=($r->jml_pinjaman-($saldo+$d->Kredit));
+						echo "<tr class='xx'>
+							<td class='kotak' align='center'>$x</td>
+							<td class='kotak' >&nbsp;&nbsp;&bull;".tglfromSql($d->Tanggal)."</td>
+							<td class='kotak'></td>
+							<td class='kotak' align='right'>".number_format($d->Kredit,2)."<input type='hidden' class='w70 angka' value='".$d->Kredit."'></td>
+							<td class='kotak' align='right'>".number_format($d->saldo,2)."</td>
+							<td class='kotak' >".$d->keterangan."</td>
+							</tr>";
+							$stat=($d->saldo==0)?number_format($d->Kredit,2) :'';
+						}
+						for($i=1;$i<=($r->lama_cicilan-$x);$i++){
+							($i==$r->lama_cicilan)? $cil=$r->cicilan_end:$cil=$r->cicilan;
+							//($stat=='')?$stat="<img src='".base_url()."asset/img/checkout.gif' id='g-".$i."' onclick=\"bayar($i);\"":$stat=$stat;
+						echo "<tr class='xx' id='r-".$r->ID."'>
+							<td class='kotak' align='center'>&nbsp;</td>
+							<td class='kotak' >Pembayaran Ke ".$r->lama_cicilan."</td>
+							<td class='kotak' align='right'>&nbsp;</td>
+							<td class='kotak' align='right'>".number_format($r->saldo,2)."</td>
+							<td class='kotak'  align='right' nowrap >";
+							echo ($stat=='')?"<img src='".base_url()."asset/img/checkout.gif' id='g-".$r->ID."' onclick=\"bayar('".$r->ID."','".$r->Tahun."');\">":$stat;
+							echo "</td>
+							<td class='kotak' align='right'>&nbsp;</td>
+							</tr>";
+						}
+		
 				}
-				for($i=($x+1);$i<=($r->lama_cicilan-$x);$i++){
-					($i==$r->lama_cicilan)? $cil=$r->cicilan_end:$cil=$r->cicilan;
-					//($stat=='')?$stat="<img src='".base_url()."asset/img/checkout.gif' id='g-".$i."' onclick=\"bayar($i);\"":$stat=$stat;
-				echo "<tr class='xx' id='r-".$i."'>
-					<td class='kotak' width='5%' align='center'>$i</td>
-					<td class='kotak' width='30%'>Angsuran Ke ".($i)."</td>
-					<td class='kotak' width='15%' align='right'>".number_format($cil,2)."</td>
-					<td class='kotak' width='15%' align='right'>&nbsp;</td>
-					<td class='kotak' width='20%' align='right'>";
-					echo ($stat=='')?"<img src='".base_url()."asset/img/checkout.gif' id='g-".$i."' onclick=\"bayar($i);\"":$stat;
-					echo "</td>
-					</tr>";
-				}
-
+			}else{
+				echo tr().td('Tidak ada tagihan','kotak\' colspan=\'6')._tr();
+			}
+		}else{
+			$jml=0;$kred=0;$sal=0;
+			foreach($data as $r){
+				$n++;
+				echo tr('xx').
+					 td("<b>$n. Tanggal : ".tglfromSql($r->Tanggal)." - No. Faktur :".rdb('inv_penjualan','Nomor','Nomor',"where NoUrut='".$r->ID."' and Tanggal='".$r->Tanggal."'"),'left\' nowrap colspan=\'2').
+					 td(number_format($r->jml_pinjaman,2),'right').
+					 td(number_format($r->Kredit,2),'right').
+					 td(number_format($r->Saldo,2),'right').
+					 td($r->keterangan,'left\' nowrap=\'nowrap').
+					 _tr();
+				$jml	=($jml+$r->jml_pinjaman);
+				$kred	=($kred+$r->Kredit);
+				$sal	=($sal+$r->Saldo);
+			}
+			echo tr('xx  list_genap',"r-".$r->ID_Agt).
+				 td('<b>Total Tagihan</b>','right\' colspan=\'2').
+				 td('<b>'.number_format($jml,2).'</b>','right').
+				 td('<b>'.number_format($kred,2).'</b>','right').
+				 td('<b>'.number_format($sal,2).'</b>','right').
+				 td(($sal!=0)?"<img src='".base_url()."asset/img/checkout.gif' id='g-".$r->ID_Agt."' onclick=\"bayarAll('".$r->ID_Agt."','".$r->Tahun."');\">":'<b>LUNAS</b>','center').
+				_tr();
 		}
 	}
 	//list transaksi simpanan pinjaman dan setoran pinjaman

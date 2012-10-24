@@ -13,6 +13,9 @@ $(document).ready(function(e) {
 				$('span:not(#v_'+id+')').hide();
 				
 			}
+			if(id=='operasionaltoko'){
+				_generate_nomor($('#trans_new').val(),'#frm2 input#no_transaksi')
+				__show_data_trans('2');}
 	})
 	
 	$('#saved-kaskeluar').attr('disabled','disabled');
@@ -222,7 +225,18 @@ function __show_data(id){
 function __show_data_trans(id){
 	$.post('list_kas_trans',{'tanggal':$('#tgl_transaksi').val()},
 	function(result){
+		//alert($.trim(result).length)
+		if($.trim(result).length!=0){
 		$('#v_operasionaltoko table#ListTable tbody').html(result)
 		$('#v_operasionaltoko table#ListTable').fixedHeader({width:(screen.width-100), height:200})
+		}else{
+			$('#setupsaldokas').removeClass('tab_button');
+			$('#setupsaldokas').addClass('tab_select');
+			$('#operasionaltoko').removeClass('tab_select');
+			$('#operasionaltoko').addClass('tab_button');
+			
+			$('#v_setupsaldokas').css({'display':'block'});
+			$('#v_operasionaltoko').css({'display':'none'});
+		}
 	})
 }

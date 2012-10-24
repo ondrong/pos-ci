@@ -7,7 +7,8 @@ class Member extends CI_Controller{
 		parent::__construct();
 		$this->load->model("Admin_model");
 		$this->load->model("member_model");
-		$this->load->model('inv_model');	
+		$this->load->model('inv_model');
+		$this->load->helper('print_report');	
 		$this->load->library("zetro_auth");
 		$this->userid=$this->session->userdata('idlevel');
 	}
@@ -52,16 +53,15 @@ class Member extends CI_Controller{
 		if(count($datax)>0){
 			foreach($datax as $row){
 			$n++;
-			echo "<tr onclick='' class='xx' title='Double click for detail view'
-				 ondblclick=\"show_member_detail('".$row->ID."');\">
-				 <td class='kotak' align='center'>$n</td>
-				 <td class='kotak' align='center'>".$row->No_Agt."</td>
-				 <td class='kotak'>".$row->Nama."</td>
-				 <td class='kotak'>".$row->Catatan."</td>
-				 <td class='kotak' >".$row->Alamat." ".$row->Kota."</td>
-				 <td class='kotak' >".$row->Telepon."/".$row->Faksimili."</td>
-				 <td class='kotak' align='right'>".number_format($row->Status,2)."</td>
-				</tr>";
+			echo tr().td($n,'center').
+					  td($row->No_Agt,'center').
+					  td($row->Nama).
+					  td($row->Catatan).
+					  td($row->Alamat." ".$row->Kota).
+					  td($row->Telepon."/".$row->Faksimili).
+					  td(number_format($row->Status,2),'right').
+					  td(img_aksi($row->ID),'center').
+					_tr();
 			}
 		}else{
 			echo "<tr><td colspan='7' class='kotak'>
@@ -85,6 +85,7 @@ class Member extends CI_Controller{
 		$data['Faksimili']	=$_POST['Faksimili'];
 		$data['ID_Aktif']	=empty($_POST['ID_Aktif'])?'0':$_POST['ID_Aktif'];
 		$data['ID_Jenis']	='1';
+		$data['TanggalKeluar']=date('Ymd');
 		$data['Status']		=empty($_POST['Status'])?'0':$_POST['Status'];
 		$this->Admin_model->replace_data('mst_anggota',$data);
 	}
@@ -213,5 +214,40 @@ class Member extends CI_Controller{
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('member/member_simpanan');
 	}
+	
+	function get_member_kredit(){
+		$data=array();$n=0;
+		$where=empty($_POST['status'])?'':"where p.stat_pinjaman='".$_POST['status']."'";
+		$where.=empty($_POST['cari'])?'':"where a.Nama like '".$_POST['cari']."%'";
+		$orderby=" order by ".$_POST['orderby'];
+		$orderby.=empty($_POST['urutan'])? '':' '.$_POST['urutan'];
+		$data=$this->member_model->get_data_pinjaman($where,$orderby);
+		foreach($data as $r){
+			$n++;
+			echo tr().td($n,'center').
+				 td($r->Nama.' [ <i> '.$r->Catatan.' </i> ]').
+				 td(number_format($r->Debet,2),'right').
+				 td(number_format($r->Kredit,2),'right').
+				 td(number_format($r->Saldo,2),'right').
+				 td(tglfromSql($r->mulai_bayar),'center').
+				_tr();	 
+		}
+	}
+	function get_member_kredit_print(){
+		$data=array();$n=0;
+		$where=($this->input->post('stat_tag')=='')?'':"where p.stat_pinjaman='".$this->input->post('stat_tag')."'";
+		//$where.=($_POST['cari'])?'':"where a.Nama like '".$_POST['cari']."%'";
+		$orderby=" order by ".$this->input->post('orderby');
+		$orderby.=($this->input->post('urutan')=='')? '':' '.$this->input->post('urutan');
+		$st=$this->input->post('stat_tag');
+		if($st==''){$stat='All';}else if($st=='0'){$stat='Belum Lunas';}else{'Lunas';}
+		$data['status']=$stat;
+		$data['temp_rec']=$this->member_model->get_data_pinjaman($where,$orderby);
+
+		$this->zetro_auth->menu_id(array('trans_beli'));
+		$this->list_data($data);
+		$this->View("laporan/lap_member_tagihan_print");
+	}
+
 }
 ?>

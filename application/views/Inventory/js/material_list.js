@@ -475,10 +475,10 @@ $(document).ready(function(e) {
 						$('#pp-edit_barang').show('slow');
 	}
 	//delete data material dari daftar barang
-	function delet_barang(id){
+	function delet_barang(id,bat){
 		var path=$('#path').val();
 					if (confirm('Yakin data ini  akan di hapus?')){
-						$.post(path+'inventory/hapus_inv',{'tbl':'inv_barang','id':id,'fld':'ID'},
+						$.post(path+'inventory/hapus_inv',{'tbl':'inv_barang','id':id,'fld':'ID','batch':bath},
 						function(result){
 							$('#v_listbarang table#ListTable tbody tr#nm-'+id).remove();
 						})

@@ -92,7 +92,7 @@ function show_member_detail(id){
 }
 
 function find_by(nama){
-		show_indicator('#ListTable',6);
+		show_indicator('#ListTable',7);
 		$.post('filter_by',{
 			'id_dept'	:'',
 			'ordby'		:'',
@@ -105,4 +105,8 @@ function find_by(nama){
 				$('#ListTable').fixedHeader({width:(screen.width-30),height:(screen.height-320)})
 				//ajax_stop();
 			})
+}
+
+function images_click(id){
+	show_member_detail(id);	
 }

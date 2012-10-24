@@ -1,8 +1,8 @@
 // JavaScript Document
 $(document).ready(function(e) {
 	var path=$('#path').val();
-    $('#rekappembelian').removeClass('tab_button');
-	$('#rekappembelian').addClass('tab_select');
+    $('#daftarpembelian').removeClass('tab_button');
+	$('#daftarpembelian').addClass('tab_select');
 	$('#v_rekappembelian table#ListTable').hide();
 	$('table#panel tr td').click(function(){
 		var id=$(this).attr('id');
@@ -14,7 +14,8 @@ $(document).ready(function(e) {
 				$('span#v_'+id).show();
 				$('span:not(#v_'+id+')').hide();
 			}
-	})	
+	})
+	//tglNow('#dari_tgl');
 	$('#frm1 #dari_tgl').dynDateTime();
 	$('#frm1 #sampai_tgl').dynDateTime();
 	$('#frm1 #jtran').val("GR' or jenis_transaksi='GRR'");
@@ -59,6 +60,21 @@ $(document).ready(function(e) {
 		$('#frm1').attr('action','lap_pembelian');
 		document.frm1.submit();
 	})
+	$("#okedech").click(function(){
+		show_indicator('xx',1);
+		$('#frm1').attr('action','pembelian_per_vendor');
+		document.frm1.submit();
+	})
+	$('#nm_vendor')
+		.coolautosuggest({
+			url		:path+'pembelian/get_pemasok?limit=10&str=',
+			width	:350,
+			showDescription	:true,
+			onSelected		:function(result){
+				$('#ID_Pemasok').val(result.id_pemasok);
+			}
+		})
+
 	$(':button')
 		.click(function(){
 			var id=$(this).attr('id');

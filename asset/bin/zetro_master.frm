@@ -52,16 +52,20 @@
 4|Debit,,,debit,,,,,,30
 
 [formfaktur]
-1|ID. Transaksi,input,text n,no_transaksi,w70 upper,,10%
+1|Tanggal Penjualan,,,,,,
+2|&nbsp;&nbsp;&nbsp;&bull; Dari Tanggal,input,text t,dari_tgl,w35,,
+3|&nbsp;&nbsp;&nbsp;&bull; Sampai Tanggal,input,text t,sampai_tgl,w35,,
+4|Nama Pelanggan,input,text n,id_anggota,w90 upper,,
+5|No. Transaksi,select,text n,no_transaksi,S70 upper,,10%
 
 [JenisLaporan]
 1|Summary,Rangkuman
 2|Detail,Detail
 
 [faktur]
-1|Nama Barang,,,nm_barang,,,,,,75
-2|Qty,,,jml_transaksi,,,,,,30
-3|Unit,,,nm_satuan,,,,,,12
+1|Nama Barang,,,nm_barang,,,,,,77
+2|Qty,,,jml_transaksi,,,,,,25
+3|Unit,,,nm_satuan,,,,,,18
 4|Harga,,,harga_beli,,,,,,30
 5|Jumlah,,,harga_beli,,,,,,30
 

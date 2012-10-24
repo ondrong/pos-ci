@@ -1,42 +1,74 @@
 <?php
+		  //$xx=new Kasir_Model;
 		  $a=new reportProduct();
 		  $zn=new zetro_manager();
 		  $nfile='asset/bin/zetro_neraca.frm';
 		  //$a->Header();
 		  $a->setKriteria("transkip");
-		  $a->setNama("REKAP PEMBELIAN BARANG");
-		  $a->setSection("rekapbeli");
-		  $a->setFilter(array($dari ." s/d ".$sampai,$id_jenis));
-		  $a->setReferer(array('Periode','Jenis Pembelian'));
+		  $a->setNama(($detail=='')? "REKAP PEMBELIAN BARANG":"LIST PEMBELIAN BARANG");
+		  $a->setSection(($detail=='')?"rekapbeli":"detailbeli");
+		  $a->setFilter(array($dari ." s/d ".$sampai));
+		  $a->setReferer(array('Periode'));
 		  $a->setFilename($nfile);
 		  $a->AliasNbPages();
-		  $a->AddPage("P","A4");
+		  $a->AddPage(($detail=='')?"P":"P","A4");
 	
 		  $a->SetFont('Arial','',10);
 		  //echo $a->getColWidth();
 		  // set lebar tiap kolom tabel transaksi
-		  $a->SetWidths(array(10,20,22,60,40,30));
+		  $a->SetWidths(($detail=='')?array(10,20,22,60,30,40):array(10,20,20,50,25,18,25,25));
 		  // set align tiap kolom tabel transaksi
-		  $a->SetAligns(array("C","C","C","L","L","R","R"));
+		  $a->SetAligns(($detail=='')?array("C","C","C","L","R","L"):array("R","C","C","L","R","L","R","R"));
 		  $a->SetFont('Arial','B',10);
 		  $a->SetFont('Arial','',9);
-		  //$rec = $temp_rec->result();
-		  $n=0;$harga=0;$hgb=0;$hargaj=0;$jml=0;
+		  $dataz=array();
+		  $n=0;$harga=0;$hargaj=0;$jml=0;
 		  foreach($temp_rec as $r)
 		  {
-			$n++;
+			$n++;$nn=0;$hgb=0;
+			if($detail==''){
 			$a->Row(array($n, tglfromSql($r->Tanggal),$r->Nomor,
-						  ucwords($r->Nama),'-',
-						 // number_format(($r->Jumlah),2),
-						  number_format(($r->Harga_Beli),2)
-						  ));
+						  ucwords($r->Nama),
+						  number_format(($r->Harga_Beli),2),
+						  $r->Jenis_Beli
+						  )) ;
+			}else if($detail=='detail'){
+			$a->SetFont('Arial','B',9);
+			$a->SetFillColor(210,210,010);	
+			$a->Cell(10,8,$n,1,0,'C',true);
+			$a->Cell(90,8,$r->Nama,1,0,'L',true);
+			$a->Cell(68,8,$r->Catatan." ".$r->Alamat." ".$r->Kota,1,0,"L",true);
+			$a->Cell(25,8,'',1,1,'R',true);
+			$a->SetFont('Arial','',9);
+			$ID_P=" and p.ID_Pemasok='".$r->ID_Pemasok."'";
+			$dataz=$this->kasir_model->detail_trans_beli($where,$ID_P,$orderby);
+				foreach($dataz as $r2){
+					$nn++;
+					$a->Row(array($nn,tglfromSql($r2->Tanggal),$r2->Nomor,
+								  ucwords($r2->Nama_Barang),
+								  number_format($r2->Jumlah,2),
+								  $r2->Satuan,
+								  number_format(($r2->Harga_Beli),2),
+								  number_format(($r2->Harga_Beli*$r2->Jumlah),2)
+								  )) ;
+				$hgb=($hgb+($r2->Harga_Beli*$r2->Jumlah));
+				}
 			//sub tlot
-			$harga =($harga+($r->Harga_Beli));
+			  $a->SetFont('Arial','B',10);
+			  $a->SetFillColor(242,239,219);
+			  $a->Cell(168,8,"Sub Total",1,0,'R',true);
+			  $a->Cell(25,8,number_format($hgb,2),1,1,'R',true);
+			}
+			  //grand total
+				$harga =($harga+($r->Harga_Beli));
+			
 		  }
 		  $a->SetFont('Arial','B',10);
 		  $a->SetFillColor(225,225,225);
-		  $a->Cell(152,8,"TOTAL",1,0,'R',true);
-		  $a->Cell(30,8,number_format($harga,2),1,0,'R',true);
+		  $a->Cell(($detail=='')?112:168,8,"GRAND TOTAL",1,0,'R',true);
+		  $a->Cell(($detail=='')?30:25,8,number_format($harga,2),1,0,'R',true);
+		  ($detail!='')?'':
+		  $a->Cell(40,8,'',1,0,'R',true);
 		  $a->Output('application/logs/'.$this->session->userdata('userid').'_rekap_pembelian.pdf','F');
 
 //show pdf output in frame

@@ -135,7 +135,8 @@
 [SusunanStock]
 1|Nama_Barang,Nama Barang
 2|k.Kategori-Nama_Barang,Kategori dan Nama Barang
-3|Nama_Barang-ms.stock,Nama Barang dan Stock
+3|ms.stock-Nama_Barang,Stock dan Nama Barang 
+4|sum(ms.harga_beli),Harga Pembelian
 
 [Urutan]
 1|asc,Kecil ke Besar (A-Z)
@@ -154,11 +155,11 @@
 
 [kredite]
 1|Sub Total ,input,text d,total_belanja,w90 angka big,,
-2|Korting,input,text d,ppn,w90 angka big,0,
+2|Corting,input,text d,ppn,w90 angka big,0,
 3|Total Bayar,input,text d,total_bayar,w90 angka big,,
 4|Uang Muka,input,text d,dibayar,w90 angka big,0,
 5|Sisa,input,text d,kembalian,w90 angka big,,
-6|Jumlah Cicilan,input,text d,cicilan,w50 angka big,1,
+6|,input,hidden d,cicilan,w50 angka big,1,
 
 
 [lapjualresep]

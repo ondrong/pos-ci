@@ -4,17 +4,19 @@
 		  $nfile='asset/bin/zetro_master.frm';
 		  //$a->Header();
 		  $a->setKriteria("faktur");
-		  $a->setNama("Faktur Penjualan Tunai");
+		  $a->setNama("Faktur Penjualan ");
 		  $a->setSection("faktur");
-		  $a->setFilter($alamat);
+		  $a->setFilter($Company);
 		  $a->setReferer($nm_nasabah);
+		  $a->setNoFaktur($faktur);
+		  $a->setDataset($tanggal);
 		  $a->setFilename('asset/bin/zetro_master.frm');
 		  $a->AliasNbPages();
 		  $a->AddPage("P","A4");
 		  $a->SetFont('Arial','',10);
 		  // set lebar tiap kolom tabel transaksi
 		  // set align tiap kolom tabel transaksi
-		  $a->SetWidths(array(10,75,30,12,30,30));
+		  $a->SetWidths(array(10,77,25,18,30,30));
 		  $a->SetAligns(array("C","L","R","C","R","R"));
 		  $a->SetFont('Arial','',9);
 		  //$rec = $temp_rec->result();
@@ -22,30 +24,30 @@
 		  foreach($temp_rec->result_object() as $r)
 		  {
 			$n++;
-			$a->Row(array($n,$r->nm_barang,
-							 number_format($r->jml_transaksi,2),
-							 $r->nm_satuan,
-							 number_format($r->harga_beli,2),
-							 number_format(($r->jml_transaksi*$r->harga_beli),2)
+			$a->Row(array($n,$r->Nama_Barang,
+							 number_format($r->Jumlah,2),
+							 $r->Satuan,
+							 number_format($r->Harga,2),
+							 number_format(($r->Jumlah*$r->Harga),2)
 							 ));
 			//sub tlot
-			$kredit =($kredit+($r->jml_transaksi*$r->harga_beli));
+			$kredit =($kredit+($r->Jumlah*$r->Harga));
 			//$debit =($debit+($r->debit));
 		  }
 		  if($n<15){
 			  $h=(6*(15-$n));
-		  $a->MultiCell(187,$h,'',1,0,'L');  
+		  $a->MultiCell(190,$h,'',1,0,'L');  
 		  }
 		  $a->SetFont('Arial','B',10);
 		  $a->SetFillColor(225,225,225);
-		  $a->Cell(157,8,"Sub Total",1,0,'R',true);
+		  $a->Cell(160,8,"Sub Total",1,0,'R',true);
 		  $a->Cell(30,8,number_format($kredit,2),1,1,'R',true);
-		  $a->Cell(157,8,"PPN 10%",1,0,'R',true);
+		  $a->Cell(160,8,"PPN 10%",1,0,'R',true);
 		  $a->Cell(30,8,number_format(round(($kredit*10/100),0),2),1,1,'R',true);
-		  $a->Cell(157,8,"Total",1,0,'R',true);
+		  $a->Cell(160,8,"Total",1,0,'R',true);
 		  $a->Cell(30,8,number_format($kredit+round(($kredit*10/100),0),2),1,1,'R',true);
 		  $a->SetFont('Arial','i',9);
-		  $a->MultiCell(187,8,"Terbilang : ".$terbilang,1,'L','C');
+		  $a->MultiCell(190,8,"Terbilang : ".$this->zetro_terbilang->terbilang($kredit+round(($kredit*10/100),0)). " rupiah.",1,'L','C');
 		  $a->Output('application/logs/'.$this->session->userdata('userid').'_laporan_beli.pdf','F');
 
 //show pdf output in frame

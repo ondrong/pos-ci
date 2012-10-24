@@ -21,11 +21,30 @@ $(document).ready(function(e) {
 		$('#frm1').attr('action','print_faktur');
 		document,frm1.submit();
 	})
+	tglNow('#dari_tgl');
+	$('#dari_tgl')
+		.focus().select()
+		.dynDateTime()
+		.focusout(function(){
+			last_notran();
+		})
+		
+	$('#sampai_tgl')
+		.focusout(function(){
+			last_notran();
+		})
+		.dynDateTime();
+	$('#id_anggota').focusout(function(){
+		last_notran();
+	})
 })
 
 function last_notran(){
-	$.post('last_no_transaksi',{'tipe':'GI'},
+	$.post('last_no_transaksi',{
+		'dari_tgl'	:$('#dari_tgl').val(),
+		'sampai_tgl':$('#sampai_tgl').val(),
+		'id_anggota':$('#id_anggota').val()},
 		function(result){
-			$('#no_transaksi').val(result-1);
+			$('#no_transaksi').html(result);
 		})
 }

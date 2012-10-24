@@ -1,8 +1,8 @@
 // JavaScript Document
 $(document).ready(function(e) {
 	var path=$('#path').val();
-    $('#rekappenjualantunai').removeClass('tab_button');
-	$('#rekappenjualantunai').addClass('tab_select');
+    $('#listbarangterjual').removeClass('tab_button');
+	$('#listbarangterjual').addClass('tab_select');
 	$('table#panel tr td').click(function(){
 		var id=$(this).attr('id');
 			if(id!=''){
@@ -122,27 +122,26 @@ $(document).ready(function(e) {
 		$('#frm1').attr('action','lap_penjualan');
 		document.frm1.submit();
 	})
-
-	$(':button')
-		.click(function(){
-			var id=$(this).attr('id');
-			switch(id){
-				case 'saved-filter':
-					$('#printsheet').click();
-				break;
-				case 'saved-resep':
-					$('#frm2').attr('action','print_laporan');
-					document.frm2.submit();
-				break;
-				case 'saved-topjual':
-					$('#frm3').attr('action','print_laporan');
-					document.frm3.submit();
-				break;
+ // penjualan detail
+	$("#okedech").click(function(){
+		show_indicator('xx',1);
+		$('#frm1').attr('action','lap_penjualan_detail');
+		document.frm1.submit();
+	})
+	$("#okedechya").click(function(){
+		show_indicator('xx',1);
+		$('#frm1').attr('action','penjualan_per_konsumen');
+		document.frm1.submit();
+	})
+	$('#nm_anggota')
+		.coolautosuggest({
+			url		:path+'member/get_anggota?limit=10&str=',
+			width	:350,
+			showDescription	:true,
+			onSelected		:function(result){
+				$('#ID_Anggota').val(result.ID);
 			}
 		})
-	$('img').click(function(){
-		//alert($(this).attr('id'))
-	})
 })
 
 

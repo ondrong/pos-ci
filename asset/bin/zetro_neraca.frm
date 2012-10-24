@@ -10,17 +10,46 @@
 1|Tanggal,,,,,,8%,,,20
 2|Nomor,,,,,,12%,,,22
 3|Pemasok,,,,,,20%,,,60
-4|Deskripsi,,,,,,25%,,,40
-;5|Jumlah,,,,,,10%,,,25
-5|Total Harga,,,,,,10%,,,30
+;4|Deskripsi,,,,,,25%,,,40
+4|Total Harga,,,,,,10%,,,30
+5|Keterangan,,,,,,10%,,,40
+
+[detailbeli]
+1|Tanggal,,,,,,8%,,,20
+2|Nomor,,,,,,12%,,,20
+3|Nama Barang,,,,,,20%,,,50
+4|Jumlah,,,,,,10%,,,25
+5|Satuan,,,,,,10%,,,18
+6|Harga,,,,,,10%,,,25
+7|Total Harga,,,,,,10%,,,25
+;8|Keterangan,,,,,,10%,,,30
+
+[belibyvendor]
+1|Tanggal,,,,,,8%,,,20
+2|Nomor,,,,,,12%,,,20
+3|Nama Barang,,,,,,20%,,,50
+4|Jumlah,,,,,,10%,,,25
+5|Satuan,,,,,,10%,,,18
+6|Harga,,,,,,10%,,,30
+7|Total Harga,,,,,,10%,,,30
+8|Keterangan,,,,,,10%,,,69
 
 [rekapjualtunai]
-1|Nama Barang,,,,,,8%,,,60
-2|Kode Barang,,,,,,8%,,,30
+1|Kode Barang,,,,,,8%,,,30
+2|Nama Barang,,,,,,8%,,,60
 3|Jumlah,,,,,,8%,,,20
 4|Satuan,,,,,,8%,,,18
 5|Harga,,,,,,8%,,,25
 6|Total Harga,,,,,,8%,,,25
+
+[detailjual]
+1|Nama Barang,,,,,,8%,,,60
+2|Jumlah,,,,,,8%,,,20
+3|Satuan,,,,,,8%,,,18
+4|Harga,,,,,,8%,,,25
+5|Total Harga,,,,,,8%,,,25
+6|Pelanggan,,,,,,8%,,,40
+7|Keterangan,,,,,,,8%,,,70
 
 [rekapjualkredit]
 1|Nama Anggota,,,,,,8%,,,70
@@ -62,3 +91,11 @@
 2|Debet,,,,,,8%,,,30
 3|Kredit,,,,,,8%,,,30
 4|Saldo,,,,,,8%,,,30
+
+[stocklimit]
+1|Kode Barang,,,,,,12%,,,30
+2|Nama Barang,,,,,,12%,,,60
+3|Min.Stock,,,,,,12%,,,25
+4|Stock,,,,,,12%,,,25
+5|Satuan,,,,,,12%,,,30
+;6|Keterangan,,,,,,12%,,,40

@@ -61,16 +61,14 @@ class Report_model extends CI_Model {
 				  $orderby";
 			break;
 			case 'stocklimit':
-			$sql="select im.nm_jenis,im.nm_kategori,
-				  im.id_barang,im.nm_satuan,im.nm_barang,
-				  sum(ms.stock) as stock,im.stokmin,
-				  sum(if(stock>0,(harga_beli*stock),null)) as harga_beli
-				  from inv_material as im
-				  left join inv_material_stok as ms
-				  on ms.nm_barang=im.nm_barang
-				  $where 
-				  group by im.nm_barang
-				  order by (ms.stock-im.stokmin) desc";
+			$sql="select b.Kode,b.Nama_Barang,b.ID,b.ID_Satuan,
+					sum(ms.Stock) as stock,b.minstok
+					from inv_material_stok as ms
+					right join inv_barang  as b
+					on ms.id_barang=b.ID
+					where (ms.stock) <= b.minstok $where
+					group by b.ID
+					$orderby";
 			break;
 			case 'lap_kas':
 			$sql="select * from ".$this->session->userdata('userid')."_tmp_lapkas $where $orderby";
@@ -129,9 +127,35 @@ class Report_model extends CI_Model {
 		//echo $sql;
 		return $this->db->query($sql);	
 	}
+	function get_no_trans($where){
+			$sql="select p.NoUrut,a.Nama,a.Catatan from inv_penjualan as p
+				left join mst_anggota as a
+				on a.ID=p.ID_Anggota
+			   $where order by p.ID desc";
+			$data=$this->db->query($sql);	
+			return $data->result();
+			
+	}
 	function laporan_faktur($no_trans){
-		$sql="select * from detail_transaksi where no_transaksi='$no_trans' order by id_transaksi";
+		$sql="select b.Nama_Barang,s.Satuan,pd.Jumlah,pd.Harga
+			 from inv_penjualan as p
+			 left join inv_penjualan_detail as pd
+			 on pd.ID_Jual=p.ID
+			 left join inv_barang as b
+			 on b.ID=pd.ID_Barang
+			 left join inv_barang_satuan as s
+			 on s.ID=pd.ID_Satuan
+			 where p.NoUrut='$no_trans' and p.Tahun='".date('Y')."' order by pd.ID";
 		return $this->db->query($sql);	
 	}
-	
+	function lap_cash_flow(){
+		$sql="select * from kas order by ID";
+			$data=$this->db->query($sql);	
+			return $data->result();
+	}
+	function lap_sub_cash($id){
+		$sql="select * from kas_sub where ID_Kas='$id'";	
+			$data=$this->db->query($sql);	
+			return $data->result();
+	}
 }
