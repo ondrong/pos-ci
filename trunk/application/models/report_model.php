@@ -158,4 +158,18 @@ class Report_model extends CI_Model {
 			$data=$this->db->query($sql);	
 			return $data->result();
 	}
+	function get_cash_flow($ID_CC,$dari,$sampai=''){
+		$sd=($sampai=='')?$dari:$sampai;
+		$sql="select k.ID_Calc,t.ID_CC,if(k.ID_Calc=1,sum(Kredit-Debet),sum(Debet-Kredit)) as Total 
+			from transaksi_temp as t
+			left join kas_sub as k
+			on k.ID_CC=t.ID_CC
+			where t.Tanggal between '".tglToSql($dari)."' and '".tglToSql($sd)."'
+			and t.ID_CC='$ID_CC'
+			group by t.ID_CC";
+			//echo $sql;
+			$data=$this->db->query($sql);	
+			return $data->result();
+		
+	}
 }

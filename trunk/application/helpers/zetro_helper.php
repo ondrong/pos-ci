@@ -19,7 +19,7 @@
 		if($sfield==''){
 		$sql="select * from ".$tabel." $where $group $order";
 		}else{
-		$sql="select ".$sfield. " from ".$tabel." $where $group $order";
+		$sql="select ".$sfield." from ".$tabel." $where $group $order";
 		}
 		//echo $sql."\n"; //for debug only;
 		$rs=mysql_query($sql) or die($sql.mysql_error());

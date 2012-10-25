@@ -29,7 +29,7 @@
 			$a->SetFont('Arial','B',9);
 			$a->SetFillColor(210,210,010);	
 			$a->Cell(10,8,$n,1,0,'C',true);
-			$a->Cell(90,8,$r->Nama,1,0,'L',true);
+			$a->Cell(90,8,($r->Nama!='')?$r->Nama:'PELANGGAN',1,0,'L',true);
 			$a->Cell(93,8,$r->Catatan." ".$r->Alamat." ".$r->Kota,1,1,"L",true);
 			$a->SetFont('Arial','',9);
 			$ID_P=" and p.ID_Anggota='".$r->ID_Anggota."' group by dt.ID_Jual";
@@ -43,8 +43,8 @@
 					$a->Cell(10,8,$nn,1,0,'R',true);
 					$a->cell(20,8,tglfromSql($r2->Tanggal),1,0,'C',true);
 					$a->cell(20,8,$r2->Nomor,1,0,'C',true);
-					$a->Cell(75,8,$r2->Jenis_Jual." : ".$r2->ID_Post." - ".$r2->Deskripsi,1,0,"L",true);
-					$a->Cell(68,8,"Jatuh Tempo  Tanggal : ".tglfromSql($r2->Tgl_Cicilan),1,1,'L',true);
+					$a->Cell(75,8,($r2->ID_Jenis=='1' || $r2->ID_Jenis=='5')?$r2->Jenis_Jual:$r2->Jenis_Jual." : ".$r2->ID_Post." - ".$r2->Deskripsi,1,0,"L",true);
+					$a->Cell(68,8,($r2->ID_Jenis=='1' || $r2->ID_Jenis=='5')?"":"Jatuh Tempo  Tanggal : ".tglfromSql($r2->Tgl_Cicilan),1,1,'L',true);
 					
 					$a->SetFont('Arial','',9);
 
@@ -59,7 +59,7 @@
 										  number_format(($rr2->Harga),2),
 										  number_format(($rr2->Harga*$rr2->Jumlah),2)
 										  )) ;
-						$hgb=($hgb+($rr2->Harga*$rr2->Jumlah));
+						$hgb= ($r2->ID_Jenis=='5')?($hgb-($rr2->Harga*$rr2->Jumlah)):($hgb+($rr2->Harga*$rr2->Jumlah));
 						}
 				}
 						$harga =($harga+($hgb));

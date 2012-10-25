@@ -2,11 +2,12 @@
 
 		  $a=new reportProduct();
 		  $TglLong=LongTgl($dari);
+		  $TglSamp=LongTgl($sampai);
 		  $a->setKriteria("neraca");
 		  $a->setNama("LAPORAN ALIRAN KAS");
 		  $a->setSection("");
-		  $a->setFilter(array($TglLong));
-		  $a->setReferer(array('Per'));
+		  $a->setFilter(array(($sampai=='')?$TglLong:$TglLong." s/d ".$TglSamp));
+		  $a->setReferer(array('Periode'));
 		  $a->setFilename('asset/bin/zetro_akun.frm');
 		  $a->AliasNbPages();
 		  //$a->AddPage("P","A4");
@@ -16,17 +17,42 @@
 		  $a->SetAligns(array("L","R","R"));// set align tiap kolom tabel transaksi
 		  $a->SetFont('Arial','B',10);
 		  $data=array();$n=0;
-		  
+		  $ax=0;$k=0;$saldo=0;
+		  $where=($sampai=='')?
+		  			"where tgl_kas='".tgltoSql($dari)."'":
+					"where tgl_kas between '".tgltoSql($dari)."' and '".tgltoSql($sampai)."'";
 		  foreach($temp_rec as $r){
 			$n++;
+			$tot=0;
+			($r->ID==5)?'':
 			$a->Row(array($r->Kode.'.'.$r->Nama_Kas),false); 
 			$data=$this->report_model->lap_sub_cash($r->ID);
 			$a->SetFont('Arial','',10);
 				foreach($data as $row){
-					$a->Row(array(sepasi(5).$row->Nama_SubKas,'100.000.000,00'),false);	
+					$valued=0;
+					if($row->ID_CC==0){
+						$valued=rdb('mst_kas_harian','saldo','sum(sa_kas) as saldo',$where ." group by tgl_kas");
+						$tot=rdb('mst_kas_harian','saldo','sum(sa_kas) as saldo',$where ." group by tgl_kas");
+					}else if($row->ID_CC!=4){
+						$datax=$this->report_model->get_cash_flow($row->ID_CC,$dari,$sampai);
+						foreach($datax as $d){
+							$valued=$d->Total;
+							$tot=($tot+$d->Total);
+						}
+						if($row->ID_Calc==1){
+							$ax=($ax+$valued);
+						}else if($row->ID_Calc==2){
+							$ax=($ax-$valued);
+						}
+					}
+					$a->Row(array(sepasi(5).$row->Nama_SubKas,number_format((int)$valued,2),''),false);	
 				}
-			$a->SetFont('Arial','B',10);
-			$a->Row(array(sepasi(15).'Total '. ucwords($r->Nama_Kas)),false); 
+			 $a->SetFont('Arial','B',10);
+			($r->ID==5)?'':
+			 $a->Row(array(sepasi(15).'Total '. ucwords($r->Nama_Kas),($r->ID==3)?number_format((int)$ax,2):number_format((int)$tot,2)),false); 
+			 $k=rdb('mst_kas_harian','saldo','sum(sa_kas) as saldo',$where ." group by tgl_kas");
+			 $saldo=($k+$ax);
+			($r->ID==5)?$a->Row(array($r->Kode.'.'.$r->Nama_Kas,number_format((int)$saldo,2)),false):''; 
 		  }
 		  
 		  $a->Output('application/logs/'.$this->session->userdata('userid').'_cash_flow.pdf','F');

@@ -99,3 +99,18 @@
 4|Stock,,,,,,12%,,,25
 5|Satuan,,,,,,12%,,,30
 ;6|Keterangan,,,,,,12%,,,40
+
+[kasmasuk]
+1|Faktur,,,,,,12%,,,25
+2|Tanggal,,,,,,12%,,,20
+3|Total,,,,,,12%,,,30
+4|Penerimaan,,,,,,12%,,,30
+5|Keterangan,,,,,,12%,,,75
+
+[labarugi]
+1|Tanggal,,,,,,12%,,,30
+2|Laba Kotor,,,,,,12%,,,30
+3|Operasional,,,,,,12%,,,30
+4|Pajak,,,,,,12%,,,25
+5|Laba Bersih,,,,,,12%,,,30
+

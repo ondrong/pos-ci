@@ -5,10 +5,10 @@
 		  $nfile='asset/bin/zetro_neraca.frm';
 		  //$a->Header();
 		  $a->setKriteria("transkip");
-		  $a->setNama(($detail=='')? "REKAP PEMBELIAN BARANG":"LIST PEMBELIAN BARANG");
-		  $a->setSection(($detail=='')?"rekapbeli":"detailbeli");
-		  $a->setFilter(array($dari ." s/d ".$sampai));
-		  $a->setReferer(array('Periode'));
+		  $a->setNama("LAPORAN PEMBELIAN BARANG");
+		  $a->setSection(($detail=='')?'rekapbeli':'detailbeli');
+		  $a->setFilter(array($dari ." s/d ".$sampai,$id_jenis));
+		  $a->setReferer(array('Periode','Jenis Pembayaran'));
 		  $a->setFilename($nfile);
 		  $a->AliasNbPages();
 		  $a->AddPage(($detail=='')?"P":"P","A4");
@@ -60,7 +60,7 @@
 			  $a->Cell(25,8,number_format($hgb,2),1,1,'R',true);
 			}
 			  //grand total
-				$harga =($harga+($r->Harga_Beli));
+				$harga =($harga+($hgb));
 			
 		  }
 		  $a->SetFont('Arial','B',10);

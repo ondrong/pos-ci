@@ -58,7 +58,7 @@ class Kasir_model extends CI_Model {
 	}
 	function rekap_trans_jual($where,$group='',$order='order by p.Tanggal'){
 		$sql="select p.Tanggal,p.ID_Anggota,dt.ID_Barang,sum(Jumlah) as Jumlah,dt.Harga,a.Nama,
-			 a.Alamat,a.Kota,a.Catatan
+			 a.Alamat,a.Kota,a.Catatan,p.ID_Jenis
 			 from inv_penjualan as p
 		     left join inv_penjualan_detail as dt
 			 on dt.ID_Jual=p.ID
@@ -67,14 +67,14 @@ class Kasir_model extends CI_Model {
 			 left join mst_anggota as a
 			 on a.ID=p.ID_Anggota
 			 $where $group $order";
-		echo $sql;
+		//echo $sql;
 		$data=$this->db->query($sql);
 		return $data->result();
 	}
 	function detail_trans_jual($where,$group='',$order='order by p.Tanggal'){
 		$sql="select dt.ID_Jual,p.Tanggal,dt.ID_Barang,b.Kode,dt.Jumlah,dt.Harga,b.Nama_Barang,s.Satuan,
 			 a.Nama,p.Nomor,j.Jenis_Jual,a.Catatan,a.Alamat,a.Kota,p.Tgl_Cicilan,p.ID_Post,
-			 p.Deskripsi,p.ID_Anggota
+			 p.Deskripsi,p.ID_Anggota,p.ID_Jenis
 			 from inv_penjualan as p
 		     left join inv_penjualan_detail as dt
 			 on dt.ID_Jual=p.ID
@@ -117,7 +117,34 @@ class Kasir_model extends CI_Model {
 		$data=$this->db->query($sql);
 		return $data->result();
 	}
-	
+	function totaldata($where){
+		$sql="select * from inv_penjualan as p $where";
+		$rs=mysql_query($sql) or die(mysql_error());
+		return mysql_num_rows($rs);	
+	}
+	function kas_masuk($where,$orderby='order by ID_Jenis,p.Tanggal'){
+		$sql="select p.ID_Jenis,sum(total) as tHarga,p.Tanggal,p.Nomor,p.NoUrut,
+			p.Deskripsi,p.Tgl_Cicilan,p.ID_Post
+			from inv_penjualan as p 
+			$where
+			group by id_jenis,p.Tanggal
+			$orderby ";
+		$data=$this->db->query($sql);
+		return $data->result();
+	}
+	function laba_rugi($where,$orderby=''){
+		$sql="select dt.ID_Barang,sum(dt.Jumlah),sum(dt.jumlah*dt.harga) as Jual,
+			(sum(dt.Jumlah)*b.Harga_Beli) as Harga_Beli,b.harga_beli,dt.Tanggal,dt.batch 
+			from inv_penjualan_detail as dt
+			left join inv_material_stok as b
+			on b.id_barang=dt.ID_Barang and b.batch=dt.Batch
+			$where
+			group by concat(dt.Tanggal)
+			$orderby";
+		//echo $sql;
+		$data=$this->db->query($sql);
+		return $data->result();
+	}
 	function get_kreditur($where,$orderby=''){
 		$sql="select p.ID,p.ID_Anggota,b.Nama,b.NIP,c.Departemen,d.Keaktifan	
 			  from inv_penjualan as p
@@ -162,6 +189,16 @@ class Kasir_model extends CI_Model {
 		$data=$this->db->query($sql);
 		return $data->result();
 	}
+	function get_kas_awal($where){
+		$sql="select * from mst_kas_harian $where order by tgl_kas";
+		$data=$this->db->query($sql);
+		return $data->result();
 	
+	}
+	function operasional($where,$orderby,$groupby=''){
+		$sql="select * from mst_kas_trans $where $groupby $orderby";
+		$data=$this->db->query($sql);
+		return $data->result();		
+	}
 	
 }

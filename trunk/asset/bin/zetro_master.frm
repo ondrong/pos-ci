@@ -48,8 +48,9 @@
 [lapkas]
 1|Tanggal,input,text t,tgl_transaksi,w35,,10%,,,22
 2|Uraian,,,uraian,,,,,,78
-3|Kredit,,,kredit,,,,,,30
-4|Debit,,,debit,,,,,,30
+3|Debet,,,kredit,,,,,,30
+4|Kredit,,,debit,,,,,,30
+
 
 [formfaktur]
 1|Tanggal Penjualan,,,,,,

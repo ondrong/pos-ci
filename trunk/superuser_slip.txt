@@ -2,36 +2,48 @@
 
                         
                                                                                 
-PD SETUJU                                                   Tanggal :24/10/2012
-Jl. RE. Martadinata No.103                            No. Faktur :RK-00009-2012
-Telp :(0264) 201043                                       Pembelian :Return
+PD SETUJU                                                   Tanggal :25/10/2012
+Jl. RE. Martadinata No.103                               No. Faktur :00027-2012
+Telp :(0264) 201043                                       Pembelian :Giro
 -------------------------------------------------------------------------------
 | No.|          Nama Barang          |Banyaknya| Harga Satuan|   Total Harga  |
 -------------------------------------------------------------------------------
   1   BESI BETON 3MM                      1 BATANG       30,000       30,000.00
-  2   BESI BETON 3MM                      1 BATANG       30,000       30,000.00
-
-
-
-
-
-
+  2   BESI BETON 8MM                      1 BATANG      150,000      150,000.00
+  3   BESI BETON 8MM                      1 BATANG      150,000      150,000.00
+  4   BESI BETON 3MM                      1 BATANG       30,000       30,000.00
+  5   BESI BETON 8MM                      1 BATANG      150,000      150,000.00
+  6   BESI BETON 3MM                      1 BATANG       30,000       30,000.00
+  7   BESI BETON 8MM                      1 BATANG      150,000      150,000.00
+  8   BESI BETON 3MM                      1 BATANG       30,000       30,000.00
+  9   BESI BETON 8MM                      1 BATANG      150,000      150,000.00
+  10   BESI BETON 3MM                      1 BATANG       30,000       30,000.00
+  11   BESI BETON 8MM                      1 BATANG      150,000      150,000.00
+  12   BESI BETON 3MM                      1 BATANG       30,000       30,000.00
+  13   BESI BETON 8MM                      1 BATANG      150,000      150,000.00
+  14   BESI BETON 3MM                      1 BATANG       30,000       30,000.00
+  15   BESI BETON 8MM                      1 BATANG      150,000      150,000.00
+  16   BESI BETON 3MM                      1 BATANG       30,000       30,000.00
+  17   BESI BETON 8MM                      1 BATANG      150,000      150,000.00
+  18   BESI BETON 3MM                      1 BATANG       30,000       30,000.00
+  19   BESI BETON 8MM                      1 BATANG      150,000      150,000.00
+  20   BESI BETON 3MM                      1 BATANG       30,000       30,000.00
 -------------------------------------------------------------------------------
-                                                    Sub Total :     30,000.00
+                                                    Sub Total :  1,800,000.00
 
                                                       Corting :          0.00
                                                              ------------------+
-                                                        Total :     30,000.00
+                                                        Total :  1,800,000.00
 
-                                                    Uang Muka :          0.00
+                                                    Uang Muka :  1,800,000.00
 
                                                              ------------------
                                                          Sisa :          0.00
 
 -------------------------------------------------------------------------------
-Pembayaran    :Return No.:0  [ 00/00/0000 ]
-Nama Konsumen :[  ]
-Alamat        :
+Pembayaran    :Giro No.:345678 BANK BCA [ 30/10/2012 ]
+Nama Konsumen :JUNED[ 0001 ]
+Alamat        :PT.CATUR NUNGGAL
 
 
 

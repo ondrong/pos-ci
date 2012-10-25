@@ -106,4 +106,75 @@ class Purch_model extends CI_Model {
 		fwrite($xml,"</graph>\r\n");
 
 	}
+	
+	function cash_graph($thn,$bln){
+		$t_days=cal_days_in_month(CAL_GREGORIAN, $bln, $thn);
+		$xml=fopen($this->user.'_graph.xml','w+');
+		fwrite($xml,"<graph caption='Grafik Aliran Kas' subcaption='Periode :".nBulan($bln)." ".$thn."' xAxisName='Bulan' yAxisName='Value' showValues= '1' showLabels='1' showValues='2'>\r\n");
+		//create category by jenis penjuallan ( tunai,giro,cheque,Kredit,return
+		fwrite($xml,"<categories>\r\n");
+		//while($rw=mysql_fetch_object($rcat)){
+		for($i=1;$i<=$t_days;$i++){
+			fwrite($xml,"<category name='".$i."'/>\r\n");
+		}
+		fwrite($xml,"</categories>\r\n");
+		$color=array('','1D8BD1','F1683C','2AD62A','DBDC25','D2DCDD');
+			fwrite($xml,"<dataset seriesName='Cash di Tangan' color='".$color[2]."'>\r\n");
+			for($x=1;$x<=$t_days;$x++){
+				$ii=strlen($x==1)?'0'.$x:$x;$val=0;
+				
+				$cat1="select t.Tanggal,k.ID_Calc,t.ID_CC,if(k.ID_Calc=1,sum(Kredit-Debet),sum(Debet-Kredit)) as Total 
+					from transaksi_temp as t
+					left join kas_sub as k
+					on k.ID_CC=t.ID_CC
+					where t.Tanggal='".$thn.$bln.$ii."'
+					group by t.ID_CC";
+				$val=rdb('mst_kas_harian','sa_kas',"sa_kas","where tgl_kas='".$thn.$bln.$ii."' order by tgl_kas");	
+				$rcat1=mysql_query($cat1) or die(mysql_error());
+				while($rw1=mysql_fetch_object($rcat1)){
+						$val=($val=='' && $rw1->Total=='')? '':($val+$rw1->Total);
+					}
+						fwrite($xml,"<set name='".$ii."'  value='".$val."'/>\r\n");
+			//   
+		}
+		fwrite($xml,"</dataset>\r\n");
+		fwrite($xml,"</graph>\r\n");
+
+	}
+	
+	function laba_graph($thn,$bln){
+		$t_days=cal_days_in_month(CAL_GREGORIAN, $bln, $thn);
+		$xml=fopen($this->user.'_graph.xml','w+');
+		fwrite($xml,"<graph caption='Grafik Aliran Kas' subcaption='Periode :".nBulan($bln)." ".$thn."' xAxisName='Bulan' yAxisName='Value' showValues= '1' showLabels='1' showValues='2'>\r\n");
+		//create category by jenis penjuallan ( tunai,giro,cheque,Kredit,return
+		fwrite($xml,"<categories>\r\n");
+		//while($rw=mysql_fetch_object($rcat)){
+		for($i=1;$i<=$t_days;$i++){
+			fwrite($xml,"<category name='".$i."'/>\r\n");
+		}
+		fwrite($xml,"</categories>\r\n");
+		$color=array('','1D8BD1','F1683C','2AD62A','DBDC25','D2DCDD');
+			fwrite($xml,"<dataset seriesName='Rugi Laba' color='".$color[3]."'>\r\n");
+			for($x=1;$x<=$t_days;$x++){
+				$ii=strlen($x==1)?'0'.$x:$x;
+				$val=0;$laba=0;
+				
+				$cat1="select sum(dt.jumlah*dt.harga) as Jual,(sum(dt.Jumlah)*b.Harga_Beli) as Harga_Beli
+						from inv_penjualan_detail as dt
+						left join inv_material_stok as b
+						on b.id_barang=dt.ID_Barang and b.batch=dt.Batch
+						where Tanggal ='".$thn.$bln.$ii."' and ID_Jenis!='5'
+						group by concat(dt.Tanggal)
+						order by dt.Tanggal";
+				$val=rdb('mst_kas_trans','jumlah',"sum(jumlah) as jumlah","where tgl_trans='".$thn.$bln.$ii."' group by tgl_trans order by tgl_trans");	
+				$rcat1=mysql_query($cat1) or die(mysql_error());
+				while($rw1=mysql_fetch_object($rcat1)){
+					$laba=($rw1->Jual-$rw1->Harga_Beli);
+					}
+						$val=($val=='' && $laba=='')? '':($val+$laba);
+						fwrite($xml,"<set name='".$ii."'  value='".$val."'/>\r\n");
+			}
+		fwrite($xml,"</dataset>\r\n");
+		fwrite($xml,"</graph>\r\n");
+	}
 }
