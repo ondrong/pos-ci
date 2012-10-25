@@ -164,7 +164,7 @@ class Simpanan extends CI_Controller{
 			$datax['keterangan']=$_POST['keterangan'];
 			$datax['ID_Bulan']	=$_POST['ID_Bulan'];
 			$datax['Tahun']		=$_POST['Tahun'];
-				$datax['created_by']	=$this->session->userdata('userid');
+			$datax['created_by']	=$this->session->userdata('userid');
 				echo $this->Admin_model->replace_data('transaksi_temp',$datax);
 	}
 	function get_total_pinjaman(){
@@ -207,9 +207,11 @@ class Simpanan extends CI_Controller{
 			$datax['ID_SubKlas']=rdb('jenis_simpanan','ID_SubKlas','ID_SubKlas',"where ID='".$id_jenis."'");
 			$datax['ID_Perkiraan']=rdb('perkiraan','ID','ID',"where ID_Agt='".$_POST['ID_Agt']."' and ID_Simpanan='".$id_jenis."'");
 			$datax['Kredit']	=$_POST['Kredit'];
-			$datax['keterangan']=$_POST['Keterangan'];
+			$datax['keterangan']=$_POST['Keterangan']." a/n ".rdb('mst_anggota','Nama','Nama',"where ID='".$_POST['ID_Agt']."'");
 			$datax['ID_Bulan']	=substr($_POST['Tanggal'],3,2);
 			$datax['Tahun']		=$_POST['Tahun'];
+			$datax['Tanggal']	=tglToSql($_POST['Tanggal']);
+			$datax['ID_CC']		='7';
 				$datax['created_by']	=$this->session->userdata('userid');
 				$this->Admin_model->replace_data('transaksi_temp',$datax);
 	}

@@ -175,8 +175,8 @@
 	2|Detail Penjualan|report/penjualan_detail||
 	3|Penjualan per Pelanggan|report/penjualan_kon||
 	4|<hr>|x|
-	5|Top Penjualan|||
-	6|Grafik Penjualan|report/penjualan_graph||
+	;5|Top Penjualan|||
+	5|Grafik Penjualan|report/penjualan_graph||
 		
 		[Rekap Penjualan]
 		1|Rekap Penjualan|rekappenjualan|y|zvp
@@ -219,10 +219,10 @@
 	1|Cash Flow|laptransaksi/cash_flow|||
 	2|Laba Rugi|laptransaksi/laba_rugi|||
 	3|<hr>|x||
-	4|Penerimaan Harian||||
-	5|Operasional Harian|||
+	4|Penerimaan Harian|laptransaksi/kas_masuk|||
+	5|Operasional Harian|laptransaksi/ops_harian||
 	6|<hr>|x|
-	7|Grafik Kas|||
+	7|Grafik Kas|report/kas_graph||
 	;8|Grafik Laba Rugi|||
 	
 		[Cash Flow]
@@ -237,7 +237,7 @@
 		[Operasional Harian]
 		1|Operasional Harian|operasionalharian|y|zvp
 		
-		[Grafik]
+		[Grafik Kas]
 		1|Cash Flow|cashflow|y|zvp
 		2|Laba Rugi|labarugi|y|zvp
 	

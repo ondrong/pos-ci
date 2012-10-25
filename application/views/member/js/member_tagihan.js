@@ -44,7 +44,8 @@ var path=$('#path').val();
 	$.post(path+'member/get_member_kredit',{
 		'cari'		:$('#cariya').val(),
 		'orderby'	:$('#orderby').val(),
-		'urutan'	:$('#urutan').val()
+		'urutan'	:$('#urutan').val(),
+		'status'	:''
 	},function(result){
 		$('table#ListTable').show();
 		$('table#ListTable tbody').html(result);

@@ -54,6 +54,12 @@ class Report extends CI_Controller
 		$this->View('laporan/pembelian_graph');
 
 	}
+	function kas_graph(){
+		$this->zetro_auth->menu_id(array('cashflow','labarugi'));
+		$this->list_data($this->zetro_auth->auth());
+		$this->View('laporan/cash_graph');
+
+	}
 	function lap_pembelian(){
 		$data=array();$where='';
 		$data['dari']=$this->input->post('dari_tgl');
@@ -137,7 +143,7 @@ class Report extends CI_Controller
 			   "where p.Tanggal between '".tglToSql($_POST['dari_tgl'])."' and '".tglToSql($_POST['sampai_tgl'])."'";
 		$where.=($this->input->post('kategori')=='')?'':" and b.ID_Kategori='".$this->input->post('kategori')."'";
 		$where.=($this->input->post('id_jenis')=='')?'':" and p.ID_Jenis='".$this->input->post('id_jenis')."'";
-		//$where.=" and p.ID_Jenis='".$this->input->post('jenis_beli')."'";
+		$where.=" and p.ID_Jenis!='5'";
 		$group="group by concat(dt.harga,dt.ID_Barang)";
 		$ordby="order by ".$this->input->post('orderby');
 		$ordby.=($this->input->post('urutan')=='')?'':" ".$this->input->post('urutan');
@@ -165,8 +171,8 @@ class Report extends CI_Controller
 			   "where p.Tanggal between '".tglToSql($_POST['dari_tgl'])."' and '".tglToSql($_POST['sampai_tgl'])."'";
 		$where.=($this->input->post('kategori')=='')?'':" and b.ID_Kategori='".$this->input->post('kategori')."'";
 		$where.=($this->input->post('id_jenis')=='')?'':" and p.ID_Jenis='".$this->input->post('id_jenis')."'";
-		$where.=" and p.ID_Anggota !='0'";
-		$group="group by p.Tanggal,a.Nama";
+		$where.=" and p.ID_Jenis!='5'";
+		$group="group by p.Tanggal,p.ID_Anggota";
 		$ordby="order by ".$this->input->post('orderby');
 		$ordby.=($this->input->post('urutan')=='')?'':" ".$this->input->post('urutan');
 		$data['dari']		=$this->input->post('dari_tgl');
@@ -384,5 +390,15 @@ class Report extends CI_Controller
 			echo "<option value='".$r->Bulan."' ".$select.">".nBulan($r->Bulan)."</option>";
 		}
 	}
+	
+	function graph_cash_data(){
+		$thn=$_POST['thn'];
+		$bln=$_POST['bln'];
+		$pos=$_POST['pos'];
+	   ($pos=='cashflow')?
+	    $this->purch_model->cash_graph($thn,$bln):
+		$this->purch_model->laba_graph($thn,$bln);	
+	}
+
 }
 ?>

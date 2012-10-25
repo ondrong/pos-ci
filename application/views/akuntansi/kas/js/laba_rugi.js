@@ -1,7 +1,7 @@
 // JavaScript Document
 $(document).ready(function(e) {
-    $('#alirankas').removeClass('tab_button');
-    $('#alirankas').addClass('tab_select');
+    $('#labarugi').removeClass('tab_button');
+    $('#labarugi').addClass('tab_select');
 	$('table#panel tr td').click(function(){
 		var id=$(this).attr('id');
 				$('#'+id).removeClass('tab_button');
@@ -16,8 +16,26 @@ $(document).ready(function(e) {
 	$('#dari_tgl').dynDateTime();
 	$('#sampai_tgl').dynDateTime();
 	
-	$('#okelah').click(function(){
-		$('#frm1').attr('action','get_cash_flow');
+	$('#okedech').click(function(){
+		$('#frm1').attr('action','get_laba_rugi');
 		document.frm1.submit();
 	})
+	if($('#pajak').is(':checked')){
+		$('#okedech').val('OK !')
+	}else{
+		$('#okedech').val('OK');
+	}
+	$(document).keypress(function(e){
+		if(e.keyCode==115){
+			if($('#pajak').is(':checked')){
+			$('#pajak').removeAttr('checked');
+			$('#okedech').val('OK')
+			}else{
+			$('#pajak').attr('checked','checked');
+			$('#okedech').val('OK !');
+			}			
+			return false
+		}
+	})
+
 })

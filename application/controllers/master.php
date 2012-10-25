@@ -91,7 +91,7 @@ class Master extends CI_Controller {
 		$this->tanggal(tgltoSql($_POST['tgl_kas']));
 		$this->JenisBayar('7');
 
-		$this->process_to_jurnal('0',$_POST['harga_beli'],'');
+		//$this->process_to_jurnal('0',$_POST['harga_beli'],'');
 		$this->list_kas_harian();
 	}
 	function simpan_kas_keluar(){
@@ -155,9 +155,9 @@ class Master extends CI_Controller {
 		if($ket==''){
 			$data['Kredit']		=$total;//rdb('inv_penjualan','Total','Total',"where ID_Anggota='".$id_anggota."' and NoUrut='".$this->no_trans."'");
 		}else{
-			$data['Debit']		=$total;
+			$data['Debet']		=$total;
 		}
-		$data['ID_CC']			='4';
+		$data['ID_CC']			='5';
 		$data['Keterangan']		=($ket=='')?'Saldo Kas Harian':$ket;
 		$data['tanggal']		=tgltoSql($this->tgl);
 		$data['ID_Bulan']		=substr($this->tgl,3,2);

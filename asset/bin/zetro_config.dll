@@ -31,3 +31,7 @@ NPPKP|NPPKP:
 [SHU Kode]
 1|35|SHU Tahun Lalu
 2|36|SHU Tahun Berjalan
+
+[Prefference]
+;potongan jika fungsi pajak (F4) di aktifkan
+Pajak|0.25

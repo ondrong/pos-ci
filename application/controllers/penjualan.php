@@ -129,8 +129,8 @@ class Penjualan extends CI_Controller{
 		if($TotalHg!='0'){
 			if(($ID_Jenis!='4' || $ID_Jenis!='5') && $id_anggota!=''){
 				$this->process_to_jurnal($id_anggota,$TotalHg,'');
-			}else if($ID_Jenis=='5'){
-				$ket='Pembayaran Retur Barang';	
+			}else if($this->id_jenis=='5'){
+				$ket='Pembayaran Retur Barang tanggal $Tanggal';	
 				$this->process_to_jurnal($id_anggota,$TotalHg,$ket);
 			}
 		}
@@ -169,10 +169,8 @@ class Penjualan extends CI_Controller{
 		$data['total_bayar']	=$_POST['total_bayar'];	
 		$data['jml_dibayar']	=$_POST['dibayar'];	
 		$data['kembalian']		=$_POST['kembalian'];
-		//$data['terbilang']		=$_POST['terbilang'];
+		$data['ID_Jenis']		=$_POST['cbayar'];
 		$data['created_by']	=$this->session->userdata('userid');
-		//$this->update_material_stock($_POST['no_transaksi'],tgltoSql($_POST['tanggal']));//update stock
-		
 		$this->Admin_model->replace_data('inv_pembayaran',$data);
 		//$this->Admin_model->hps_data('inv_material',"where nm_barang='".$_POST[
 		echo $_POST['no_transaksi'];
@@ -485,20 +483,25 @@ class Penjualan extends CI_Controller{
 		$data['ID_Klas']		=rdb('jenis_simpanan','ID_Klasifikasi','ID_Klasifikasi',"where ID='".$this->id_jenis."'");
 		$data['ID_SubKlas']		=rdb('jenis_simpanan','ID_SubKlas','ID_SubKlas',"where ID='".$this->id_jenis."'");
 		$data['ID_Dept']		=($idp=='')? '0':rdb('mst_anggota','ID_Dept','ID_Dept',"where ID='".$id_anggota."'");
-		if($ket==''){
+		if($this->id_jenis!='5'){
 			$data['Kredit']		=$total;//rdb('inv_penjualan','Total','Total',"where ID_Anggota='".$id_anggota."' and NoUrut='".$this->no_trans."'");
 		}else{
 			$data['Debet']		=$total;
 		}
 		$data['ID_CC']			='1';
-		$data['Keterangan']		=($ket=='')?'Penjualan '.rdb('jenis_simpanan','Jenis','Jenis',"where ID='".$this->id_jenis."'").' no. Faktur: '.rdb('inv_penjualan','Nomor','Nomor',"where NoUrut='".$this->no_trans."' and Tanggal='".tgltoSql($this->tgl)."'"):$ket;
+		$data['Keterangan']		=($this->id_jenis!='5')?
+								 'Penjualan '.rdb('jenis_simpanan','Jenis','Jenis',"where ID='".$this->id_jenis."'").' no. Faktur: '.rdb('inv_penjualan','Nomor','Nomor',"where NoUrut='".$this->no_trans."' and Tanggal='".tgltoSql($this->tgl)."'"):
+								 'Pembayaran Retur Barang tanggal '.$this->tgl;
 		$data['tanggal']		=tgltoSql($this->tgl);
 		$data['ID_Bulan']		=substr($this->tgl,3,2);
 		$data['Tahun']			=substr($this->tgl,6,4);
 		$data['created_by']		=$this->session->userdata('userid');
 		//print_r($data);
 		 $this->Admin_model->replace_data('transaksi_temp',$data);
-		 $this->_set_pinjaman($id_anggota);
+		($this->id_jenis=='2' ||
+		 $this->id_jenis=='3' ||
+		 $this->id_jenis=='4' )?
+		 $this->_set_pinjaman($id_anggota):'';
 	}
 	
 	function _update_perkiraan($ID_Agt,$ID_Simpanan){

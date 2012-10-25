@@ -217,10 +217,11 @@ class Member extends CI_Controller{
 	
 	function get_member_kredit(){
 		$data=array();$n=0;
-		$where=empty($_POST['status'])?'':"where p.stat_pinjaman='".$_POST['status']."'";
-		$where.=empty($_POST['cari'])?'':"where a.Nama like '".$_POST['cari']."%'";
+		$where=($_POST['status']=='')?'':"where p.stat_pinjaman='".$_POST['status']."'";
+		$where=empty($_POST['cari'])?$where:"where a.Nama like '".$_POST['cari']."%'";
 		$orderby=" order by ".$_POST['orderby'];
 		$orderby.=empty($_POST['urutan'])? '':' '.$_POST['urutan'];
+		echo $where;
 		$data=$this->member_model->get_data_pinjaman($where,$orderby);
 		foreach($data as $r){
 			$n++;

@@ -3,45 +3,53 @@
 		  $zn=new zetro_manager();
 		  $nfile='asset/bin/zetro_neraca.frm';
 		  //$a->Header();
+		  $pajake=$zn->rContent('Prefference','Pajak','asset/bin/zetro_config.dll');
 		  $a->setKriteria("transkip");
 		  $a->setNama("LAPORAN KAS MASUK");
-		  $a->setSection("kasmasuk");
-		  $a->setFilter(array(($sampai=='')?$dari:$dari .' s/d '. $sampai,$id_jenis));
-		  $a->setReferer(array('Periode','Jenis Pembayaran'));
+		  $a->setSection("labarugi");
+		  $a->setFilter(array(($sampai=='')?$dari:$dari .' s/d '. $sampai));
+		  $a->setReferer(array('Periode'));
 		  $a->setFilename($nfile);
 		  $a->AliasNbPages();
 		  $a->AddPage("P","A4");
 		  $a->SetFont('Arial','',10);
 		  // set lebar tiap kolom tabel transaksi
 		  // set align tiap kolom tabel transaksi
-		  $a->SetWidths(array(10,25,20,30,30,75));
-		  $a->SetAligns(array("C","C","C","R","R","L"));
+		  $a->SetWidths(array(10,30,30,30,25,30));
+		  $a->SetAligns(array("C","C","R","R","R","R"));
 		  $a->SetFont('Arial','',9);
 		  //$rec = $temp_rec->result();
-		  $n=0;$harga=0;$hgb=0;$hargaj=0;$terima=0;
+		  $n=0;$harga=0;$hgb=0;
+		  $hargaj=0;$ppn=0;
+		  $tppn=0;$opr=0;$lab=0;
+		  $kotor=0;
 		  foreach($temp_rec as $r)
 		  {
 			$n++;
-			$des=($r->Deskripsi!='')?" No.: ".$r->ID_Post." ".$r->Deskripsi." [ ". tglfromSql($r->Tgl_Cicilan)." ]":'';
-			$dibayar=rdb('inv_pembayaran','jml_dibayar','sum(jml_dibayar) as jml_dibayar',"where /*no_transaksi='".$r->NoUrut."' and*/ date(doc_date)='".$r->Tanggal."' and ID_Jenis='".$r->ID_Jenis."' group by concat(ID_Jenis,date(doc_date))");
-			$tobayar=rdb('inv_pembayaran','total_bayar','sum(total_bayar) as total_bayar',"where /*no_transaksi='".$r->NoUrut."' and*/ date(doc_date)='".$r->Tanggal."' and ID_Jenis='".$r->ID_Jenis."' group by concat(ID_Jenis,date(doc_date))");
-			$terima=(($dibayar-$tobayar)>0)?$tobayar:$dibayar;
-			$a->Row(array($n,$r->Nomor, tglfromSql($r->Tanggal),
-				number_format($r->tHarga,2),
-				number_format($terima,2),
-				rdb('inv_penjualan_jenis','Jenis_Jual','Jenis_Jual',"where ID='".$r->ID_Jenis."'").$des,
-				
+			$opr	=rdb('mst_kas_trans','jumlah','sum(jumlah) as jumlah',"where tgl_trans='".$r->Tanggal."' group by tgl_trans");
+			$kotor	=($pajak=='ok')?(($r->Jual-$r->Harga_Beli)-(($r->Jual-$r->Harga_Beli)*$pajake)):($r->Jual-$r->Harga_Beli);
+			$ppn	=($pajak=='ok')?(($kotor)*10/100):0;
+			$lab	=($kotor-$opr-$ppn);
+			$a->Row(array($n,tglfromSql($r->Tanggal),
+				number_format(round($kotor,-2),2),
+				number_format((int)$opr,2),
+				number_format($ppn,2),
+				number_format($lab,2)
 				));
 			//sub tlot
-			$harga =($harga+($r->tHarga));
-			$hargaj =($hargaj+$terima);
+			$tppn	=($tppn+$ppn);
+			$harga	=($harga+($r->Jual-$r->Harga_Beli));
+			$hgb	=($hgb+$opr);
+			$hargaj	=($hargaj+$lab);
+			
 		  }
 		  $a->SetFont('Arial','B',10);
 		  $a->SetFillColor(225,225,225);
-		  $a->Cell(55,8,"TOTAL",1,0,'R',true);
+		  $a->Cell(40,8,"TOTAL",1,0,'R',true);
 		  $a->Cell(30,8,number_format($harga,2),1,0,'R',true);
-		  $a->Cell(30,8,number_format($hargaj,2),1,0,'R',true);
-		  $a->Cell(75,8,'',1,1,'R',true);
+		  $a->Cell(30,8,number_format($hgb,2),1,0,'R',true);
+		  $a->Cell(25,8,number_format($tppn,2),1,0,'R',true);
+		  $a->Cell(30,8,number_format($hargaj,2),1,1,'R',true);
 /*		  $a->Cell(140,8,"SALDO",1,0,'R',true);
 		  $a->Cell(30,8,number_format(($harga-$hargaj),2),1,0,'R',true);
 */		  $a->Output('application/logs/'.$this->session->userdata('userid').'_kas_masuk.pdf','F');
