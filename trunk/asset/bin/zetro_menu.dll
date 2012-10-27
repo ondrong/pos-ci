@@ -47,7 +47,7 @@
 		
 	[Help]
 	1|Info|admin/about|
-	2|TO DO|admin/todo|
+	;2|TO DO|admin/todo|
 	
 ;Keanggotaan ======================================================
 	[Pelanggan]
