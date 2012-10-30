@@ -6,20 +6,20 @@
 
 
 [subklasifikasi]
-1|Klasifikasi,select,text n,ID_Klasifikasi,S70,,20%,RD,klasifikasi-ID-Kode+Klasifikasi-
+1|Klasifikasi,select,text n,ID_Klasifikasi,S70,,20%,RD,klasifikasi-ID-Kode+Klasifikasi-order by ID
 2|Kode,input,text n,Kode,w90,,5%
 3|Sub Klasifikasi,input,text n,SubKlasifikasi,w90,,65%
 
 [perkiraan]
-1|Klasifikasi,select,text n,ID_Klas,S70,,18%,RD,klasifikasi-ID-Kode+Klasifikasi-
+1|Klasifikasi,select,text n,ID_Klas,S70,,18%,RD,klasifikasi-ID-Kode+Klasifikasi-order by ID
 2|Sub Klasifikasi,select,text n,ID_SubKlas,S70,,22%,
 3|Unit,select,text n,ID_Unit,S35,,5%,RD,unit_jurnal-ID-Kode+Unit-
 4|Laporan,select,text n,ID_Laporan,S50,,,RD,laporan-ID-JenisLaporan-
-5|Lap. Detail,select,text n,ID_LapDetail,S70,,,
-6|Sistem Kalkulasi,select,text n,ID_Calc,S50,,,RD,lap_head-ID-header2-
-7|Kode,input,text n,Kode,w50,,10%,
-8|Nama Perkiraan,input,text n,Perkiraan,w90,,35%,
-9|Saldo Awal,input,text d,SaldoAwal,w35 angka,,
+;5|Lap. Detail,select,text n,ID_LapDetail,S70,,,
+5|Sistem Kalkulasi,select,text n,ID_Calc,S50,,,RD,lap_head-ID-header2-
+6|Kode,input,text n,Kode,w50,,10%,
+7|Nama Perkiraan,input,text n,Perkiraan,w90,,35%,
+8|Saldo Awal,input,text d,SaldoAwal,w35 angka,,
 
 ;Tanggal,,,,,,,,,22
 [rekapsimpanan]

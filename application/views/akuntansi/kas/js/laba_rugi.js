@@ -12,6 +12,7 @@ $(document).ready(function(e) {
 				$('span:not(#v_'+id+')').hide();
 				$('#prs').val(id);
 	})
+	$('#pajak').removeAttr('checked');
 	//tglNow('#dari_tgl')
 	$('#dari_tgl').dynDateTime();
 	$('#sampai_tgl').dynDateTime();
