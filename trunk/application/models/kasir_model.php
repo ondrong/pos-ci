@@ -141,7 +141,7 @@ class Kasir_model extends CI_Model {
 			$where
 			group by concat(dt.Tanggal)
 			$orderby";
-		//echo $sql;
+		echo $sql;
 		$data=$this->db->query($sql);
 		return $data->result();
 	}

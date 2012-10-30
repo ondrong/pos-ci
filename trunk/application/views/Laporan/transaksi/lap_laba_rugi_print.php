@@ -38,7 +38,7 @@
 				));
 			//sub tlot
 			$tppn	=($tppn+$ppn);
-			$harga	=($harga+($r->Jual-$r->Harga_Beli));
+			$harga	=($harga+(round($kotor,-2)));//($r->Jual-$r->Harga_Beli));
 			$hgb	=($hgb+$opr);
 			$hargaj	=($hargaj+$lab);
 			
@@ -52,7 +52,7 @@
 		  $a->Cell(30,8,number_format($hargaj,2),1,1,'R',true);
 /*		  $a->Cell(140,8,"SALDO",1,0,'R',true);
 		  $a->Cell(30,8,number_format(($harga-$hargaj),2),1,0,'R',true);
-*/		  $a->Output('application/logs/'.$this->session->userdata('userid').'_kas_masuk.pdf','F');
+*/		  $a->Output('application/logs/'.$this->session->userdata('userid').'_laba_rugi.pdf','F');
 
 //show pdf output in frame
 $path='application/views/laporan';
@@ -60,7 +60,7 @@ $img=" <img src='".base_url()."asset/images/back.png' onclick='js:window.history
 link_js('auto_sugest.js,lap_beli.js,jquery.fixedheader.js','asset/js,'.$path.'/js,asset/js');
 panel_begin('Print Preview','','Back'.$img);
 ?>
-		  <iframe src="<?=base_url();?>application/logs/<?=$this->session->userdata('userid');?>_kas_masuk.pdf" height="100%" width="100%" frameborder="0" allowtransparency="1"></iframe>
+		  <iframe src="<?=base_url();?>application/logs/<?=$this->session->userdata('userid');?>_laba_rugi.pdf" height="100%" width="100%" frameborder="0" allowtransparency="1"></iframe>
 <?
 panel_end();
 

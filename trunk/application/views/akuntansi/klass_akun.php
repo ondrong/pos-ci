@@ -4,7 +4,7 @@ $zlb=new zetro_buildlist();
 $zlb->config_file('asset/bin/zetro_akun.frm');
 $path='application/views/akuntansi';
 link_js('jquery.fixedheader.js,klass_akun.js','asset/js,'.$path.'/js');
-panel_begin('Accounting');
+panel_begin('Klasifikasi');
 panel_multi('klasifikasi','block');
 if($all_klasifikasi!=''){
 $fld="<input type='hidden' id='ID_A' name='ID_A' value=''>";
