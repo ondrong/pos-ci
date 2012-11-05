@@ -131,7 +131,7 @@ class Report extends CI_Controller
 		$this->View('laporan/transaksi/lap_jual_detail');
 	}
 	function penjualan_kon(){
-		$this->zetro_auth->menu_id(array('penjualanperkonsumen'));
+		$this->zetro_auth->menu_id(array('penjualanperpelanggan'));
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('laporan/transaksi/lap_jual_vendor');
 

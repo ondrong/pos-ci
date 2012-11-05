@@ -26,7 +26,7 @@
 		  foreach($temp_rec as $r)
 		  {
 			$n++;
-			$a->Row(array($n,tglfromSql($r->Tanggal),$r->Nomor,$r->Nama_Barang,
+			$a->Row(array($n,tglfromSql($r->Tanggal),$r->Nomor,capital($r->Nama_Barang),
 						  number_format($r->Jumlah,2),
 						  $r->Satuan,number_format($r->Harga_Beli,2),
 						  number_format(($r->Jumlah*$r->Harga_Beli),2),

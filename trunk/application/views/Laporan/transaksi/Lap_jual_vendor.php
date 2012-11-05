@@ -7,9 +7,9 @@ calender();
 link_css('jquery.coolautosuggest.css','asset/css');
 link_js('jquery.coolautosuggest.js','asset/js');
 link_js('auto_sugest.js,lap_jual.js,jquery.fixedheader.js','asset/js,'.$path.'/js,asset/js');
-panel_begin('Penjualan per Konsumen');
-panel_multi('penjualanperkonsumen','block',false);
-if($all_penjualanperkonsumen!=''){
+panel_begin('Penjualan per Pelanggan');
+panel_multi('penjualanperpPelanggan','block',false);
+if($all_penjualanperpelanggan!=''){
 	echo "<form id='frm1' name='frm1' method='post' action=''>";
 	addText(array('Nama Pelanggan','Periode  :',' s/d ',''),
 	array("<input type='text' id='nm_anggota' name='nm_anggota' value='' class='cari w100'>",

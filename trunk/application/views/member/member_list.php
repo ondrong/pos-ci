@@ -17,7 +17,7 @@ link_js('jquery.fcbkcomplete.js','asset/js');
 link_js('jquery.fixedheader.js,member_list.js','asset/js,'.$path.'/js');
 panel_begin('Pelanggan');//,'','Department :,'.$dept.', &nbsp;&nbsp;Keaktifan :'.$stat,",Total Data : <span id='td'></span>");
 panel_multi('daftaranggota','block');
-if($all_daftaranggota!=''){
+if($all_member__member_list!=''){
 addText(array('Cari Berdasarkan Nama'),
 		array("<div style='border:1px solid #DDD; background:#FFF'>
 			  <input type='text' id='carix' value='' style='border:none'>

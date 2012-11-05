@@ -133,7 +133,7 @@ class Simpanan extends CI_Controller{
 	//transaksi pinjaman uang dan barang
 	//pinjaman barang dari toko masuk pada class penjualan toko
 	function t_pinjaman(){
-		$this->zetro_auth->menu_id(array('pinjaman','setoranpinjaman'));
+		$this->zetro_auth->menu_id(array('pembayarantagihan','setoranpinjaman'));
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('member/member_pinjaman');
 	}

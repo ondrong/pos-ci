@@ -45,7 +45,7 @@
 				foreach($dataz as $r2){
 					$nn++;
 					$a->Row(array($nn,tglfromSql($r2->Tanggal),$r2->Nomor,
-								  ucwords($r2->Nama_Barang),
+								  ucwords(strtolwer($r2->Nama_Barang)),
 								  number_format($r2->Jumlah,2),
 								  $r2->Satuan,
 								  number_format(($r2->Harga_Beli),2),

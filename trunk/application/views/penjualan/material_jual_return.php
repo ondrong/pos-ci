@@ -12,7 +12,7 @@ link_js('jquery.fixedheader.js','asset/js');
 link_js('material_jual_return.js,jquery_terbilang.js,jquery.sumfield.js',$path.'/js,asset/js,asset/js');
 panel_begin('Return Penjualan');
 panel_multi('returnjual','block',false);
-if($c_returnjual!=''){
+if($c_return_jual!=''){
 	echo "<table id='frame' width='99%'>
 		 <tr valign='top'><td width='45%'>";
 		$zfm->AddBarisKosong(false);

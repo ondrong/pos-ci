@@ -16,11 +16,11 @@ link_js('jquery.coolautosuggest.js,jquery_terbilang.js','asset/js,asset/js');
 link_js('jquery.fixedheader.js,material_list.js','asset/js,'.$path.'/js');
 panel_begin('Daftar Barang');
 panel_multi('listbarang','block',false);
-if($e_list!='' || $v_list!=''){
+if($e_listbarang!='' || $v_listbarang!=''){
 addText(array('Filter by Kategori :',' Jenis :','Status',' Cari by nama'),array($kateg,$jenis,$stats,$cari));
 /*	$sql="select * from inv_barang order by nama_barang";*/
 		$zlb->section('BarangList');
-		$zlb->aksi(($e_list!='')?true:false);
+		$zlb->aksi(($e_listbarang!='')?true:false);
 		$zlb->Header('100%');
 		$zlb->icon();
 /*
@@ -53,7 +53,7 @@ if($c_hargabeli!=''){
 }
 panel_multi_end();
 panel_multi('satuan','none',false);
-if($c_unit!=''){
+if($c_hargabeli!=''){
 	$zfm->AddBarisKosong();
 	$zfm->Start_form(true,'frm3');
 	$zfm->BuildForm('Satuan',true,'70%');
@@ -74,7 +74,7 @@ inline_edit('satuan');
 }
 panel_multi_end();
 panel_multi('unitkonversi','none',false);
-if($c_kunit!=''){
+if($c_hargabeli!=''){
 	$zfm->AddBarisKosong();
 	$zfm->Start_form(true,'frm4');
 	$zfm->BuildForm('Konversi',true,'70%');

@@ -330,7 +330,7 @@ class Inventory extends CI_Controller {
 	//get additional constantdata for buildlist
 	function _filename(){
 		$this->zetro_buildlist->config_file('asset/bin/zetro_inv.frm');
-		$this->zetro_buildlist->aksi(false);
+		$this->zetro_buildlist->aksi(true);
 		$this->zetro_buildlist->icon();
 	}
 	

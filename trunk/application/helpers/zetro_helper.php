@@ -158,9 +158,9 @@
 	}
 	echo str_repeat("<br>",3);	
 	echo"<table width='100%' style='border-collapse:collapse' border='0' bordercolor='#CCC' id='panel'>\n
-			<tr height='50px' align='center' valign='middle'>\n";
+			<tr height='40px' align='center' valign='middle'>\n";
 			foreach ($data as $menu){
-			  echo "<td nowrap class='tab_button tab_font' id='".strtolower(str_replace(" ",'',$menu))."'>".strtoupper($menu)."</td>\n";
+			  echo "<td nowrap='nowrap' class='tab_button tab_font' id='".strtolower(str_replace(" ",'',$menu))."'>".strtoupper($menu)."</td>\n";
 			}
 		if($filter!=''){
 			echo "<td width='10px' class='flt'>&nbsp;</td>\n";
@@ -348,6 +348,11 @@
 			    &nbsp;<img src='".base_url()."asset/images/no.png' id='hapus' onclick=\"images_click('".$id."','del');\" class='hapus' title='Click to Edit stock'>";
 		 }
 		 return $data;
+	}
+	function capital($text,$besar=false){
+		($besar==false)?
+		ucwords(strtolower($text)):
+		strtoupper($text);	
 	}
 
 //}

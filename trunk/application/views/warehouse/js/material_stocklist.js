@@ -3,7 +3,7 @@ $(document).ready(function(e) {
     var path=$('#path').val();
     $('#liststock').removeClass('tab_button');
 	$('#liststock').addClass('tab_select');
-	$('table#panel tr td').click(function(){
+/*	$('table#panel tr td').click(function(){
 		var id=$(this).attr('id');
 			if(id!=''){
 				$('#'+id).removeClass('tab_button');
@@ -14,7 +14,7 @@ $(document).ready(function(e) {
 				$('span:not(#v_'+id+')').hide();
 			}
 	})
-	$('table#stoked').hide()
+*/	$('table#stoked').hide()
 	$('#dari_tgl').dynDateTime();
 	$('#okelah').click(function(){
 		$('table#stoked').show()
@@ -47,7 +47,8 @@ function _show_data(){
 		'kategori'	:$('#Kategori').val(),
 		'stat'		:$('#Stat').val(),
 		'orderby'	:$('#orderby').val(),
-		'urutan'	:$('#urutan').val()},
+		'urutan'	:$('#urutan').val(),
+		'edited'	:$('#edited').val()},
 	function(result){
 		$('table#stoked tbody').html(result);
 		$('table#stoked').fixedHeader({width:(screen.width-30),height:(screen.height-335)})

@@ -31,7 +31,7 @@ function show_graph(id){
 	var height=(screen.height-330);
 	var width=(screen.width-50);
 		   var chart = new FusionCharts("<?=base_url();?>chart/FCF_Column3D.swf", "ChartId", width, height);
-		   chart.setDataURL("<?=base_url().$this->session->userdata('userid');?>_graph.xml");		
+		   chart.setDataURL("<?=base_url().$this->session->userdata('userid');?>_graph_p.xml");		
 		   chart.render(id);
 }
 
