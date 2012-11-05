@@ -2,13 +2,13 @@
 
                         
                                                                                 
-PD SETUJU                                                   Tanggal :03/11/2012
-Jl. RE. Martadinata No.103                               No. Faktur :00035-2012
+PD SETUJU                                                   Tanggal :05/11/2012
+Jl. RE. Martadinata No.103                               No. Faktur :00036-2012
 Telp :(0264) 201043                                       Pembelian :Tunai
 -------------------------------------------------------------------------------
 | No.|          Nama Barang          |Banyaknya| Harga Satuan|   Total Harga  |
 -------------------------------------------------------------------------------
-  1   Besi Beton 8 Asli X 12m             2 BATANG       35,000       70,000.00
+  1   Besi Beton 8 Asli X 12m            50 BATANG       35,000    1,750,000.00
 
 
 
@@ -17,13 +17,13 @@ Telp :(0264) 201043                                       Pembelian :Tunai
 
 
 -------------------------------------------------------------------------------
-                                                    Sub Total :     70,000.00
+                                                    Sub Total :  1,750,000.00
 
                                                       Corting :          0.00
                                                              ------------------+
-                                                        Total :     70,000.00
+                                                        Total :  1,750,000.00
 
-                                                         Cash :     70,000.00
+                                                         Cash :  1,750,000.00
 
                                                              ------------------
                                                       Kembali :          0.00
