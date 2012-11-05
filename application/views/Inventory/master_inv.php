@@ -16,7 +16,7 @@ if($all_kategoribarang!=''){
 	echo "<hr/>";
 	$sql2="select * from inv_barang_kategori order by Kategori";
 		$zlb->section('Kategori');
-		$zlb->aksi(($e_kategoribarang!='')?false:false);
+		$zlb->aksi(($e_kategoribarang!='')?true:false);
 		$zlb->icon('deleted');
 		$zlb->query($sql2);
 		$zlb->Header('50%');

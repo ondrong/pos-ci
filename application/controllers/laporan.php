@@ -31,7 +31,7 @@ class Laporan extends CI_Controller{
 		$this->Footer();
 	}
 	function faktur(){
-		$this->zetro_auth->menu_id(array('faktur'));
+		$this->zetro_auth->menu_id(array('laporan__faktur'));
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('laporan/lap_faktur');
 	}

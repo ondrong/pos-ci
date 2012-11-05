@@ -16,7 +16,7 @@ if($all_jenisbarang!=''){
 	echo "<hr/>";
 	$sql2="select * from inv_barang_jenis order by JenisBarang";
 		$zlb->section('Jenis');
-		$zlb->aksi(($e_jenisbarang!='')?false:false);
+		$zlb->aksi(($e_jenisbarang!='')?true:false);
 		$zlb->icon('deleted');
 		$zlb->query($sql2);
 		$zlb->sub_total(false);

@@ -8,7 +8,7 @@ link_js('jquery.coolautosuggest.js,auto_sugest.js','asset/js,asset/js');
 link_js('jquery.fixedheader.js,jquery_terbilang.js,member_simpanan.js','asset/js,asset/js,'.$path.'/js');
 panel_begin('Simpanan');
 panel_multi('transaksisimpanan','block');
-if($all_transaksisimpanan!=''){
+if($all_pembayarantagihan!=''){
 	$zfm->AddBarisKosong();
 	$zfm->Start_form(true,'frm1');
 	$zfm->BuildForm('simpanan',true,'50%');

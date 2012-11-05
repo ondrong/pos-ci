@@ -9,7 +9,7 @@ link_js('jquery.coolautosuggest.js,auto_sugest.js','asset/js,asset/js');
 link_js('jquery.fixedheader.js,jquery_terbilang.js,member_pinjaman.js','asset/js,asset/js,'.$path.'/js');
 panel_begin('Pembayaran Tagihan');
 panel_multi('pinjaman','none',false);
-if($all_pinjaman!=''){
+if($all_pembayarantagihan!=''){
 $fld="<input type='hidden' value='' id='ID_Perkiraan'>";
 	$zfm->Addinput($fld);
 	$zfm->AddBarisKosong();
@@ -20,8 +20,8 @@ $fld="<input type='hidden' value='' id='ID_Perkiraan'>";
 	no_auth();
 }
 panel_multi_end();
-panel_multi('setoranpinjaman','block');
-if($all_setoranpinjaman!=''){
+panel_multi('pembayarantagihan','block');
+if($all_pembayarantagihan!=''){
 $fld="<input type='hidden' value='' id='ID_Perkiraane'>";
 	$zfm->Addinput($fld);
 	$zfm->AddBarisKosong();

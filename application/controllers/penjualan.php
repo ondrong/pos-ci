@@ -341,7 +341,7 @@ class Penjualan extends CI_Controller{
 			 $satuan=rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".
 			 		 rdb('inv_barang','ID_Satuan','ID_Satuan',"where ID='".$row->ID_Barang."'")."'");
 			$nama_barang=rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$row->ID_Barang."'");
-			$content .=sepasi(((6-strlen($n))/2)).$n.sepasi(3).substr($nama_barang,0,31).sepasi((32-strlen($nama_barang))).
+			$content .=sepasi(((6-strlen($n))/2)).$n.sepasi(3).substr(ucwords(strtolower($nama_barang)),0,31).sepasi((32-strlen($nama_barang))).
 					 sepasi((11-strlen($row->Jumlah)-strlen($satuan))).round($row->Jumlah,0).sepasi(1).$satuan.
 					 sepasi((13-strlen(number_format($row->Harga)))).number_format($row->Harga).
 					 sepasi((16-strlen(number_format(($row->Jumlah *$row->Harga),2)))).number_format(($row->Jumlah *$row->Harga),2).newline();
@@ -428,7 +428,7 @@ class Penjualan extends CI_Controller{
 	
 	function return_jual(){
 		$data=array();
-		$this->zetro_auth->menu_id(array('returnjual'));
+		$this->zetro_auth->menu_id(array('return_jual'));
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('penjualan/material_jual_return');
 	}

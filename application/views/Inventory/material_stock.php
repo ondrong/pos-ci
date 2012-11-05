@@ -8,7 +8,7 @@ link_js('jquery.coolautosuggest.js','asset/js');
 link_js('jquery.fixedheader.js,material_stock.js,auto_sugest.js,jquery_terbilang.js','asset/js,'.$path.'/js,asset/js,asset/js');
 panel_begin('Stock');
 panel_multi('stockoverview','block',false);
-if($v_stockoverview!=''){
+if($v_stock__index!=''){
 	$zfm->AddBarisKosong(true);
 	$zfm->Start_form(true,'frm1');
 	$zfm->BuildForm('stokoverview',false,'50%');

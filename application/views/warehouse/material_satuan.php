@@ -16,8 +16,8 @@ if($c_satuanbarang!=''){
 	echo "<hr>";
 	$sql2="select * from inv_barang_satuan order by Satuan";
 		$zlb->section('Satuan');
-		$zlb->aksi(false);
-		$zlb->icon();
+		$zlb->aksi(true);
+		$zlb->icon('deleted');
 		$zlb->Header('100%');
 		$zlb->query($sql2);
 		$zlb->list_data('Satuan');

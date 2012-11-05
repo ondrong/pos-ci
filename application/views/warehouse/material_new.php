@@ -11,7 +11,7 @@ link_js('jquery.coolautosuggest.js,jquery_terbilang.js','asset/js,asset/js');
 link_js('jquery.fixedheader.js,material_new.js','asset/js,'.$path.'/js');
 panel_begin('Gudang');
 panel_multi('tambahbarang','block',false);
-if($c_tambahbarang!=''){
+if($c_gudang__index!=''){
 	$zfm->AddBarisKosong(true);
 	$zfm->Start_form(true,'frm1');
 	$zfm->BuildForm($section,true,'70%');

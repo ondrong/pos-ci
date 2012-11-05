@@ -30,7 +30,8 @@ $(document).ready(function(e){
 	var pos=$('#pos').val()
 	_get_bulan('')
 	_get_tahun('')
-	_generate_data_shu(today.getFullYear(),(today.getMonth()+1),$('#j_graph').val());
+/*	_generate_data_shu(today.getFullYear(),(today.getMonth()+1),$('#j_graph').val());
+*/	
 	$('#okelah').click(function(){
 		_generate_data_shu($('#thn').val(),$('#bln').val(),$('#j_graph').val());
 	})
@@ -43,15 +44,15 @@ $(document).ready(function(e){
 	$('#j_graph').change(function(){
 		_generate_data_shu($('#thn').val(),$('#bln').val(),$('#j_graph').val());
 	})
-	//==proces grafik labarugi
-	$('#okelah_lb').click(function(){
+		//==proces grafik labarugi
+	$('#okedech_lb').click(function(){
 		_generate_data_shu($('#thn_lb').val(),$('#bln_lb').val(),$('#j_graph_lb').val());
 	})
 	$('#thn_lb').change(function(){
-		_generate_data_shu($(this).val(),$('#bln_lb').val(),$('#j_graph_lb').val());
+		_generate_data_shu($('#thn_lb').val(),$('#bln_lb').val(),$('#j_graph_lb').val());
 	})
 	$('#bln_lb').change(function(){
-		_generate_data_shu($('#thn_lb').val(),$('#bln').val(),$('#j_graph_lb').val());
+		_generate_data_shu($('#thn_lb').val(),$('#bln_lb').val(),$('#j_graph_lb').val());
 	})
 	$('#j_graph_lb').change(function(){
 		_generate_data_shu($('#thn_lb').val(),$('#bln_lb').val(),$('#j_graph_lb').val());
@@ -81,6 +82,7 @@ function _get_bulan(id){
 	$.post('get_bulan',{'id':''},
 	function(result){
 		$('#bln'+id).html(result);
+		$('#okelah').click();
 	})
 }
 

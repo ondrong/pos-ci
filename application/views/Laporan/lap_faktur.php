@@ -9,7 +9,7 @@ link_js('jquery.coolautosuggest.js','asset/js');
 link_js('lap_faktur.js,jquery_terbilang.js',$path.'/js,asset/js');
 panel_begin('Print Faktur');
 panel_multi('printfakturpenjualan','block');
-if($all_faktur!=''){
+if($all_laporan__faktur!=''){
 $fld3="<input type='hidden' id='section' name='section' value='faktur'>";
 $fld3.="<input type='hidden' id='lap' name='lap' value='faktur'>";
 $fld3.="<input type='hidden' id='optional' name='optional' value=''>";

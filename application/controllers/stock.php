@@ -32,12 +32,12 @@ class Stock extends CI_Controller{
 		$this->Footer();
 	}
 	function index(){
-		$this->zetro_auth->menu_id(array('stockoverview','liststock'));
+		$this->zetro_auth->menu_id(array('stock__index','liststock'));
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('inventory/material_stock');
 	}
 	function stock_barang(){
-		$this->zetro_auth->menu_id(array('liststock'));
+		$this->zetro_auth->menu_id(array('liststock','stockadjustment'));
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('warehouse/material_stocklist');
 	}
@@ -94,7 +94,7 @@ class Stock extends CI_Controller{
 		$nmj=$this->inv_model->set_stock($where);
 			foreach ($nmj as $row){
 				$n++;
-				echo tr().td($n,'center').td($row->Kode).td($row->Nama_Barang).
+				echo tr().td($n,'center').td($row->Kode).td(ucwords($row->Nama_Barang)).
 					td($row->Satuan).td(number_format($row->stock,0),'right').td($row->Status);
 				echo ($section=='stoklistview')?
 					td("<img src='".base_url()."asset/images/editor.png' onclick=\"edited('".$row->ID."');\"",'center'):'';
@@ -152,19 +152,20 @@ class Stock extends CI_Controller{
 		$where.=empty($_POST['stat'])?'':" and Status='".$_POST['stat']."' and ms.Stock<>'0'";
 		$orderby=empty($_POST['orderby'])?'':"order by ".str_replace('-',',',$_POST['orderby'])." ";
 		$orderby.=empty($_POST['urutan'])?'':' '.$_POST['urutan'];
-		$sesi=$this->session->userdata('menus');	
+		$sesi=$this->session->userdata('menus');
+		$edit_true=$_POST['edited'];	
 		$data=$this->report_model->stock_list($where,'stock',$orderby);
 		foreach($data as $r){
 			$n++;
 			echo tr().td($n,'center').
 					  td(strtoupper($r->Kode)).
-					  td($r->Nama_Barang).
+					  td(ucwords(strtolower($r->Nama_Barang))).
 					  td(rdb('inv_barang_kategori','Kategori','Kategori',"where ID='".$r->ID_Kategori."'")).
 					  td(number_format($r->stock,2),'right').
 					  td(rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".$r->ID_Satuan."'")).
 					  td(number_format($r->harga_beli,2),'right').
 					  td($r->Status);
-				 if($sesi=='SW52ZW50b3J5'){echo td(img_aksi($r->ID.':'.$r->batch),'center');}
+				 if($sesi=='SW52ZW50b3J5' && $edit_true!='' ){echo td(img_aksi($r->ID.':'.$r->batch),'center');}
 				echo  _tr();	 
 		}
 	}

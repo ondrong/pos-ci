@@ -63,7 +63,7 @@ class Purch_model extends CI_Model {
 	}
 	
 	function pembelian_graph($thn){
-		$xml=fopen($this->user.'_graph.xml','w+');
+		$xml=fopen($this->user.'_graph_p.xml','w+');
 		fwrite($xml,"<graph caption='Grafik Pembelian' subcaption='Tahun : ".$thn."' xAxisName='Bulan' yAxisName='Value' showValues= '1' showLabels='1' showValues='1'>\r\n");
 		$trr=mysql_query("select distinct(month(Tanggal)) as Bulan from inv_pembelian where year(Tanggal)='".$thn."' order by month(Tanggal)");
 		while($th=mysql_fetch_object($trr)){
@@ -78,7 +78,7 @@ class Purch_model extends CI_Model {
 	
 	function penjualan_graph($thn,$bln){
 		$t_days=cal_days_in_month(CAL_GREGORIAN, $bln, $thn);
-		$xml=fopen($this->user.'_graph.xml','w+');
+		$xml=fopen($this->user.'_graph_j.xml','w+');
 		fwrite($xml,"<graph caption='Grafik Penjualan' subcaption='Periode :".nBulan($bln)." ".$thn."' xAxisName='Bulan' yAxisName='Value' showValues= '0' showLabels='1' showValues='2'>\r\n");
 		//create category by jenis penjuallan ( tunai,giro,cheque,Kredit,return
 		
@@ -96,10 +96,11 @@ class Purch_model extends CI_Model {
 		while($rw1=mysql_fetch_object($rcat1)){
 			fwrite($xml,"<dataset seriesName='".$rw1->Jenis_Jual."' color='".$color[$rw1->ID]."'>\r\n");
 			for($x=1;$x<=$t_days;$x++){
-				$ii=strlen($x==1)?'0'.$x:$x;
+				$ii=(strlen($x)==1)?"0".$x:$x;
 				$val=rdb('inv_penjualan','Total',"sum(Total) as Total","where ID_Jenis='".$rw1->ID."' and Tanggal='".$thn.$bln.$ii."' order by Tanggal");	
 				$val=($val=='')?'0':$val;
 				fwrite($xml,"<set name='".$ii."'  value='".$val."'/>\r\n");
+			$ii='';
 			}
 		   fwrite($xml,"</dataset>\r\n");
 		}
@@ -109,7 +110,7 @@ class Purch_model extends CI_Model {
 	
 	function cash_graph($thn,$bln){
 		$t_days=cal_days_in_month(CAL_GREGORIAN, $bln, $thn);
-		$xml=fopen($this->user.'_graph.xml','w+');
+		$xml=fopen($this->user.'_graph_cashflow.xml','w');
 		fwrite($xml,"<graph caption='Grafik Aliran Kas' subcaption='Periode :".nBulan($bln)." ".$thn."' xAxisName='Bulan' yAxisName='Value' showValues= '1' showLabels='1' showValues='2'>\r\n");
 		//create category by jenis penjuallan ( tunai,giro,cheque,Kredit,return
 		fwrite($xml,"<categories>\r\n");
@@ -121,7 +122,7 @@ class Purch_model extends CI_Model {
 		$color=array('','1D8BD1','F1683C','2AD62A','DBDC25','D2DCDD');
 			fwrite($xml,"<dataset seriesName='Cash di Tangan' color='".$color[2]."'>\r\n");
 			for($x=1;$x<=$t_days;$x++){
-				$ii=strlen($x==1)?'0'.$x:$x;$val=0;
+				$ii=(strlen($x)==1)?'0'.$x:$x;$val=0;
 				
 				$cat1="select t.Tanggal,k.ID_Calc,t.ID_CC,if(k.ID_Calc=1,sum(Kredit-Debet),sum(Debet-Kredit)) as Total 
 					from transaksi_temp as t
@@ -144,7 +145,7 @@ class Purch_model extends CI_Model {
 	
 	function laba_graph($thn,$bln){
 		$t_days=cal_days_in_month(CAL_GREGORIAN, $bln, $thn);
-		$xml=fopen($this->user.'_graph.xml','w+');
+		$xml=fopen($this->user.'_graph_labarugi.xml','w');
 		fwrite($xml,"<graph caption='Grafik Aliran Kas' subcaption='Periode :".nBulan($bln)." ".$thn."' xAxisName='Bulan' yAxisName='Value' showValues= '1' showLabels='1' showValues='2'>\r\n");
 		//create category by jenis penjuallan ( tunai,giro,cheque,Kredit,return
 		fwrite($xml,"<categories>\r\n");
@@ -156,7 +157,7 @@ class Purch_model extends CI_Model {
 		$color=array('','1D8BD1','F1683C','2AD62A','DBDC25','D2DCDD');
 			fwrite($xml,"<dataset seriesName='Rugi Laba' color='".$color[3]."'>\r\n");
 			for($x=1;$x<=$t_days;$x++){
-				$ii=strlen($x==1)?'0'.$x:$x;
+				$ii=(strlen($x)==1)?'0'.$x:$x;
 				$val=0;$laba=0;
 				
 				$cat1="select sum(dt.jumlah*dt.harga) as Jual,(sum(dt.Jumlah)*b.Harga_Beli) as Harga_Beli
