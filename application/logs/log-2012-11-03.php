@@ -1,0 +1,93 @@
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
+
+ERROR - 2012-11-03 22:28:10 --> Severity: Notice  --> Undefined variable: r D:\inetpub\wwwroot\SETUJU\application\controllers\penjualan.php 211
+ERROR - 2012-11-03 22:28:10 --> Severity: Notice  --> Trying to get property of non-object D:\inetpub\wwwroot\SETUJU\application\controllers\penjualan.php 211
+ERROR - 2012-11-03 22:28:10 --> Severity: Notice  --> Undefined variable: r D:\inetpub\wwwroot\SETUJU\application\controllers\penjualan.php 211
+ERROR - 2012-11-03 22:28:10 --> Severity: Notice  --> Trying to get property of non-object D:\inetpub\wwwroot\SETUJU\application\controllers\penjualan.php 211
+ERROR - 2012-11-03 22:33:03 --> Severity: Notice  --> Undefined variable: r D:\inetpub\wwwroot\SETUJU\application\controllers\penjualan.php 211
+ERROR - 2012-11-03 22:33:03 --> Severity: Notice  --> Trying to get property of non-object D:\inetpub\wwwroot\SETUJU\application\controllers\penjualan.php 211
+ERROR - 2012-11-03 22:33:36 --> Severity: Warning  --> include(helveticab.php) [<a href='function.include'>function.include</a>]: failed to open stream: No such file or directory C:\xampp\php\PEAR\fpdf.php 541
+ERROR - 2012-11-03 22:33:36 --> Severity: Warning  --> include() [<a href='function.include'>function.include</a>]: Failed opening 'helveticab.php' for inclusion (include_path='.;C:\xampp\php\PEAR') C:\xampp\php\PEAR\fpdf.php 541
+ERROR - 2012-11-03 22:38:55 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-03 22:38:55 --> Severity: Notice  --> Undefined variable: c_unit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-03 22:38:55 --> Severity: Notice  --> Undefined variable: c_kunit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77
+ERROR - 2012-11-03 22:54:09 --> Severity: Notice  --> Undefined index: dari_tgl D:\inetpub\wwwroot\SETUJU\application\controllers\laporan.php 126
+ERROR - 2012-11-03 22:57:09 --> Severity: Notice  --> Undefined variable: all_daftaranggota D:\inetpub\wwwroot\SETUJU\application\views\member\member_list.php 41
+ERROR - 2012-11-03 22:58:59 --> Severity: Notice  --> Undefined variable: all_setoranpinjaman D:\inetpub\wwwroot\SETUJU\application\views\member\member_pinjaman.php 24
+ERROR - 2012-11-03 22:59:28 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 22:59:28 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 22:59:28 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 23:02:01 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 23:02:01 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 23:02:01 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 23:02:01 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 23:03:59 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-03 23:03:59 --> Severity: Notice  --> Undefined variable: c_unit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-03 23:03:59 --> Severity: Notice  --> Undefined variable: c_kunit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77
+ERROR - 2012-11-03 23:10:19 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 23:10:19 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 23:10:19 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 23:10:19 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 23:10:26 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 23:10:26 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 23:10:26 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 23:10:26 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 23:10:26 --> Severity: Notice  --> Undefined property: stdClass::$saldo D:\inetpub\wwwroot\SETUJU\application\controllers\simpanan.php 256
+ERROR - 2012-11-03 23:23:37 --> Severity: Notice  --> Undefined variable: ID_Jenis D:\inetpub\wwwroot\SETUJU\application\controllers\pembelian.php 122
+ERROR - 2012-11-03 23:25:51 --> Severity: Notice  --> Undefined variable: c_gudang__index D:\inetpub\wwwroot\SETUJU\application\views\warehouse\material_new.php 14
+ERROR - 2012-11-03 23:27:01 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-03 23:27:01 --> Severity: Notice  --> Undefined variable: c_unit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-03 23:27:01 --> Severity: Notice  --> Undefined variable: c_kunit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77
+ERROR - 2012-11-03 23:27:28 --> Severity: Notice  --> Undefined variable: e_list D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 19
+ERROR - 2012-11-03 23:27:28 --> Severity: Notice  --> Undefined variable: v_list D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 19
+ERROR - 2012-11-03 23:27:28 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-03 23:27:28 --> Severity: Notice  --> Undefined variable: c_unit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-03 23:27:28 --> Severity: Notice  --> Undefined variable: c_kunit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77
+ERROR - 2012-11-03 23:28:14 --> Severity: Notice  --> Undefined variable: e_list D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 23
+ERROR - 2012-11-03 23:28:14 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-03 23:28:14 --> Severity: Notice  --> Undefined variable: c_unit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-03 23:28:14 --> Severity: Notice  --> Undefined variable: c_kunit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77
+ERROR - 2012-11-03 23:28:28 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-03 23:28:28 --> Severity: Notice  --> Undefined variable: c_unit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-03 23:28:28 --> Severity: Notice  --> Undefined variable: c_kunit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77
+ERROR - 2012-11-03 23:32:06 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-03 23:32:06 --> Severity: Notice  --> Undefined variable: c_unit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-03 23:32:06 --> Severity: Notice  --> Undefined variable: c_kunit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77
+ERROR - 2012-11-03 23:32:37 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-03 23:32:37 --> Severity: Notice  --> Undefined variable: c_unit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-03 23:32:37 --> Severity: Notice  --> Undefined variable: c_kunit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77
+ERROR - 2012-11-03 23:32:47 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-03 23:32:47 --> Severity: Notice  --> Undefined variable: c_unit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-03 23:32:47 --> Severity: Notice  --> Undefined variable: c_kunit D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77
+ERROR - 2012-11-03 23:34:04 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-03 23:34:04 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-03 23:34:04 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77
+ERROR - 2012-11-03 23:37:38 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-03 23:37:38 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-03 23:37:38 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77
+ERROR - 2012-11-03 23:37:45 --> Severity: Notice  --> Undefined variable: all_jenis D:\inetpub\wwwroot\SETUJU\application\views\Inventory\master_inv.php 33
+ERROR - 2012-11-03 23:37:45 --> Severity: Notice  --> Undefined variable: all_golongan D:\inetpub\wwwroot\SETUJU\application\views\Inventory\master_inv.php 55
+ERROR - 2012-11-03 23:38:55 --> Severity: Notice  --> Undefined variable: all_jenis D:\inetpub\wwwroot\SETUJU\application\views\Inventory\master_inv.php 33
+ERROR - 2012-11-03 23:38:55 --> Severity: Notice  --> Undefined variable: all_golongan D:\inetpub\wwwroot\SETUJU\application\views\Inventory\master_inv.php 55
+ERROR - 2012-11-03 23:39:53 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-03 23:39:53 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-03 23:39:53 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 23:40:01 --> Severity: Notice  --> Undefined variable: data D:\inetpub\wwwroot\SETUJU\application\libraries\zetro_listBuilder.php 48
+ERROR - 2012-11-03 17:21:03 --> Severity: Warning  --> cal_days_in_month() expects parameter 3 to be long, string given D:\inetpub\wwwroot\SETUJU\application\models\purch_model.php 112

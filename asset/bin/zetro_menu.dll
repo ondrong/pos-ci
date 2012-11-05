@@ -87,6 +87,11 @@
 	
 	[Penerimaan]
 	1|Penerimaan Barang|pembelian/index||
+	2|<hr>|x|
+	3|Stock Adjustment|stock/stock_barang||
+		
+		[Stock Adjustment]
+		1|Stock Adjustment|stockadjustment|y|zevp
 			
 		[Penerimaan Barang]
 		1|Input Pembelian|pembelian/index|y|zce

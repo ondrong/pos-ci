@@ -5,7 +5,7 @@
 
 [pembelian]
 1|No. ID,input,text n,no_transaksi,w50 upper,,10%
-2|Tanggal,input,date t,tgl_transaksi,w35,,8%
+2|Tanggal,input,text t,tgl_transaksi,w35,,8%
 3|No.Faktur Pembelian,input,text n,faktur_transaksi,w70 upper,,12%
 4|Nama Pemasok,input,text n,nm_produsen,w90 upper,,15%
 5|No. PO,input,text n,po_pembelian,w70 upper,,10%
@@ -31,7 +31,7 @@
 
 [jualan]
 1|No. ID,input,text n,no_transaksi,w50 upper,,10%
-2|Tanggal,input,date t,tgl_transaksi,w35,,8%
+2|Tanggal,input,text t,tgl_transaksi,w35,,8%
 3|No.Faktur,input,text n,faktur_transaksi,w70 upper,,12%
 4|Nama Anggota,input,text n,nm_nasabah,w70 upper,,15%,,,
 ;5|Cara Bayar,select,text n,cara_bayar,S25,,5%,RS,Carabeli
@@ -79,7 +79,7 @@
 [return_beli]
 1|,input,hidden n,no_transaksi,w50 upper,,10%
 2|Doc.No.,input,text n,no_doc,w50 upper,,10%
-3|Tanggal,input,date t,tgl_transaksi,w35,,8%
+3|Tanggal,input,text t,tgl_transaksi,w35,,8%
 4|No.Faktur,input,text n,faktur_transaksi,w70 upper,,12%
 5|Nama Vendor,input,text n,nm_nasabah,w70 upper,,15%,,,
 6|Nama Barang,input,text n,nm_barang,w90 upper,,25%
