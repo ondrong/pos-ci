@@ -66,6 +66,15 @@
 6|Harga/Sat.,input,text d,Harga_Beli,w35 angka,,10%,,,20
 7|Status,input,text n,Status,w35,,10%,,,15,
 
+[stockadjust]
+1|Kode Barang,input,text n,Kode,w50,,15%,
+2|Nama Barang,input,text n,Nama_Barang,w90 upper,,25%,
+3|Kategori,input,text n,ID_Kategori,S70,,15%,
+4|Jumlah,input,text d,stock,w35 angka,,10%,
+5|Satuan,input,text n,Satuan,w35,,10%,
+6|Harga/Sat.,input,text d,Harga_Beli,w35 angka,,10%,
+7|Status,input,text n,Status,w35,,10%,
+
 [pemakaian]
 1|Tanggal,input,text t,tanggal,w35,,8%,,,20
 2|Kode Barang,input,text n,Kode,w50,,10%,,,30,

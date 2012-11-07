@@ -40,7 +40,7 @@ $fld.="<input type='hidden' id='batch' val=''/>";
 	$zfm->Addinput($fld);
 	$zfm->AddBarisKosong(true);
 	$zfm->Start_form(true,'frm2');
-	$zfm->BuildForm('stocklist',true,'100%');
+	$zfm->BuildForm('stockadjust',true,'100%');
 	$zfm->BuildFormButton('Simpan','edit_mat');
 popup_end();
 

@@ -129,6 +129,7 @@ echo "<input type='hidden' value='".date('d/m/Y')."' id='today'>";
         $('#plh').html("<? dropdown('inv_barang_kategori','ID','Kategori','order by Kategori');?>");
 		$('#plh_jenis').html("<? dropdown('inv_barang_jenis','ID','JenisBarang','order by JenisBarang');?>");
 		//$('#v_listobat table#ListTable').fixedHeader({width:900,height:400})
+	_show_data();
     });
 </script>
 <input type='hidden' id='id_kategori' value=''>

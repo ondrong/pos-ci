@@ -589,3 +589,20 @@ function on_clicked(id,fld,frm){
 		break;
 	}
 }
+function _show_data(){
+	var path=$('#path').val()
+		show_indicator('ListTable','11');
+		$('plh_cari').val('')
+		$.post(path+'inventory/show_list',{
+			'id'		:$('#plh').val(),
+			'id_jenis'	:$('#plh_jenis').val(),
+			'stat'		:$('#plh_stat').val(),
+			'cari'		:$('#plh_cari').val()
+		},
+		function(result){
+			$('#v_listbarang table#ListTable tbody').html(result);
+			$('#bawahan').html("<b>&bull;&bull;&bull; Total record :"+$('#v_listbarang table#ListTable tbody tr').length+"");
+			$('#v_listbarang table#ListTable').fixedHeader({width:(screen.width-30),height:(screen.height-345)});
+			$('#bawahan').show();
+		})
+}
