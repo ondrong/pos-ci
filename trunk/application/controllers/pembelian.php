@@ -243,7 +243,7 @@ class Pembelian extends CI_Controller{
 	
 	function get_satuan_konversi(){
 		$data=array();
-		$kode=$_POST['nm_barang'];
+		$kode=addslashes($_POST['nm_barang']);
 		$data=$this->purch_model->get_satuan_konv($kode);
 		foreach($data as $r){
 			echo "<option value='".$r->sat_beli."'>".$r->Satuan."</option>";	

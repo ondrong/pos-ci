@@ -126,6 +126,8 @@
 	6|<hr>|x||
 	7|Satuan Barang|gudang/satuan||
 	8|Konversi Satuan|gudang/konversi||
+	;9|<hr>|x||
+	;10|Stock Adjust|gudang/stock_adjust||
 		
 		[Daftar Barang]
 		1|List Barang|listbarang|y|zevp
@@ -142,6 +144,8 @@
 		[Konversi Satuan]
 		1|Konversi Satuan|konversisatuan|y|zcev
 		
+		[Stock Adjust]
+		1|Stock Adjustment|stockadjust|y|zcev
 		
 ;Laporan===============================================
 		[Print Preview]

@@ -234,7 +234,7 @@ class Inventory extends CI_Controller {
 
 	function data_material(){
 		$datax=array();
-		$str	=$_GET['str'];
+		$str	=addslashes($_GET['str']);
 		$limit	=$_GET['limit'];
 		$fld	=$_GET['fld'];
 		$dest	=empty($_GET['dest'])?'':$dest;

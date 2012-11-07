@@ -42,7 +42,11 @@ class Gudang extends CI_Controller {
 		$this->View('warehouse/material_new');
 
 	}
-	
+	function stock_adjust(){
+		$this->zetro_auth->menu_id(array('stockadjust','countsheet'));
+		$this->list_data($this->zetro_auth->auth());
+		$this->View('inventory/material_adjust');
+	}
 	function list_barang(){
 		//tampilkan view list barang
 		//$this->inv_model->auto_data();
