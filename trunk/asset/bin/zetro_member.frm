@@ -123,12 +123,17 @@
 5|Kredit,,,,,,12%,
 6|Keterangan,,,,,,20%,
 
+[upd_tagihan]
+1|Nama Pelanggan,input,text n,Nama,w70 upper,,
+2|No. Faktur,input,text n,Nomor,w50
+
+
 [TagihanKredit]
 1|Nama Pelanggan,,,,,,40%,,,90
 2|Total Tagihan,,,,,,12%,,,25
-3|Total Bayar,,,,,,18%,,,25
+3|Total Bayar,,,,,,12%,,,25
 4|Saldo Tagihan,,,,,,15%,,,25
-5|Jatuh Tempo,,,,,,15%,,,18
+5|Jatuh Tempo,,,,,,20%,,,18
 
 [TagihanKreditPdf]
 1|Nama Pelanggan,,,,,,40%,,,90
@@ -138,6 +143,13 @@
 5|J.Tempo,,,,,,15%,,,18
 
 [SusunanKredit]
+1|b.Nama_Barang, Nama Barang
+2|a.Nama,Nama Pelanggan
+3|pb.Saldo,Saldo Tagihan
+4|sum(p.jml_pinjaman),Total Tagihan
+5|p.mulai_bayar, Tanggal Jatuh Tempo
+
+[SusunanPlg]
 1|a.Nama,Nama Pelanggan
 2|pb.Saldo,Saldo Tagihan
 3|sum(p.jml_pinjaman),Total Tagihan

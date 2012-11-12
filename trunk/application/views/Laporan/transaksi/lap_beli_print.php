@@ -16,7 +16,7 @@
 		  $a->SetFont('Arial','',10);
 		  //echo $a->getColWidth();
 		  // set lebar tiap kolom tabel transaksi
-		  $a->SetWidths(($detail=='')?array(10,20,22,60,30,40):array(10,20,20,50,25,18,25,25));
+		  $a->SetWidths(($detail=='')?array(10,20,22,60,30,40):array(10,20,20,50,22,18,25,27));
 		  // set align tiap kolom tabel transaksi
 		  $a->SetAligns(($detail=='')?array("C","C","C","L","R","L"):array("R","C","C","L","R","L","R","R"));
 		  $a->SetFont('Arial','B',10);
@@ -37,8 +37,8 @@
 			$a->SetFillColor(210,210,010);	
 			$a->Cell(10,8,$n,1,0,'C',true);
 			$a->Cell(90,8,$r->Nama,1,0,'L',true);
-			$a->Cell(68,8,$r->Catatan." ".$r->Alamat." ".$r->Kota,1,0,"L",true);
-			$a->Cell(25,8,'',1,1,'R',true);
+			$a->Cell(65,8,$r->Catatan." ".$r->Alamat." ".$r->Kota,1,0,"L",true);
+			$a->Cell(27,8,'',1,1,'R',true);
 			$a->SetFont('Arial','',9);
 			$ID_P=" and p.ID_Pemasok='".$r->ID_Pemasok."'";
 			$dataz=$this->kasir_model->detail_trans_beli($where,$ID_P,$orderby);
@@ -54,19 +54,19 @@
 				$hgb=($hgb+($r2->Harga_Beli*$r2->Jumlah));
 				}
 			//sub tlot
-			  $a->SetFont('Arial','B',10);
+			  $a->SetFont('Arial','B',9);
 			  $a->SetFillColor(242,239,219);
-			  $a->Cell(168,8,"Sub Total",1,0,'R',true);
-			  $a->Cell(25,8,number_format($hgb,2),1,1,'R',true);
+			  $a->Cell(165,8,"Sub Total",1,0,'R',true);
+			  $a->Cell(27,8,number_format($hgb,2),1,1,'R',true);
 			}
 			  //grand total
 				$harga =($harga+($hgb));
 			
 		  }
-		  $a->SetFont('Arial','B',10);
+		  $a->SetFont('Arial','B',9);
 		  $a->SetFillColor(225,225,225);
-		  $a->Cell(($detail=='')?112:168,8,"GRAND TOTAL",1,0,'R',true);
-		  $a->Cell(($detail=='')?30:25,8,number_format($harga,2),1,0,'R',true);
+		  $a->Cell(($detail=='')?112:165,8,"GRAND TOTAL",1,0,'R',true);
+		  $a->Cell(($detail=='')?30:27,8,number_format($harga,2),1,0,'R',true);
 		  ($detail!='')?'':
 		  $a->Cell(40,8,'',1,0,'R',true);
 		  $a->Output('application/logs/'.$this->session->userdata('userid').'_rekap_pembelian.pdf','F');

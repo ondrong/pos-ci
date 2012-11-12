@@ -122,6 +122,7 @@ class Purch_model extends CI_Model {
 		$color=array('','1D8BD1','F1683C','2AD62A','DBDC25','D2DCDD');
 			fwrite($xml,"<dataset seriesName='Cash di Tangan' color='".$color[2]."'>\r\n");
 			for($x=1;$x<=$t_days;$x++){
+				$valu='';
 				$ii=(strlen($x)==1)?'0'.$x:$x;$val=0;
 				
 				$cat1="select t.Tanggal,k.ID_Calc,t.ID_CC,if(k.ID_Calc=1,sum(Kredit-Debet),sum(Debet-Kredit)) as Total 
@@ -129,13 +130,14 @@ class Purch_model extends CI_Model {
 					left join kas_sub as k
 					on k.ID_CC=t.ID_CC
 					where t.Tanggal='".$thn.$bln.$ii."'
-					group by t.ID_CC";
+					group by Tanggal";
+				echo $cat1;
 				$val=rdb('mst_kas_harian','sa_kas',"sa_kas","where tgl_kas='".$thn.$bln.$ii."' order by tgl_kas");	
 				$rcat1=mysql_query($cat1) or die(mysql_error());
 				while($rw1=mysql_fetch_object($rcat1)){
-						$val=($val=='' && $rw1->Total=='')? '':($val+$rw1->Total);
+						$valu=($val=='' && $rw1->Total=='')? '':($rw1->Total+$val);
 					}
-						fwrite($xml,"<set name='".$ii."'  value='".$val."'/>\r\n");
+						fwrite($xml,"<set name='".$ii."'  value='".$valu."'/>\r\n");
 			//   
 		}
 		fwrite($xml,"</dataset>\r\n");
@@ -160,7 +162,7 @@ class Purch_model extends CI_Model {
 				$ii=(strlen($x)==1)?'0'.$x:$x;
 				$val=0;$laba=0;
 				
-				$cat1="select sum(dt.jumlah*dt.harga) as Jual,(sum(dt.Jumlah)*b.Harga_Beli) as Harga_Beli
+				$cat1="select sum(dt.jumlah*dt.harga) as Jual,sum(dt.Jumlah*b.Harga_Beli) as Harga_Beli
 						from inv_penjualan_detail as dt
 						left join inv_material_stok as b
 						on b.id_barang=dt.ID_Barang and b.batch=dt.Batch
@@ -172,7 +174,7 @@ class Purch_model extends CI_Model {
 				while($rw1=mysql_fetch_object($rcat1)){
 					$laba=($rw1->Jual-$rw1->Harga_Beli);
 					}
-						$val=($val=='' && $laba=='')? '':($val+$laba);
+						$val=($val=='' && $laba=='')? '':($laba-$val);
 						fwrite($xml,"<set name='".$ii."'  value='".$val."'/>\r\n");
 			}
 		fwrite($xml,"</dataset>\r\n");

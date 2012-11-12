@@ -221,7 +221,7 @@ class Member extends CI_Controller{
 		$where=empty($_POST['cari'])?$where:"where a.Nama like '".$_POST['cari']."%'";
 		$orderby=" order by ".$_POST['orderby'];
 		$orderby.=empty($_POST['urutan'])? '':' '.$_POST['urutan'];
-		echo $where;
+		//echo $where;
 		$data=$this->member_model->get_data_pinjaman($where,$orderby);
 		foreach($data as $r){
 			$n++;
@@ -231,6 +231,7 @@ class Member extends CI_Controller{
 				 td(number_format($r->Kredit,2),'right').
 				 td(number_format($r->Saldo,2),'right').
 				 td(tglfromSql($r->mulai_bayar),'center').
+				 td(($r->Kredit=='0')?img_aksi($r->ID.'-'.$r->Tahun,true,'del'):'').
 				_tr();	 
 		}
 	}

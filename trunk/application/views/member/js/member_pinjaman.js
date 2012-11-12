@@ -170,7 +170,7 @@ $(document).ready(function(e){
 								$('#dat_pinjm table#dat_simp tbody').html('');
 								$('#dat_pinjm table#dat_simp tbody').html(data);
 								$('div#dat_pinjm').show();
-								$('#dat_pinjm table#dat_simp').fixedHeader({width:(screen.width-200),height:(screen.Height-330)});
+								$('#dat_pinjm table#dat_simp').fixedHeader({width:(screen.width-150),height:(screen.Height-330)});
 							})
 						}
 				})
@@ -236,6 +236,30 @@ function bayar(row,thn){
 //	$('div#ild').css({'left':(pos.left+2),'top':pos.top,'position':'fixed'});//.html($('#ild').contents())
 //	$('div#ild').show();
 }
+function images_click(id,aksi){
+	switch(aksi){
+		case 'edit':
+			jPrompt('Rubah Keterangan',$('#r-'+id).html(),'Edit Keterangan',function(r){
+				if(r){$.post('update_keterangan',{'id':id,'Ket':r},
+					function(result){
+						$('table tr td#r-'+id).html(r);
+					})
+				}
+			})
+		break;
+		case 'del':
+			jConfirm('Yakin data setoran ini akan dihapus','Message',function(r){
+				if(r){
+				 $.post('hapus_setoran',{'id':id},
+				 	function(result){
+						_show_data();
+					})
+				}
+			})
+		break;
+	}
+		
+}
 function bayarAll(row,thn){
 	$('img#g-'+row).hide();
 	$('#ID_Perkiraane').val(row);
@@ -260,7 +284,16 @@ function batal_frm2(){
 				//$('#dat_pinjm table#dat_simp').fixedHeader({width:(screen.width-250),height:265});
 			})
 }
-
+function _show_data(){
+			$.post('data_pinjaman',{
+				'ID_Agt':$('#ID_Perkiraane').val(),
+				'cBayar':$('#frm2 #capem').val()},
+				function(data){
+					$('#dat_pinjm table#dat_simp tbody').html('');
+					$('#dat_pinjm table#dat_simp tbody').html(data);
+					$('div#dat_pinjm').show();
+				})
+}
 function simpan_frm2(){
 	var bln=$('#frm2 #Tanggal').val().split('/')
 	$.post('set_bayar_pinjaman',{

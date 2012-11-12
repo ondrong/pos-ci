@@ -177,7 +177,7 @@ class Inv_model extends CI_Model {
 	function list_barang($where){
 		$data=array();
 		$sql="select b.ID,bj.JenisBarang,bk.Kategori,b.Kode,b.Nama_Barang,
-				b.Harga_Beli,b.Harga_Jual,bs.Satuan,b.Status,b.minstok,ms.stock,ms.harga_beli
+				b.Harga_Beli,b.Harga_Jual,bs.Satuan,b.Status,b.minstok,ms.stock,ms.harga_beli,ms.batch
 				from inv_barang as b
 				left join inv_barang_jenis as bj
 				on bj.ID=b.ID_Jenis

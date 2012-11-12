@@ -1,4 +1,4 @@
-<graph caption='Grafik Aliran Kas' subcaption='Periode :Oktober 2012' xAxisName='Bulan' yAxisName='Value' showValues= '1' showLabels='1' showValues='2'>
+<graph caption='Grafik Aliran Kas' subcaption='Periode :November 2012' xAxisName='Bulan' yAxisName='Value' showValues= '1' showLabels='1' showValues='2'>
 <categories>
 <category name='1'/>
 <category name='2'/>
@@ -30,7 +30,6 @@
 <category name='28'/>
 <category name='29'/>
 <category name='30'/>
-<category name='31'/>
 </categories>
 <dataset seriesName='Rugi Laba' color='2AD62A'>
 <set name='01'  value=''/>
@@ -43,7 +42,7 @@
 <set name='08'  value=''/>
 <set name='09'  value=''/>
 <set name='10'  value=''/>
-<set name='11'  value=''/>
+<set name='11'  value='69000'/>
 <set name='12'  value=''/>
 <set name='13'  value=''/>
 <set name='14'  value=''/>
@@ -56,13 +55,12 @@
 <set name='21'  value=''/>
 <set name='22'  value=''/>
 <set name='23'  value=''/>
-<set name='24'  value='2945000'/>
-<set name='25'  value='2085000'/>
+<set name='24'  value=''/>
+<set name='25'  value=''/>
 <set name='26'  value=''/>
 <set name='27'  value=''/>
 <set name='28'  value=''/>
-<set name='29'  value='1843000'/>
+<set name='29'  value=''/>
 <set name='30'  value=''/>
-<set name='31'  value=''/>
 </dataset>
 </graph>

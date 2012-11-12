@@ -48,7 +48,7 @@ popup_end();
 <input type='hidden' value='<?=$e_stockadjustment;?>' id='edited' />
 <script language="javascript">
 $(document).ready(function(e) {
-    $('#Kategori').html("<? dropdown('inv_barang_kategori','ID','Kategori','order by Kategori','8');?>")
+    $('#Kategori').html("<? dropdown('inv_barang_kategori','ID','Kategori','order by Kategori','1');?>")
 	$('#okelah').click();
     $('#stockadjustment').removeClass('tab_button');
 	$('#stockadjustment').addClass('tab_select');

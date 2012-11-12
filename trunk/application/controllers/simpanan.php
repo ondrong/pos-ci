@@ -184,7 +184,7 @@ class Simpanan extends CI_Controller{
 		$data=array();
 		$id_jenis=rdb('inv_penjualan','ID_Jenis','ID_Jenis',"where NoUrut='".$_POST['ID_Pinj']."' and Tahun='".$_POST['ThnAsal']."'");
 			$debet=rdb("pinjaman_bayar","Saldo","(sum(Debet)-sum(Kredit)) as Saldo","where ID_Pinjaman='".$_POST['ID_Pinj']."' and Tahun='".$_POST['ThnAsal']."' group by ID_Pinjaman");
-			echo $debet."<br>";
+			//echo $debet."<br>";
 			$data['ID_Pinjaman']=$_POST['ID_Pinj'];
 			$data['ID_Agt']		=$_POST['ID_Agt'];
 			$data['Tanggal']	=tglToSql($_POST['Tanggal']);
@@ -215,6 +215,25 @@ class Simpanan extends CI_Controller{
 				$datax['created_by']	=$this->session->userdata('userid');
 				$this->Admin_model->replace_data('transaksi_temp',$datax);
 	}
+	function update_keterangan(){
+	 $id	=$_POST['id'];
+	 $ket	=$_POST['Ket'];
+	 	$this->Admin_model->upd_data('pinjaman_bayar',"set keterangan='$ket'","where id='".$id."'");
+	}
+	function hapus_setoran(){
+		$id=$_POST['id'];
+		$no_pinjaman=rdb('pinjaman_bayar','ID_Pinjaman','ID_Pinjaman',"where ID='".$id."'");
+		$this->Admin_model->hps_data('pinjaman_bayar',"where ID='".$id."'");
+		$lama_cicilan=rdb('pinjaman','lama_cicilan','lama_cicilan',"where ID='".$no_pinjaman."'");
+		$lama_cicilan=($lama_cicilan > 1)?($lama_cicilan-1):1;
+		echo $lama_cicilan."--".$no_pinjaman;
+		$this->Admin_model->upd_data('pinjaman',"set lama_cicilan='".$lama_cicilan."'","where ID='".$no_pinjaman."'");
+	}
+	function hapus_tagihan(){
+		$id=$_POST['id'];
+		$th=$_POST['thn'];
+		$this->Admin_model->hps_data('pinjaman',"where ID='".$id."' and Tahun='".$th."'");
+	}
 	function data_pinjaman(){
 		$data=array();$detail=array();$n=0;$x=0;$stat='';$saldo=0;
 		$ID_Agt=$_POST['ID_Agt'];
@@ -242,9 +261,14 @@ class Simpanan extends CI_Controller{
 							<td class='kotak'></td>
 							<td class='kotak' align='right'>".number_format($d->Kredit,2)."<input type='hidden' class='w70 angka' value='".$d->Kredit."'></td>
 							<td class='kotak' align='right'>".number_format($d->saldo,2)."</td>
-							<td class='kotak' >".$d->keterangan."</td>
+							<td class='kotak' >
+								<table width='100%' style='border-collapse:collapse'>
+								<tr><td width='75%' id='r-".$d->ID."'>".$d->keterangan."</td>
+								<td width='25%' align='right'>".img_aksi($d->ID,true)."</td>
+								</tr></table>
+							</td>
 							</tr>";
-							$stat=($d->saldo==0)?number_format($d->Kredit,2) :'';
+							$stat=($d->saldo ==0)?number_format($d->Kredit,2) :'';
 						}
 						for($i=1;$i<=($r->lama_cicilan-$x);$i++){
 							($i==$r->lama_cicilan)? $cil=$r->cicilan_end:$cil=$r->cicilan;
@@ -253,7 +277,7 @@ class Simpanan extends CI_Controller{
 							<td class='kotak' align='center'>&nbsp;</td>
 							<td class='kotak' >Pembayaran Ke ".$r->lama_cicilan."</td>
 							<td class='kotak' align='right'>&nbsp;</td>
-							<td class='kotak' align='right'>".number_format($r->saldo,2)."</td>
+							<td class='kotak' align='right'>".number_format($r->Saldo,2)."</td>
 							<td class='kotak'  align='right' nowrap >";
 							echo ($stat=='')?"<img src='".base_url()."asset/img/checkout.gif' id='g-".$r->ID."' onclick=\"bayar('".$r->ID."','".$r->Tahun."');\">":$stat;
 							echo "</td>

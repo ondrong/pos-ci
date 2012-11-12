@@ -139,9 +139,9 @@ class Inventory extends CI_Controller {
 	}
 	function simpan_barang(){
 		$data=array();$kat=array();$jen=array();$sat=array();
-		$data['ID_Jenis']	=empty($_POST['id_jenis'])?'1':$_POST['id_jenis'];
+		$data['ID_Jenis']	=empty($_POST['id_jenis'])?'':$_POST['id_jenis'];
 		$data['Kode']		=empty($_POST['id_barang'])?rand(1000,9999):strtoupper($_POST['id_barang']);
-		$data['ID_Kategori']=empty($_POST['id_kategori'])?'1':$_POST['id_kategori'];
+		$data['ID_Kategori']=empty($_POST['id_kategori'])?'':$_POST['id_kategori'];
 		$data['Nama_Barang']=addslashes(strtoupper($_POST['nm_barang']));
 		$data['ID_Satuan']	=empty($_POST['id_satuan'])?'1':$_POST['id_satuan'];
 		$data['Status']		=ucwords($_POST['status_barang']);
@@ -268,7 +268,7 @@ class Inventory extends CI_Controller {
 		$stat		=($_POST['stat']=='all')?'':"and status='".$_POST['stat']."'";
 		$cari		=empty($_POST['cari'])?'': "and Nama_Barang like '".$_POST['cari']."%'";
 		$group		="group by ms.batch,b.ID";
-		$withoutZero=" and ms.Stock <>'0'";
+		$withoutZero='';//" and ms.Stock <>'0'";
 		if($id!='' && $id_jenis!=''){
 			 $where="where ID_Kategori='$id' $id_jenis $stat $cari $withoutZero $group order by ID_Jenis,nama_barang";
 		}else if ($id=='' && $id_jenis!=''){
@@ -291,7 +291,7 @@ class Inventory extends CI_Controller {
 			echo ($this->zetro_auth->cek_oto('e','list')!='')?
 				($this->session->userdata('menus')=='QWNjb3VudGluZw==')?'':
 				 td(aksi('asset/images/editor.png','edit','Click for edit',"upd_barang('".$r->ID."');").'&nbsp;'.
-				 	aksi('asset/images/no.png','del','Click for delete',"delet_barang('".$r->ID."');"),'center'):'';
+				 	aksi('asset/images/no.png','del','Click for delete',"delet_barang('".$r->ID."','".$r->batch."');"),'center'):'';
 			echo _tr();
 		}
 		

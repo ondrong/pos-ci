@@ -66,7 +66,7 @@ class Report_model extends CI_Model {
 					from inv_material_stok as ms
 					right join inv_barang  as b
 					on ms.id_barang=b.ID
-					where (ms.stock) <= b.minstok $where
+					/*where (ms.stock) <= b.minstok*/ $where
 					group by b.ID
 					$orderby";
 			break;

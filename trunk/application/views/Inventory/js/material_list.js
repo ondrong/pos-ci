@@ -412,7 +412,16 @@ $(document).ready(function(e) {
 					$('#id_kategori').val(result.ID)
 				}
 			})
+			.focusout(function(){
+				if($(this).val()==''){
+					 alert('Kategori tidak boleh kosong');
+					 
+				}
+			})
 		$('#frm9 #nm_jenis')
+			.focus(function(){
+				($(this).val()=='')? $('#frm9 #nm_kategori').focus().select:'';
+			})
 			.coolautosuggest({
 				url	:'get_jenis?limit=8&str=',
 				width:250,
@@ -420,6 +429,10 @@ $(document).ready(function(e) {
 				onSelected:function(result){
 					$('#id_jenis').val(result.ID)
 				}
+			})
+			.focusout(function(){
+				($(this).val()=='')?
+				$('#id_jenis').val(''):'';	
 			})
 		$('#frm9 #nm_satuan')
 			.coolautosuggest({
@@ -478,7 +491,7 @@ $(document).ready(function(e) {
 	function delet_barang(id,bat){
 		var path=$('#path').val();
 					if (confirm('Yakin data ini  akan di hapus?')){
-						$.post(path+'inventory/hapus_inv',{'tbl':'inv_barang','id':id,'fld':'ID','batch':bath},
+						$.post(path+'inventory/hapus_inv',{'tbl':'inv_barang','id':id,'fld':'ID','batch':bat},
 						function(result){
 							$('#v_listbarang table#ListTable tbody tr#nm-'+id).remove();
 						})

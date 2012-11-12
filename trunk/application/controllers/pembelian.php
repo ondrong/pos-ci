@@ -95,13 +95,13 @@ class Pembelian extends CI_Controller{
 	function set_detail_pembelian(){
 		$data=array();$rcord=0;$tot_bel=0;$find_batch='';
 		$id_beli=rdb('inv_pembelian','ID','ID',"where NoUrut='".$_POST['no_trans']."' and Tanggal='".tgltoSql($_POST['tanggal'])."'");
-		$id_barang=rdb('inv_barang','ID','ID',"where Nama_Barang='".$_POST['nm_barang']."'");
+		$id_barang=rdb('inv_barang','ID','ID',"where Nama_Barang='".addslashes($_POST['nm_barang'])."'");
 		$find_batch=rdb('inv_material_stok','batch','batch',"where id_barang='".$id_barang."' and harga_beli='".$_POST['harga_beli']."'");
 		$tot_bel=rdb('inv_pembelian','ID_Bayar','ID_Bayar',"where NoUrut='".$_POST['no_trans']."' and Tanggal='".tgltoSql($_POST['tanggal'])."'");
 		$id_anggota=rdb('inv_pembelian','ID_Pemasok','ID_Pemasok',"where NoUrut='".$_POST['no_trans']."' and Tanggal='".tgltoSql($_POST['tanggal'])."'");
 		$data['tanggal']	=tgltoSql($_POST['tanggal']);
 		$data['id_beli']	=$id_beli;
-		$data['id_barang']	=rdb('inv_barang','ID','ID',"where Nama_Barang='".$_POST['nm_barang']."'");
+		$data['id_barang']	=rdb('inv_barang','ID','ID',"where Nama_Barang='".addslashes($_POST['nm_barang'])."'");
 		$data['jml_faktur']	=$_POST['jumlah'];
 		$data['Jumlah']		=$_POST['jumlah'];
 		$data['Harga_Beli']	=$_POST['harga_beli'];
@@ -152,14 +152,14 @@ class Pembelian extends CI_Controller{
 	function update_stock(){
 		$data=array();$hasil_konv=1;
 		$stock_awal=0;$stock_akhir=0;$rcord=0;
-		$id_barang=rdb('inv_barang','ID','ID',"where Nama_Barang='".$_POST['nm_barang']."'");
+		$id_barang=rdb('inv_barang','ID','ID',"where Nama_Barang='".addslashes($_POST['nm_barang'])."'");
 		$find_batch=empty($_POST['batch'])?rdb('inv_pembelian_detail','batch','batch',"where id_barang='".$id_barang."' and harga_beli='".$_POST['harga_beli']."'"):$_POST['batch'];
 		$stock_awal=rdb('inv_material_stok','stock','stock',"where id_barang='".$id_barang."' and batch='".$find_batch."'");
 		$hasil_konv=rdb('inv_konversi','isi_konversi','isi_konversi',"where id_barang='".$id_barang."' and sat_beli='".$_POST['id_satuan']."'");
 		$stock_akhir=($_POST['aksi']=='del')?((int)$stock_awal-($hasil_konv*$_POST['jumlah'])):((int)$stock_awal+($hasil_konv*$_POST['jumlah']));
 		$data['id_barang']	=$id_barang;
-		$data['nm_satuan']	=rdb('inv_barang','ID_Satuan','ID_Satuan',"where Nama_Barang='".$_POST['nm_barang']."'");
-		$data['nm_barang']	=$_POST['nm_barang'];
+		$data['nm_satuan']	=rdb('inv_barang','ID_Satuan','ID_Satuan',"where Nama_Barang='".addslashes($_POST['nm_barang'])."'");
+		$data['nm_barang']	=addslashes($_POST['nm_barang']);
 		$data['batch']		=$find_batch;
 		$data['stock']		=$stock_akhir;
 		$data['harga_beli']	=$_POST['harga_beli'];

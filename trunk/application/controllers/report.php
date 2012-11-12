@@ -69,7 +69,7 @@ class Report extends CI_Controller
 			   "where p.Tanggal between '".tglToSql($_POST['dari_tgl'])."' and '".tglToSql($_POST['sampai_tgl'])."'";
 		$where.=($this->input->post('jenis_beli')=='')?" and p.ID_Pemasok!='0' and a.ID_Jenis='2'":
 				" and p.ID_Jenis='".$this->input->post('jenis_beli')."' and p.ID_Pemasok!='0' and a.ID_Jenis='2'";
-		$group="group by p.Tanggal,a.Nama";
+		$group="group by /*p.Tanggal,*/a.Nama";
 		$orderby="order by ".$this->input->post('orderby');
 		$orderby.=($this->input->post('urutan')=='')?'':' '.$this->input->post('urutan');
 		$data['id_jenis']=rdb('inv_pembelian_jenis','Jenis_Beli','Jenis_Beli',"Where ID='".$this->input->post('jenis_beli')."'");
@@ -143,7 +143,7 @@ class Report extends CI_Controller
 			   "where p.Tanggal between '".tglToSql($_POST['dari_tgl'])."' and '".tglToSql($_POST['sampai_tgl'])."'";
 		$where.=($this->input->post('kategori')=='')?'':" and b.ID_Kategori='".$this->input->post('kategori')."'";
 		$where.=($this->input->post('id_jenis')=='')?'':" and p.ID_Jenis='".$this->input->post('id_jenis')."'";
-		$where.=" and p.ID_Jenis!='5'";
+		$where.=" and p.ID_Jenis!='5' and Jumlah !='0'";
 		$group="group by concat(dt.harga,dt.ID_Barang)";
 		$ordby="order by ".$this->input->post('orderby');
 		$ordby.=($this->input->post('urutan')=='')?'':" ".$this->input->post('urutan');
@@ -171,7 +171,7 @@ class Report extends CI_Controller
 			   "where p.Tanggal between '".tglToSql($_POST['dari_tgl'])."' and '".tglToSql($_POST['sampai_tgl'])."'";
 		$where.=($this->input->post('kategori')=='')?'':" and b.ID_Kategori='".$this->input->post('kategori')."'";
 		$where.=($this->input->post('id_jenis')=='')?'':" and p.ID_Jenis='".$this->input->post('id_jenis')."'";
-		$where.=" and p.ID_Jenis!='5'";
+		$where.=" and p.ID_Jenis!='5' and Jumlah !='0'";
 		$group="group by p.Tanggal,p.ID_Anggota";
 		$ordby="order by ".$this->input->post('orderby');
 		$ordby.=($this->input->post('urutan')=='')?'':" ".$this->input->post('urutan');
@@ -198,7 +198,7 @@ class Report extends CI_Controller
 		$where=empty($_POST['sampai_tgl'])?
 			   "where p.Tanggal='".tglToSql($_POST['dari_tgl'])."'":
 			   "where p.Tanggal between '".tglToSql($_POST['dari_tgl'])."' and '".tglToSql($_POST['sampai_tgl'])."'";
-		$where.=" and p.ID_Anggota='".$this->input->post('ID_Anggota')."' and a.ID_Jenis='1'";
+		$where.=" and p.ID_Anggota='".$this->input->post('ID_Anggota')."' and a.ID_Jenis='1' and Jumlah!='0'";
 		$group="group by dt.ID_Jual";
 		$orderby="order by p.Tanggal";
 		$orderby.=($this->input->post('urutan')=='')?'':' '.$this->input->post('urutan');

@@ -53,3 +53,16 @@ var path=$('#path').val();
 	})
    }
 }
+
+function images_click(id){
+var path=$('#path').val();
+	var h=id.split('-')
+jConfirm('Yakin data ini akan dihapus','Message',function(r){
+	if(r){
+		$.post(path+'simpanan/hapus_tagihan',{'id':h[0],'thn':h[1]},
+		 function(result){
+			_show_data(false); 
+		 })
+	}
+})
+}

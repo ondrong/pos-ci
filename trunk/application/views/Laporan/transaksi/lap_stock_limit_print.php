@@ -27,13 +27,14 @@
 		  foreach($temp_rec as $r)
 		  {
 			$n++;
+			((int)$r->stock <=$r->minstok)?
 			$a->Row(array($n, strtoupper($r->Kode),
 						 $r->Nama_Barang,
 						 number_format($r->minstok,0),
 						 number_format($r->stock,0),
 						 rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".$r->ID_Satuan."'"),
 						 
-						  ));
+						  )):'';
 		  }
 		  $a->Output('application/logs/'.$this->session->userdata('userid').'_mutasi.pdf','F');
 
