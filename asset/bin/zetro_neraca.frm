@@ -18,10 +18,21 @@
 1|Tanggal,,,,,,8%,,,20
 2|Nomor,,,,,,12%,,,20
 3|Nama Barang,,,,,,20%,,,50
-4|Jumlah,,,,,,10%,,,25
+4|Jumlah,,,,,,10%,,,22
 5|Satuan,,,,,,10%,,,18
 6|Harga,,,,,,10%,,,25
+7|Total Harga,,,,,,10%,,,27
+;8|Keterangan,,,,,,10%,,,30
+
+[detailbelijual]
+1|Tanggal,,,,,,8%,,,25
+2|Nomor,,,,,,12%,,,22
+3|Nama Barang,,,,,,20%,,,90
+4|Jumlah,,,,,,10%,,,25
+5|Satuan,,,,,,10%,,,20
+6|Harga,,,,,,10%,,,25
 7|Total Harga,,,,,,10%,,,25
+8|Modal,,,,,,10%,,,25
 ;8|Keterangan,,,,,,10%,,,30
 
 [belibyvendor]

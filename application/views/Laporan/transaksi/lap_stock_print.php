@@ -28,7 +28,7 @@
 		  {
 			$n++;
 			$a->Row(array($n, strtoupper($r->Kode),
-						 $r->Nama_Barang,
+						 ucwords(strtolower($r->Nama_Barang)),
 						 rdb('inv_barang_kategori','Kategori','Kategori',"where ID='".$r->ID_Kategori."'"),
 						 number_format($r->stock,0),
 						 rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".$r->ID_Satuan."'"),

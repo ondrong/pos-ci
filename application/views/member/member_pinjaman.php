@@ -4,7 +4,9 @@ $zlb=new zetro_buildlist();
 $zlb->config_file('asset/bin/zetro_member.frm');
 $path='application/views/member';
 calender();
+link_css('jquery.alerts.css','asset/css');
 link_css('jquery.coolautosuggest.css','asset/css');
+link_js('jquery.alerts.js','asset/js');
 link_js('jquery.coolautosuggest.js,auto_sugest.js','asset/js,asset/js');
 link_js('jquery.fixedheader.js,jquery_terbilang.js,member_pinjaman.js','asset/js,asset/js,'.$path.'/js');
 panel_begin('Pembayaran Tagihan');
@@ -34,9 +36,9 @@ $fld="<input type='hidden' value='' id='ID_Perkiraane'>";
 			<tr class='headere' align='center'>
 				<th class='kotak' width='5%'>No.</th>
 				<th class='kotak' width='15%'>Tanggal </th>
-				<th class='kotak' width='20%'>Tagihan</th>
-				<th class='kotak' width='20%'>Pembayaran</th>
-				<th class='kotak' width='25%'>Saldo</th>
+				<th class='kotak' width='18%'>Tagihan</th>
+				<th class='kotak' width='18%'>Pembayaran</th>
+				<th class='kotak' width='20%'>Saldo</th>
 				<th class='kotak' width='30%'>Keterangan</th>
 				</tr>
 		</thead><tbody>";

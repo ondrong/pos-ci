@@ -52,13 +52,13 @@ class Kasir_model extends CI_Model {
 			 left join inv_pembelian_jenis as j
 			 on j.ID=p.ID_Jenis
 			 $where $group $order";
-		echo $sql;
+		//echo $sql;
 		$data=$this->db->query($sql);
 		return $data->result();
 	}
 	function rekap_trans_jual($where,$group='',$order='order by p.Tanggal'){
 		$sql="select p.Tanggal,p.ID_Anggota,dt.ID_Barang,sum(Jumlah) as Jumlah,dt.Harga,a.Nama,
-			 a.Alamat,a.Kota,a.Catatan,p.ID_Jenis
+			 a.Alamat,a.Kota,a.Catatan,p.ID_Jenis,p.NoUrut,p.Tahun
 			 from inv_penjualan as p
 		     left join inv_penjualan_detail as dt
 			 on dt.ID_Jual=p.ID
@@ -74,7 +74,7 @@ class Kasir_model extends CI_Model {
 	function detail_trans_jual($where,$group='',$order='order by p.Tanggal'){
 		$sql="select dt.ID_Jual,p.Tanggal,dt.ID_Barang,b.Kode,dt.Jumlah,dt.Harga,b.Nama_Barang,s.Satuan,
 			 a.Nama,p.Nomor,j.Jenis_Jual,a.Catatan,a.Alamat,a.Kota,p.Tgl_Cicilan,p.ID_Post,
-			 p.Deskripsi,p.ID_Anggota,p.ID_Jenis
+			 p.Deskripsi,p.ID_Anggota,p.ID_Jenis,p.NoUrut,p.Tahun
 			 from inv_penjualan as p
 		     left join inv_penjualan_detail as dt
 			 on dt.ID_Jual=p.ID
@@ -134,14 +134,14 @@ class Kasir_model extends CI_Model {
 	}
 	function laba_rugi($where,$orderby=''){
 		$sql="select dt.ID_Barang,sum(dt.Jumlah),sum(dt.jumlah*dt.harga) as Jual,
-			(sum(dt.Jumlah)*b.Harga_Beli) as Harga_Beli,b.harga_beli,dt.Tanggal,dt.batch 
+			sum(dt.Jumlah*b.Harga_Beli) as Harga_Beli,b.harga_beli,dt.Tanggal,dt.batch 
 			from inv_penjualan_detail as dt
 			left join inv_material_stok as b
 			on b.id_barang=dt.ID_Barang and b.batch=dt.Batch
 			$where
 			group by concat(dt.Tanggal)
 			$orderby";
-		echo $sql;
+		//echo $sql;
 		$data=$this->db->query($sql);
 		return $data->result();
 	}

@@ -24,7 +24,7 @@
 		  $n=0;$hgb=0;$hargaj=0;$jml=0;
 		  foreach($temp_rec as $r)
 		  {
-			$n++;$nn=0;$harga=0;
+			$n++;$nn=0;$harga=0;$corting=0;
 			$a->SetFont('Arial','I',9);
 			$a->SetFillColor(210,210,010);	
 			$a->Cell(10,8,$n,1,0,'C',true);
@@ -42,15 +42,24 @@
 							  $r->Satuan,number_format($rr->Harga,2),
 							  number_format(($rr->Jumlah*$rr->Harga),2)));
 				//sub tlot
-				$jml	=($jml+$r->Jumlah);
-				$hargaj	=($hargaj+$r->Harga);
-				$harga	=($harga+($r->Jumlah*$r->Harga));
+				$jml	=($jml+$rr->Jumlah);
+				$hargaj	=($hargaj+$rr->Harga);
+				$harga	=($harga+($rr->Jumlah*$rr->Harga));
 			}
+			  //potongan
+			$corting=rdb('inv_pembayaran','ppn','sum(ppn) as ppn',"where no_transaksi='".$r->NoUrut."' and year(doc_date)='".$r->Tahun."'");
+			 if($corting!=0){
+			  $a->SetFont('Arial','I',10);
+			  $a->SetFillColor(242,239,219);
+			  $a->Cell(168,8,"Potongan",1,0,'R',true);
+			  $a->Cell(25,8,number_format($corting,2),1,1,'R',true);
+			 }
+			  //subtotal
 			  $a->SetFont('Arial','B',10);
 			  $a->SetFillColor(242,239,219);
 			  $a->Cell(168,8,"Sub Total",1,0,'R',true);
-			  $a->Cell(25,8,number_format($harga,2),1,1,'R',true);
-			  $hgb=($hgb+$harga);
+			  $a->Cell(25,8,number_format(($harga-$corting),2),1,1,'R',true);
+			  $hgb=($hgb+($harga-$corting));
 		  }
 		  $a->SetFont('Arial','B',10);
 		  $a->SetFillColor(225,225,225);

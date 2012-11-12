@@ -14,7 +14,7 @@ addText(array('Periode Tanggal : ',' s/d ','',''),
 		array("<input type='text' id='dari_tgl' name='dari_tgl' value=''/>",
 			  "<input type='text' id='sampai_tgl' name='sampai_tgl' value=''/>",
 			  "<input type='button' id='okedech' value='OK'/>",
-			  "<input type='checkbox' id='pajak' name='pajak' value='ok' style='display:'>"),true,'frm1');
+			  "<input type='checkbox' id='pajak' name='pajak' value='ok' style='display:none'>"),true,'frm1');
 }else{
 	no_auth();	
 }

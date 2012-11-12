@@ -149,11 +149,11 @@ class Stock extends CI_Controller{
 	function get_stock(){
 		$data=array();$n=0;
 		$where=empty($_POST['kategori'])?'':"where im.ID_Kategori='".$_POST['kategori']."' and ms.Stock<>'0'";
-		$where.=empty($_POST['stat'])?'':" and Status='".$_POST['stat']."' and ms.Stock<>'0'";
-		$orderby=empty($_POST['orderby'])?'':"order by ".str_replace('-',',',$_POST['orderby'])." ";
-		$orderby.=empty($_POST['urutan'])?'':' '.$_POST['urutan'];
+		$where.=empty($_POST['stat'])?'':" and Status='".$_POST['stat']."' and ms.Stock!='0'";
+		$orderby=empty($_POST['orderby'])?'':" order by ".str_replace('-',',',$_POST['orderby'])." ";
+		$orderby.=empty($_POST['urutan'])?'':strtoupper($_POST['urutan']);
 		$sesi=$this->session->userdata('menus');
-		$edit_true=$_POST['edited'];	
+		$edit_true=empty($_POST['edited'])?'':$_POST['edited'];	
 		$data=$this->report_model->stock_list($where,'stock',$orderby);
 		foreach($data as $r){
 			$n++;
@@ -171,10 +171,11 @@ class Stock extends CI_Controller{
 	}
 	function print_stock(){
 		$data=array();$n=0;
-		$where=($this->input->post('Kategori')=='')?'':"where im.ID_Kategori='".$this->input->post('Kategori')."' and ms.Stock<>'0'";
-		$where.=($this->input->post('Stat')=='')?'':" and Status='".$this->input->post('Stat')."' and ms.Stock<>'0'";
-		$orderby=($this->input->post('orderby'))?'':"order by ".str_replace('-',',',$this->input->post('orderby'))." ";
-		$orderby.=($this->input->post('urutan'))?'':' '.$this->input->post('urutan');
+		$where=($this->input->post('Kategori')=='')?'':"where im.ID_Kategori='".$this->input->post('Kategori')."' and ms.Stock!='0'";
+		$where.=($this->input->post('Stat')=='')?'':" and Status='".$this->input->post('Stat')."' and ms.Stock!='0'";
+		$orderby=($this->input->post('orderby')=='')?'':" order by ".str_replace('-',',',$this->input->post('orderby'))." ";
+		$orderby.=($this->input->post('urutan')=='')?'':strtoupper($this->input->post('urutan'));
+		echo $where.'/'.$orderby;
 		$data['kategori']=rdb('inv_barang_kategori','Kategori','Kategori',"where ID='".$this->input->post('Kategori')."'");
 		$data['status']	=$this->input->post('Stat');
 		$data['temp_rec']=$this->report_model->stock_list($where,'stock',$orderby);

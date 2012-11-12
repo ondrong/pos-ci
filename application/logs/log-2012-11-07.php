@@ -25,3 +25,16 @@ ERROR - 2012-11-07 14:44:03 --> Severity: Notice  --> Undefined variable: c_harg
 ERROR - 2012-11-07 14:44:32 --> Severity: Notice  --> Undefined variable: all_jenis D:\inetpub\wwwroot\SETUJU\application\views\Inventory\master_inv.php 33
 ERROR - 2012-11-07 14:44:32 --> Severity: Notice  --> Undefined variable: all_golongan D:\inetpub\wwwroot\SETUJU\application\views\Inventory\master_inv.php 55
 ERROR - 2012-11-07 14:47:00 --> Query error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'X12''' at line 4
+ERROR - 2012-11-07 15:29:54 --> Severity: Notice  --> Undefined variable: ID_Jenis D:\inetpub\wwwroot\SETUJU\application\controllers\pembelian.php 122
+ERROR - 2012-11-07 15:30:03 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-07 15:30:03 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-07 15:30:03 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77
+ERROR - 2012-11-07 15:30:26 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-07 15:30:27 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-07 15:30:27 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77
+ERROR - 2012-11-07 15:31:04 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-07 15:31:04 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-07 15:31:04 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77
+ERROR - 2012-11-07 15:31:43 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 40
+ERROR - 2012-11-07 15:31:43 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 56
+ERROR - 2012-11-07 15:31:43 --> Severity: Notice  --> Undefined variable: c_hargabeli D:\inetpub\wwwroot\SETUJU\application\views\Inventory\material_list.php 77

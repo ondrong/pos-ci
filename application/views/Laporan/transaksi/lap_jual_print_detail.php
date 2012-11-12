@@ -16,9 +16,9 @@
 		  $a->SetFont('Arial','',10);
 		  //echo $a->getColWidth();
 		  // set lebar tiap kolom tabel transaksi
-		  $a->SetWidths(array(10,20,20,50,25,18,25,25));
+		  $a->SetWidths(array(10,20,20,50,25,18,25,25,25));
 		  // set align tiap kolom tabel transaksi
-		  $a->SetAligns(array("R","C","C","L","R","L","R","R"));
+		  $a->SetAligns(array("R","C","C","L","R","L","R","R","R"));
 		  $a->SetFont('Arial','B',10);
 		  $a->SetFont('Arial','',9);
 		  $dataz=array();$datax=array();
@@ -62,12 +62,19 @@
 						$hgb= ($r2->ID_Jenis=='5')?($hgb-($rr2->Harga*$rr2->Jumlah)):($hgb+($rr2->Harga*$rr2->Jumlah));
 						}
 				}
-						$harga =($harga+($hgb));
 			//sub tlot
+			$hargaj=rdb('inv_pembayaran','ppn','sum(ppn) as ppn',"where no_transaksi='".$r->NoUrut."' and year(doc_date)='".$r->Tahun."'");
+			$harga =($harga+($hgb-$hargaj));
+			if ($hargaj!=0){
+			  $a->SetFont('Arial','I',10);
+			  $a->SetFillColor(242,239,219);
+			  $a->Cell(168,8,"Potongan",1,0,'R',true);
+			  $a->Cell(25,8,number_format($hargaj,2),1,1,'R',true);
+			}
 			  $a->SetFont('Arial','B',10);
 			  $a->SetFillColor(242,239,219);
 			  $a->Cell(168,8,"Sub Total",1,0,'R',true);
-			  $a->Cell(25,8,number_format($hgb,2),1,1,'R',true);
+			  $a->Cell(25,8,number_format(($hgb-$hargaj),2),1,1,'R',true);
 			  //grand total
 			}
 			
