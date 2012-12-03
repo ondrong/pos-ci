@@ -238,7 +238,7 @@ class Inv_model extends CI_Model {
 		$ret=($return=='1')?"and stock <>'0'":'';
 		$sql="select batch, sum(stock) as stock, sum(blokstok) as blokstok,
 			   expired,nm_satuan,harga_beli from inv_material_stok where id_barang='$nm_barang'
-			   $ret group by batch order by batch $sort $limit";
+			   $ret group by batch order by doc_date,batch $sort $limit";
 		//echo $sql;
 		$data=$this->db->query($sql);
 		return $data->result();
