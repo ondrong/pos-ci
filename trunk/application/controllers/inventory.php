@@ -63,7 +63,7 @@ class Inventory extends CI_Controller {
 	//save data
 	
 	function simpan_jenis(){
-		$data=array();
+		$data=array();$n=0;
 		$nm_jenis=ucwords($_POST['nm_jenis']);
 		$induk=$_POST['induk'];
 		$data['JenisBarang']=strtoupper($nm_jenis);
@@ -73,14 +73,38 @@ class Inventory extends CI_Controller {
 		if($induk==''){
 			dropdown('inv_barang_jenis','ID','JenisBarang','',$nm_jenis);
 		}else{
-			$this->_filename();
-			$this->zetro_buildlist->icon();
-			$this->zetro_buildlist->section('Jenis');
-			$sql2="select * from inv_barang_jenis order by JenisBarang";
-			$this->zetro_buildlist->query($sql2);
-			$this->zetro_buildlist->list_data('Jenis');
-			$this->zetro_buildlist->BuildListData('JenisBarang');
+		$data=$this->Admin_model->show_list('inv_barang_jenis','order by JenisBarang');
+			foreach($data as $r){
+				$n++;
+				echo tr().
+					 td($n,'center').
+					 td($r->JenisBarang).
+					 td(img_aksi($r->ID,true,'del'),'center').
+					 _tr();	
+			}
 		}
+	}
+	function jenis_list(){
+		$data=array();$n=0;
+		$nTable=$_POST['tabel'];
+		$orderby='order by '.$_POST['orderby'];
+		$data=$this->Admin_model->show_list($nTable,$orderby);
+			foreach($data as $r){
+				$n++;
+				echo tr().
+					 td($n,'center').
+					 td($r->$_POST['orderby']).
+					 td(img_aksi($r->ID.'-'.$nTable,true,'del'),'center').
+					 _tr();	
+			}
+	}
+	function hapus_jenis(){
+/*		$fld=$_POST['fld'];
+*/		$tbl=$_POST['tbl'];
+		$where=str_replace('_',' ',$_POST['id']);
+		//$this->Admin_model->hapus_table($tbl,$fld,$where);
+		$this->Admin_model->hps_data($tbl,"where ID='".$_POST['id']."'");
+		echo $_POST['id'];
 	}
 	function simpan_kategori(){
 		$data=array();
