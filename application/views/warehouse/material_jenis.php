@@ -5,25 +5,20 @@ $section='Barang';
 $zlb->config_file('asset/bin/zetro_inv.frm');
 $path='application/views/inventory';
 link_js('material_inv.js',$path.'/js');
+link_js('jquery.fixedheader.js','asset/js');
 tab_select('');
 panel_begin('Jenis Barang');
 panel_multi('jenisbarang','block',false);
 if($all_jenisbarang!=''){
-	$zfm->AddBarisKosong(true);
+	$zfm->AddBarisKosong(false);
 	$zfm->Start_form(true,'frm1');
 	$zfm->BuildForm('Jenis',true,'50%');
 	$zfm->BuildFormButton('Simpan','jenis');
 	echo "<hr/>";
-	$sql2="select * from inv_barang_jenis order by JenisBarang";
 		$zlb->section('Jenis');
 		$zlb->aksi(($e_jenisbarang!='')?true:false);
 		$zlb->icon('deleted');
-		$zlb->query($sql2);
-		$zlb->sub_total(false);
-		$zlb->sub_total_field('stock,blokstok');
-		$zlb->Header('50%');
-		$zlb->list_data('Jenis');
-		$zlb->BuildListData('JenisBarang');
+		$zlb->Header('100%','Jenis');
 		echo "</tbody></table>";
 }else{
 	no_auth();
