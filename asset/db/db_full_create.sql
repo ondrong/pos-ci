@@ -1,9 +1,9 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               5.5.25a - MySQL Community Server (GPL)
+-- Server version:               5.5.8 - MySQL Community Server (GPL)
 -- Server OS:                    Win32
--- HeidiSQL version:             7.0.0.4140
--- Date/time:                    2012-10-29 16:01:41
+-- HeidiSQL version:             7.0.0.4053
+-- Date/time:                    2012-12-06 13:23:41
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -60,18 +60,18 @@ CREATE TABLE IF NOT EXISTS `cost_center` (
   `nama_cc` varchar(150) NOT NULL DEFAULT '',
   PRIMARY KEY (`nama_cc`),
   KEY `ID` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.cost_center: ~7 rows (approximately)
+-- Dumping data for table setujudb.cost_center: 7 rows
 /*!40000 ALTER TABLE `cost_center` DISABLE KEYS */;
-REPLACE INTO `cost_center` (`ID`, `nama_cc`) VALUES
-	(1, 'Penjualan Tunai'),
-	(2, 'Penjualan Kredit'),
-	(3, 'Return Penjualan'),
-	(4, 'Pembelian Tunai'),
-	(5, 'Pembelian Kredit'),
+INSERT IGNORE INTO `cost_center` (`ID`, `nama_cc`) VALUES
 	(6, 'Pembayaran Hutang'),
-	(7, 'Pembayaran Piutang');
+	(7, 'Pembayaran Piutang'),
+	(5, 'Pembelian Kredit'),
+	(4, 'Pembelian Tunai'),
+	(2, 'Penjualan Kredit'),
+	(1, 'Penjualan Tunai'),
+	(3, 'Return Penjualan');
 /*!40000 ALTER TABLE `cost_center` ENABLE KEYS */;
 
 
@@ -118,20 +118,13 @@ CREATE TABLE IF NOT EXISTS `inv_barang` (
   `minstok` double DEFAULT '0',
   PRIMARY KEY (`Nama_Barang`),
   KEY `ID` (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=197 DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.inv_barang: 9 rows
+-- Dumping data for table setujudb.inv_barang: 2 rows
 /*!40000 ALTER TABLE `inv_barang` DISABLE KEYS */;
-REPLACE INTO `inv_barang` (`ID`, `Kode`, `ID_Kategori`, `ID_Jenis`, `ID_Pemasok`, `Nama_Barang`, `Harga_Beli`, `Harga_Jual`, `ID_Satuan`, `Status`, `minstok`) VALUES
-	(11, 'BB3MM', 8, 2, NULL, 'BESI PLAT 3MM', 22500, 30000, 2, 'Continue', 10),
-	(16, 'AA100', 10, 6, NULL, 'ANKUR BETON', 15000, 20000, 8, 'Continue', 5),
-	(17, 'BBT10MM', 8, 1, NULL, 'BESI BETON 10 MM', 35000, 40000, 4, 'Continue', 5),
-	(6, 'BBT6M', 8, 1, NULL, 'BESI BETON 6MM', 30000, 35000, 4, 'Continue', 10),
-	(15, 'BBT3M', 8, 1, NULL, 'BESI BETON 3MM', 25000, 30000, 4, 'Continue', 15),
-	(13, 'BBP1.5MM', 8, 2, NULL, 'BESI PLAT 1.5 MM', 150000, 200000, 2, 'Continue', 12),
-	(14, 'BBT8M', 8, 1, NULL, 'BESI BETON 8MM', 50000, 150000, 4, 'Continue', 10),
-	(18, 'BB8SJ', 15, 1, NULL, 'BESI BETON 8 ASLI X 12M', 31300, 35000, 4, 'Continue', 300),
-	(19, '5537', 16, 8, NULL, 'PIPA HITAM 1/2 IN X 0,8MM X 6M', 20000, 25000, 4, 'Continue', 30);
+INSERT IGNORE INTO `inv_barang` (`ID`, `Kode`, `ID_Kategori`, `ID_Jenis`, `ID_Pemasok`, `Nama_Barang`, `Harga_Beli`, `Harga_Jual`, `ID_Satuan`, `Status`, `minstok`) VALUES
+	(195, '9656', 1, 15, NULL, 'BETON 4,0 X 12M', 8800, 10000, 4, 'Continue', 300),
+	(196, '2699', 1, 15, NULL, 'BETON 5,1 X 12M', 12300, 14000, 4, 'Continue', 300);
 /*!40000 ALTER TABLE `inv_barang` ENABLE KEYS */;
 
 
@@ -142,17 +135,18 @@ CREATE TABLE IF NOT EXISTS `inv_barang_jenis` (
   `JenisBarang` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`JenisBarang`),
   KEY `ID` (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.inv_barang_jenis: 6 rows
+-- Dumping data for table setujudb.inv_barang_jenis: 7 rows
 /*!40000 ALTER TABLE `inv_barang_jenis` DISABLE KEYS */;
-REPLACE INTO `inv_barang_jenis` (`ID`, `JenisBarang`) VALUES
+INSERT IGNORE INTO `inv_barang_jenis` (`ID`, `JenisBarang`) VALUES
 	(1, 'BESI BETON'),
 	(2, 'PLAT'),
 	(5, 'BESI ULIR'),
 	(6, 'ANGKUR'),
 	(7, 'TALANG'),
-	(8, 'PIPA HITAM');
+	(8, 'PIPA HITAM'),
+	(9, 'EZZER');
 /*!40000 ALTER TABLE `inv_barang_jenis` ENABLE KEYS */;
 
 
@@ -163,11 +157,11 @@ CREATE TABLE IF NOT EXISTS `inv_barang_kategori` (
   `Kategori` varchar(20) NOT NULL DEFAULT '',
   PRIMARY KEY (`Kategori`),
   KEY `ID` (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.inv_barang_kategori: 8 rows
+-- Dumping data for table setujudb.inv_barang_kategori: 9 rows
 /*!40000 ALTER TABLE `inv_barang_kategori` DISABLE KEYS */;
-REPLACE INTO `inv_barang_kategori` (`ID`, `Kategori`) VALUES
+INSERT IGNORE INTO `inv_barang_kategori` (`ID`, `Kategori`) VALUES
 	(9, 'KAYU'),
 	(8, 'BESI'),
 	(7, 'BAJA'),
@@ -175,7 +169,8 @@ REPLACE INTO `inv_barang_kategori` (`ID`, `Kategori`) VALUES
 	(13, 'BAUT'),
 	(14, 'PLASTIK'),
 	(15, 'BETON'),
-	(16, 'PIPA');
+	(16, 'PIPA'),
+	(17, 'PLAT');
 /*!40000 ALTER TABLE `inv_barang_kategori` ENABLE KEYS */;
 
 
@@ -190,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `inv_barang_satuan` (
 
 -- Dumping data for table setujudb.inv_barang_satuan: 18 rows
 /*!40000 ALTER TABLE `inv_barang_satuan` DISABLE KEYS */;
-REPLACE INTO `inv_barang_satuan` (`ID`, `Satuan`) VALUES
+INSERT IGNORE INTO `inv_barang_satuan` (`ID`, `Satuan`) VALUES
 	(2, 'LEMBAR'),
 	(3, 'KG'),
 	(4, 'BATANG'),
@@ -253,19 +248,34 @@ CREATE TABLE IF NOT EXISTS `inv_konversi` (
   PRIMARY KEY (`sat_beli`,`id_barang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.inv_konversi: 10 rows
+-- Dumping data for table setujudb.inv_konversi: 25 rows
 /*!40000 ALTER TABLE `inv_konversi` DISABLE KEYS */;
-REPLACE INTO `inv_konversi` (`id_barang`, `nm_barang`, `nm_satuan`, `sat_beli`, `isi_konversi`, `doc_date`, `created_by`) VALUES
+INSERT IGNORE INTO `inv_konversi` (`id_barang`, `nm_barang`, `nm_satuan`, `sat_beli`, `isi_konversi`, `doc_date`, `created_by`) VALUES
 	('16', 'ANKUR BETON', '8', '3', 0.25, '2012-10-17 13:40:14', NULL),
 	('11', 'BESI PLAT 3MM', '2', '2', 1, '2012-10-06 13:50:35', NULL),
-	('14', 'BESI BETON 8MM', '4', '4', 1, '2012-10-06 13:53:07', NULL),
+	('197', 'BESI BETON 8MM', '4', '4', 1, '2012-11-07 15:30:21', NULL),
 	('16', 'ANKUR BETON', '8', '8', 1, '2012-10-17 13:38:24', NULL),
 	('17', 'BESI BETON 10 MM', '4', '4', 1, '2012-10-24 14:48:45', NULL),
-	('6', 'BESI BETON 6MM', '4', '4', 1, '2012-10-06 11:48:10', NULL),
+	('20', 'BESI BETON 6MM', '4', '4', 1, '2012-11-03 23:26:56', NULL),
 	('15', 'BESI BETON 3MM', '4', '4', 1, '2012-10-08 23:06:54', NULL),
 	('13', 'BESI PLAT 1.5 MM', '2', '2', 1, '2012-10-06 13:52:48', NULL),
 	('18', 'BESI BETON 8 ASLI X 12M', '4', '4', 1, '2012-10-29 14:58:52', NULL),
-	('19', 'PIPA HITAM 1/2 IN X 0,8MM X 6M', '4', '4', 1, '2012-10-29 15:23:51', NULL);
+	('19', 'PIPA HITAM 1/2 IN X 0,8MM X 6M', '4', '4', 1, '2012-10-29 15:23:51', NULL),
+	('18', 'BESI BETON 8 ASLI X 12M', '4', '6', 0.01, '2012-11-03 23:40:52', NULL),
+	('21', 'EZZER 9MM 0.5\'X12\'', '2', '2', 1, '2012-11-07 14:46:53', NULL),
+	('195', 'BETON 4,0 X 12M', '4', '4', 1, '2012-11-07 15:38:52', NULL),
+	('196', 'BETON 5,1 X 12M', '4', '4', 1, '2012-11-07 15:27:15', NULL),
+	('3', 'BETON 5,5 X 12M', '4', '4', 1, '2012-11-07 15:27:15', NULL),
+	('4', 'BETON 6,1 X 12M', '4', '4', 1, '2012-11-07 15:27:15', NULL),
+	('5', 'BETON 8 SD X 12M - BJKU SNI SJ', '4', '4', 1, '2012-11-07 15:27:15', NULL),
+	('67', 'BETON 8 SJ X 12M - BJKU SNI SJ', '4', '4', 1, '2012-11-07 15:27:15', NULL),
+	('7', 'BETON 10 SSJ X 12M - BJKU SNI ', '4', '4', 1, '2012-11-07 15:27:15', NULL),
+	('8', 'BETON 10 BT X 12 M - BJKU SNI ', '4', '4', 1, '2012-11-07 15:27:15', NULL),
+	('9', 'BETON 8 ASLI X 12M - BJKU SNI ', '4', '4', 1, '2012-11-07 15:27:15', NULL),
+	('10', 'BETON 10 ASLI - BJKU SNI SJ 9', '4', '4', 1, '2012-11-07 15:27:15', NULL),
+	('11', 'BETON 12 SSJ X 12 M - BJKU SNI', '4', '4', 1, '2012-11-07 15:27:15', NULL),
+	('12', 'BETON 12 ASLI X 12 M ', '4', '4', 1, '2012-11-07 15:27:15', NULL),
+	('13', 'BETON 12 FULL X 12 M - HJP 12 ', '4', '4', 1, '2012-11-07 15:27:15', NULL);
 /*!40000 ALTER TABLE `inv_konversi` ENABLE KEYS */;
 
 
@@ -303,16 +313,8 @@ CREATE TABLE IF NOT EXISTS `inv_material_stok` (
   PRIMARY KEY (`batch`,`id_barang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='data stock material';
 
--- Dumping data for table setujudb.inv_material_stok: 7 rows
+-- Dumping data for table setujudb.inv_material_stok: 0 rows
 /*!40000 ALTER TABLE `inv_material_stok` DISABLE KEYS */;
-REPLACE INTO `inv_material_stok` (`id_barang`, `nm_barang`, `batch`, `expired`, `stock`, `blokstok`, `nm_satuan`, `harga_beli`, `created_by`, `doc_date`) VALUES
-	(4, 'BESI BETON 10MM', '12297-8', NULL, 50, 0, '4', 35000, 'superuser', '2012-10-24 14:39:58'),
-	(19, 'PIPA HITAM 1/2 IN X 0,8MM X 6M', '12302-9', NULL, 20, 0, '4', 20000, 'superuser', '2012-10-29 15:56:44'),
-	(18, 'BESI BETON 8 ASLI X 12M', '12302-7', NULL, 200, 0, '4', 31300, NULL, '2012-10-29 15:06:48'),
-	(15, 'BESI BETON 3MM', '12297-2', NULL, 20, 0, '4', 25000, NULL, '2012-10-25 15:27:12'),
-	(14, 'BESI BETON 8MM', '12297-8', NULL, 29, 0, '4', 35000, NULL, '2012-10-25 15:27:12'),
-	(19, 'PIPA HITAM 1/2 IN X 0,8MM X 6M', '', NULL, 0, 0, '4', 0, NULL, '2012-10-29 15:33:56'),
-	(19, 'PIPA HITAM 1/2 IN X 0,8MM X 6M', '12302-5', NULL, 0, 0, '4', 21000, NULL, '2012-10-29 15:33:53');
 /*!40000 ALTER TABLE `inv_material_stok` ENABLE KEYS */;
 
 
@@ -350,9 +352,9 @@ CREATE TABLE IF NOT EXISTS `inv_pembayaran` (
   PRIMARY KEY (`no_transaksi`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.inv_pembayaran: 25 rows
+-- Dumping data for table setujudb.inv_pembayaran: 29 rows
 /*!40000 ALTER TABLE `inv_pembayaran` DISABLE KEYS */;
-REPLACE INTO `inv_pembayaran` (`no_transaksi`, `total_belanja`, `ppn`, `total_bayar`, `jml_dibayar`, `kembalian`, `doc_date`, `created_by`, `ID_Jenis`) VALUES
+INSERT IGNORE INTO `inv_pembayaran` (`no_transaksi`, `total_belanja`, `ppn`, `total_bayar`, `jml_dibayar`, `kembalian`, `doc_date`, `created_by`, `ID_Jenis`) VALUES
 	('4000000017', 900000, 0, 900000, 900000, 0, '2012-10-24 23:16:34', 'superuser', 1),
 	('4000000016', 1320000, 0, 1320000, 1320000, 0, '2012-10-24 23:16:32', 'superuser', 2),
 	('4000000000', 150000, 0, 150000, 150000, 0, '2012-10-24 23:15:20', 'superuser', 1),
@@ -378,7 +380,10 @@ REPLACE INTO `inv_pembayaran` (`no_transaksi`, `total_belanja`, `ppn`, `total_ba
 	('4000000027', 1800000, 0, 1800000, 1800000, 0, '2012-10-25 15:27:12', 'superuser', 2),
 	('4000000029', 21000000, 0, 21000000, 21000000, 0, '2012-10-29 15:06:47', 'superuser', 1),
 	('4000000031', 1500000, 0, 1500000, 1500000, 0, '2012-10-29 15:33:52', 'superuser', 1),
-	('4000000033', 1500000, 0, 1500000, 0, 0, '2012-10-29 15:57:19', 'superuser', 5);
+	('4000000033', 1500000, 0, 1500000, 0, 0, '2012-10-29 15:57:19', 'superuser', 5),
+	('4000000034', 35000, 0, 35000, 35000, 0, '2012-11-03 22:38:11', 'superuser', 2),
+	('4000000036', 1750000, 0, 1750000, 1750000, 0, '2012-11-05 16:33:42', 'superuser', 1),
+	('4000000035', 70000, 0, 70000, 70000, 0, '2012-11-03 15:46:37', 'superuser', 1);
 /*!40000 ALTER TABLE `inv_pembayaran` ENABLE KEYS */;
 
 
@@ -397,16 +402,18 @@ CREATE TABLE IF NOT EXISTS `inv_pembelian` (
   `ID_Bayar` int(11) DEFAULT NULL,
   `ID_Post` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.inv_pembelian: 4 rows
+-- Dumping data for table setujudb.inv_pembelian: 7 rows
 /*!40000 ALTER TABLE `inv_pembelian` DISABLE KEYS */;
-REPLACE INTO `inv_pembelian` (`ID`, `ID_Jenis`, `Tanggal`, `Bulan`, `Tahun`, `ID_Pemasok`, `NoUrut`, `Nomor`, `Deskripsi`, `ID_Bayar`, `ID_Post`) VALUES
+INSERT IGNORE INTO `inv_pembelian` (`ID`, `ID_Jenis`, `Tanggal`, `Bulan`, `Tahun`, `ID_Pemasok`, `NoUrut`, `Nomor`, `Deskripsi`, `ID_Bayar`, `ID_Post`) VALUES
 	(1, 1, '2012-10-24', 10, 2012, 4, '5000000000', 'BT-0000-12', 'BAJA BESI. PT', 1750000, NULL),
 	(2, 1, '2012-10-24', 10, 2012, 4, '5000000001', '3344565', 'BAJA BESI. PT', 3525000, NULL),
 	(3, 1, '2012-10-29', 10, 2012, 6, '5000000002', '1', 'SURYA BAJA GEMILANG', 25040000, NULL),
 	(4, 1, '2012-10-29', 10, 2012, 6, '5000000003', '12', 'SURYA BAJA GEMILANG', 1630000, NULL),
-	(5, 1, '2012-10-29', 10, 2012, 6, '5000000004', 'BT-0004-12', 'SURYA BAJA GEMILANG', 400000, NULL);
+	(5, 1, '2012-10-29', 10, 2012, 6, '5000000004', 'BT-0004-12', 'SURYA BAJA GEMILANG', 400000, NULL),
+	(6, 1, '2012-11-03', 11, 2012, 4, '5000000005', 'BT-0005-12', 'BAJA BESI. PT', 1575000, NULL),
+	(7, 1, '2012-11-07', 11, 2012, 4, '5000000006', 'BT-0006-12', 'BAJA BESI. PT', 1500000, NULL);
 /*!40000 ALTER TABLE `inv_pembelian` ENABLE KEYS */;
 
 
@@ -426,18 +433,20 @@ CREATE TABLE IF NOT EXISTS `inv_pembelian_detail` (
   `ID_Satuan` int(11) DEFAULT NULL,
   `Batch` varchar(50) DEFAULT NULL,
   KEY `ID` (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.inv_pembelian_detail: 6 rows
+-- Dumping data for table setujudb.inv_pembelian_detail: 9 rows
 /*!40000 ALTER TABLE `inv_pembelian_detail` DISABLE KEYS */;
-REPLACE INTO `inv_pembelian_detail` (`ID`, `Tanggal`, `Bulan`, `Tahun`, `ID_Beli`, `ID_Barang`, `Jml_Faktur`, `Jumlah`, `Harga_Beli`, `Keterangan`, `ID_Satuan`, `Batch`) VALUES
+INSERT IGNORE INTO `inv_pembelian_detail` (`ID`, `Tanggal`, `Bulan`, `Tahun`, `ID_Beli`, `ID_Barang`, `Jml_Faktur`, `Jumlah`, `Harga_Beli`, `Keterangan`, `ID_Satuan`, `Batch`) VALUES
 	(4, '2012-10-24', 10, 2012, 2, 15, 50, 50, 25000, '1250000', 4, '12297-2'),
 	(5, '2012-10-24', 10, 2012, 2, 14, 65, 65, 35000, '2275000', 4, '12297-8'),
 	(3, '2012-10-24', 10, 2012, 1, 4, 50, 50, 35000, '1750000', 4, '12297-8'),
 	(6, '2012-10-29', 10, 2012, 3, 18, 800, 800, 31300, '25040000', 4, '12302-7'),
 	(7, '2012-10-29', 10, 2012, 4, 19, 50, 50, 20000, '1000000', 4, '12302-9'),
 	(8, '2012-10-29', 10, 2012, 4, 19, 30, 30, 21000, '630000', 4, '12302-5'),
-	(9, '2012-10-29', 10, 2012, 5, 19, 20, 20, 20000, '400000', 4, '12302-9');
+	(9, '2012-10-29', 10, 2012, 5, 19, 20, 20, 20000, '400000', 4, '12302-9'),
+	(10, '2012-11-03', 11, 2012, 6, 18, 50, 50, 31500, '1575000', 4, '12307-0'),
+	(11, '2012-11-07', 11, 2012, 7, 14, 30, 30, 50000, '1500000', 4, '12311-9');
 /*!40000 ALTER TABLE `inv_pembelian_detail` ENABLE KEYS */;
 
 
@@ -452,7 +461,7 @@ CREATE TABLE IF NOT EXISTS `inv_pembelian_jenis` (
 
 -- Dumping data for table setujudb.inv_pembelian_jenis: 3 rows
 /*!40000 ALTER TABLE `inv_pembelian_jenis` DISABLE KEYS */;
-REPLACE INTO `inv_pembelian_jenis` (`ID`, `Jenis_Beli`) VALUES
+INSERT IGNORE INTO `inv_pembelian_jenis` (`ID`, `Jenis_Beli`) VALUES
 	(1, 'Tunai'),
 	(2, 'Giro'),
 	(3, 'Cheque');
@@ -476,9 +485,9 @@ CREATE TABLE IF NOT EXISTS `inv_pembelian_rekap` (
   `batch` varchar(50) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table setujudb.inv_pembelian_rekap: 14 rows
+-- Dumping data for table setujudb.inv_pembelian_rekap: 17 rows
 /*!40000 ALTER TABLE `inv_pembelian_rekap` DISABLE KEYS */;
-REPLACE INTO `inv_pembelian_rekap` (`ID`, `Tanggal`, `Bulan`, `Tahun`, `ID_Beli`, `ID_Barang`, `Jml_Faktur`, `Jumlah`, `Harga_Beli`, `Keterangan`, `ID_Satuan`, `batch`) VALUES
+INSERT IGNORE INTO `inv_pembelian_rekap` (`ID`, `Tanggal`, `Bulan`, `Tahun`, `ID_Beli`, `ID_Barang`, `Jml_Faktur`, `Jumlah`, `Harga_Beli`, `Keterangan`, `ID_Satuan`, `batch`) VALUES
 	(3, '2012-10-19 00:00:00', 10, 2012, 2, 4, 100, 100, 35000, '3500000', 4, '12290-5'),
 	(4, '2012-10-19 00:00:00', 10, 2012, 3, 11, 10, 10, 545000, '5450000', 2, '12293-6'),
 	(5, '2012-10-19 00:00:00', 10, 2012, 3, 13, 5, 5, 350000, '1750000', 2, '12293-2'),
@@ -493,7 +502,9 @@ REPLACE INTO `inv_pembelian_rekap` (`ID`, `Tanggal`, `Bulan`, `Tahun`, `ID_Beli`
 	(6, '2012-10-29 00:00:00', 10, 2012, 3, 18, 800, 800, 31300, '25040000', 4, '12302-7'),
 	(7, '2012-10-29 00:00:00', 10, 2012, 4, 19, 50, 50, 20000, '1000000', 4, '12302-9'),
 	(8, '2012-10-29 00:00:00', 10, 2012, 4, 19, 30, 30, 21000, '630000', 4, '12302-5'),
-	(9, '2012-10-29 00:00:00', 10, 2012, 5, 19, 20, 20, 20000, '400000', 4, '12302-9');
+	(9, '2012-10-29 00:00:00', 10, 2012, 5, 19, 20, 20, 20000, '400000', 4, '12302-9'),
+	(10, '2012-11-03 00:00:00', 11, 2012, 6, 18, 50, 50, 31500, '1575000', 4, '12307-0'),
+	(11, '2012-11-07 00:00:00', 11, 2012, 7, 14, 30, 30, 50000, '1500000', 4, '12311-9');
 /*!40000 ALTER TABLE `inv_pembelian_rekap` ENABLE KEYS */;
 
 
@@ -527,11 +538,11 @@ CREATE TABLE IF NOT EXISTS `inv_penjualan` (
   `ID_Post` varchar(100) DEFAULT NULL,
   `ID_Close` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.inv_penjualan: 32 rows
+-- Dumping data for table setujudb.inv_penjualan: 37 rows
 /*!40000 ALTER TABLE `inv_penjualan` DISABLE KEYS */;
-REPLACE INTO `inv_penjualan` (`ID`, `ID_Jenis`, `Tanggal`, `Bulan`, `Tahun`, `NoUrut`, `Nomor`, `ID_Anggota`, `Deskripsi`, `Cicilan`, `Total`, `Tgl_Cicilan`, `ID_Post`, `ID_Close`) VALUES
+INSERT IGNORE INTO `inv_penjualan` (`ID`, `ID_Jenis`, `Tanggal`, `Bulan`, `Tahun`, `NoUrut`, `Nomor`, `ID_Anggota`, `Deskripsi`, `Cicilan`, `Total`, `Tgl_Cicilan`, `ID_Post`, `ID_Close`) VALUES
 	(1, 1, '2012-10-24', 10, 2012, '4000000000', '00000-2012', 2, '', 0, 150000, '0000-00-00', '0', NULL),
 	(2, 2, '2012-10-24', 10, 2012, '4000000001', '00001-2012', 3, 'BANK BCA', 1, 900000, '2012-10-26', '334455', NULL),
 	(3, 5, '2012-10-24', 10, 2012, '4000000002', 'RK-00002-2012', 3, '', 1, 750000, '0000-00-00', '0', NULL),
@@ -565,7 +576,10 @@ REPLACE INTO `inv_penjualan` (`ID`, `ID_Jenis`, `Tanggal`, `Bulan`, `Tahun`, `No
 	(31, 1, '2012-10-29', 10, 2012, '4000000030', '00030-2012', 7, NULL, 0, 0, NULL, NULL, NULL),
 	(32, 1, '2012-10-29', 10, 2012, '4000000031', '00031-2012', 7, '', 0, 1500000, '0000-00-00', '0', NULL),
 	(33, 1, '2012-10-29', 10, 2012, '4000000032', '00032-2012', 0, NULL, 0, 0, NULL, NULL, NULL),
-	(34, 5, '2012-10-29', 10, 2012, '4000000033', 'RK-00033-2012', 0, '', 1, 1500000, '0000-00-00', '0', NULL);
+	(34, 5, '2012-10-29', 10, 2012, '4000000033', 'RK-00033-2012', 0, '', 1, 1500000, '0000-00-00', '0', NULL),
+	(35, 2, '2012-11-03', 11, 2012, '4000000034', '00034-2012', 1, 'BANK BTN', 1, 35000, '2012-11-03', '1234', NULL),
+	(36, 1, '2012-11-03', 11, 2012, '4000000035', '00035-2012', 1, '', 0, 70000, '0000-00-00', '0', NULL),
+	(37, 1, '2012-11-05', 11, 2012, '4000000036', '00036-2012', 0, '', 0, 1750000, '0000-00-00', '0', NULL);
 /*!40000 ALTER TABLE `inv_penjualan` ENABLE KEYS */;
 
 
@@ -601,11 +615,11 @@ CREATE TABLE IF NOT EXISTS `inv_penjualan_detail` (
   `ID_Satuan` varchar(50) DEFAULT NULL,
   `Batch` varchar(50) DEFAULT NULL,
   KEY `ID` (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=50 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=53 DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.inv_penjualan_detail: 49 rows
+-- Dumping data for table setujudb.inv_penjualan_detail: 52 rows
 /*!40000 ALTER TABLE `inv_penjualan_detail` DISABLE KEYS */;
-REPLACE INTO `inv_penjualan_detail` (`ID`, `ID_Jenis`, `Tanggal`, `Bulan`, `Tahun`, `ID_Jual`, `ID_Barang`, `Jumlah`, `Harga`, `ID_Post`, `Keterangan`, `ID_Satuan`, `Batch`) VALUES
+INSERT IGNORE INTO `inv_penjualan_detail` (`ID`, `ID_Jenis`, `Tanggal`, `Bulan`, `Tahun`, `ID_Jual`, `ID_Barang`, `Jumlah`, `Harga`, `ID_Post`, `Keterangan`, `ID_Satuan`, `Batch`) VALUES
 	(1, 1, '2012-10-24', 1, NULL, 1, 15, 5, 30000, '0', '4000000000', '4', '12297-2'),
 	(2, 2, '2012-10-24', 1, NULL, 2, 15, 5, 30000, '0', '4000000001', '4', '12297-2'),
 	(3, 2, '2012-10-24', 2, NULL, 2, 14, 5, 150000, '0', '4000000001', '4', '12297-8'),
@@ -654,7 +668,10 @@ REPLACE INTO `inv_penjualan_detail` (`ID`, `ID_Jenis`, `Tanggal`, `Bulan`, `Tahu
 	(46, 2, '2012-10-25', 19, NULL, 28, 14, 1, 150000, '0', '4000000027', '4', '12297-8'),
 	(47, 2, '2012-10-25', 20, NULL, 28, 15, 1, 30000, '0', '4000000027', '4', '12297-2'),
 	(48, 1, '2012-10-29', 1, NULL, 30, 18, 600, 35000, '0', '4000000029', '4', '12302-7'),
-	(49, 1, '2012-10-29', 1, NULL, 32, 19, 60, 25000, '0', '4000000031', '4', '12302-9');
+	(49, 1, '2012-10-29', 1, NULL, 32, 19, 60, 25000, '0', '4000000031', '4', '12302-9'),
+	(50, 2, '2012-11-03', 1, NULL, 35, 18, 1, 35000, '0', '4000000034', '4', '12302-7'),
+	(51, 1, '2012-11-03', 1, NULL, 36, 18, 2, 35000, '0', '4000000035', '4', '12307-0'),
+	(52, 1, '2012-11-05', 1, NULL, 37, 18, 50, 35000, '0', '4000000036', '4', '12307-0');
 /*!40000 ALTER TABLE `inv_penjualan_detail` ENABLE KEYS */;
 
 
@@ -668,7 +685,7 @@ CREATE TABLE IF NOT EXISTS `inv_penjualan_jenis` (
 
 -- Dumping data for table setujudb.inv_penjualan_jenis: 5 rows
 /*!40000 ALTER TABLE `inv_penjualan_jenis` DISABLE KEYS */;
-REPLACE INTO `inv_penjualan_jenis` (`ID`, `Jenis_Jual`) VALUES
+INSERT IGNORE INTO `inv_penjualan_jenis` (`ID`, `Jenis_Jual`) VALUES
 	(1, 'Tunai'),
 	(2, 'Giro'),
 	(3, 'Cheque'),
@@ -694,9 +711,9 @@ CREATE TABLE IF NOT EXISTS `inv_penjualan_rekap` (
   `no_transaksi` varchar(50) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table setujudb.inv_penjualan_rekap: 78 rows
+-- Dumping data for table setujudb.inv_penjualan_rekap: 81 rows
 /*!40000 ALTER TABLE `inv_penjualan_rekap` DISABLE KEYS */;
-REPLACE INTO `inv_penjualan_rekap` (`ID`, `ID_Jenis`, `Tanggal`, `Bulan`, `Tahun`, `ID_Jual`, `ID_Barang`, `Jumlah`, `Harga`, `ID_Post`, `Keterangan`, `no_transaksi`) VALUES
+INSERT IGNORE INTO `inv_penjualan_rekap` (`ID`, `ID_Jenis`, `Tanggal`, `Bulan`, `Tahun`, `ID_Jual`, `ID_Barang`, `Jumlah`, `Harga`, `ID_Post`, `Keterangan`, `no_transaksi`) VALUES
 	(4, 2, '2012-10-17 00:00:00', 10, 2012, 7, 4, 1, 35000, NULL, '0', '4000000018'),
 	(5, 3, '2012-10-17 00:00:00', 10, 2012, 8, 4, 4, 35000, NULL, '1', '4000000019'),
 	(6, 4, '2012-10-17 00:00:00', 10, 2012, 8, 15, 1, 30000, NULL, '1', '4000000019'),
@@ -774,7 +791,10 @@ REPLACE INTO `inv_penjualan_rekap` (`ID`, `ID_Jenis`, `Tanggal`, `Bulan`, `Tahun
 	(46, 2, '2012-10-25 00:00:00', 10, 2012, 28, 14, 1, 150000, NULL, '1', '4000000027'),
 	(47, 2, '2012-10-25 00:00:00', 10, 2012, 28, 15, 1, 30000, NULL, '2', '4000000027'),
 	(48, 1, '2012-10-29 00:00:00', 10, 2012, 30, 18, 600, 35000, NULL, '1', '4000000029'),
-	(49, 1, '2012-10-29 00:00:00', 10, 2012, 32, 19, 60, 25000, NULL, '1', '4000000031');
+	(49, 1, '2012-10-29 00:00:00', 10, 2012, 32, 19, 60, 25000, NULL, '1', '4000000031'),
+	(50, 2, '2012-11-03 00:00:00', 11, 2012, 35, 18, 1, 35000, NULL, '0', '4000000034'),
+	(51, 1, '2012-11-03 00:00:00', 11, 2012, 36, 18, 2, 35000, NULL, '1', '4000000035'),
+	(52, 1, '2012-11-05 00:00:00', 11, 2012, 37, 18, 50, 35000, NULL, '0', '4000000036');
 /*!40000 ALTER TABLE `inv_penjualan_rekap` ENABLE KEYS */;
 
 
@@ -843,7 +863,7 @@ CREATE TABLE IF NOT EXISTS `jenis_simpanan` (
 
 -- Dumping data for table setujudb.jenis_simpanan: 7 rows
 /*!40000 ALTER TABLE `jenis_simpanan` DISABLE KEYS */;
-REPLACE INTO `jenis_simpanan` (`ID`, `Jenis`, `ID_Klasifikasi`, `ID_SubKlas`, `ID_Laporan`, `ID_LapDetail`, `ID_Calc`, `ID_Unit`) VALUES
+INSERT IGNORE INTO `jenis_simpanan` (`ID`, `Jenis`, `ID_Klasifikasi`, `ID_SubKlas`, `ID_Laporan`, `ID_LapDetail`, `ID_Calc`, `ID_Unit`) VALUES
 	(1, 'Tunai', 4, 17, 2, 30, 2, 1),
 	(2, 'Giro', 4, 18, 2, 31, 2, 1),
 	(3, 'Cheque', 4, 19, 2, 32, 2, 1),
@@ -883,11 +903,11 @@ CREATE TABLE IF NOT EXISTS `kas` (
   `Kode` varchar(50) DEFAULT NULL,
   `Nama_Kas` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.kas: ~5 rows (approximately)
+-- Dumping data for table setujudb.kas: 5 rows
 /*!40000 ALTER TABLE `kas` DISABLE KEYS */;
-REPLACE INTO `kas` (`ID`, `Kode`, `Nama_Kas`) VALUES
+INSERT IGNORE INTO `kas` (`ID`, `Kode`, `Nama_Kas`) VALUES
 	(1, 'A', 'Penerimaan Kas'),
 	(2, 'B', 'Pengeluaran Kas'),
 	(3, 'C', 'Saldo Kas [ A - B ]'),
@@ -905,11 +925,11 @@ CREATE TABLE IF NOT EXISTS `kas_sub` (
   `ID_Calc` int(10) DEFAULT '0',
   `ID_CC` int(10) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.kas_sub: ~6 rows (approximately)
+-- Dumping data for table setujudb.kas_sub: 6 rows
 /*!40000 ALTER TABLE `kas_sub` DISABLE KEYS */;
-REPLACE INTO `kas_sub` (`ID`, `ID_KAS`, `Nama_SubKas`, `ID_Calc`, `ID_CC`) VALUES
+INSERT IGNORE INTO `kas_sub` (`ID`, `ID_KAS`, `Nama_SubKas`, `ID_Calc`, `ID_CC`) VALUES
 	(1, 1, 'Transaksi Penjualan', 1, 1),
 	(2, 1, 'Pembayaran Piutang', 1, 7),
 	(3, 2, 'Transaksi Pembelian', 2, 4),
@@ -928,7 +948,7 @@ CREATE TABLE IF NOT EXISTS `keaktifan` (
 
 -- Dumping data for table setujudb.keaktifan: 3 rows
 /*!40000 ALTER TABLE `keaktifan` DISABLE KEYS */;
-REPLACE INTO `keaktifan` (`ID`, `Keaktifan`) VALUES
+INSERT IGNORE INTO `keaktifan` (`ID`, `Keaktifan`) VALUES
 	(1, 'Aktif'),
 	(2, 'Non Aktif'),
 	(3, 'Keluar');
@@ -945,7 +965,7 @@ CREATE TABLE IF NOT EXISTS `klasifikasi` (
 
 -- Dumping data for table setujudb.klasifikasi: 9 rows
 /*!40000 ALTER TABLE `klasifikasi` DISABLE KEYS */;
-REPLACE INTO `klasifikasi` (`ID`, `Kode`, `Klasifikasi`) VALUES
+INSERT IGNORE INTO `klasifikasi` (`ID`, `Kode`, `Klasifikasi`) VALUES
 	(1, '1', 'Harta'),
 	(2, '2', 'Kewajiban'),
 	(3, '3', 'Kekayaan Bersih'),
@@ -967,7 +987,7 @@ CREATE TABLE IF NOT EXISTS `laba_rugi` (
 
 -- Dumping data for table setujudb.laba_rugi: 3 rows
 /*!40000 ALTER TABLE `laba_rugi` DISABLE KEYS */;
-REPLACE INTO `laba_rugi` (`ID`, `Jenis`) VALUES
+INSERT IGNORE INTO `laba_rugi` (`ID`, `Jenis`) VALUES
 	(1, 'Pendapatan Usaha'),
 	(2, 'Pendapatan Lain'),
 	(3, 'Beban Langsung');
@@ -983,7 +1003,7 @@ CREATE TABLE IF NOT EXISTS `laporan` (
 
 -- Dumping data for table setujudb.laporan: 2 rows
 /*!40000 ALTER TABLE `laporan` DISABLE KEYS */;
-REPLACE INTO `laporan` (`ID`, `JenisLaporan`) VALUES
+INSERT IGNORE INTO `laporan` (`ID`, `JenisLaporan`) VALUES
 	(1, 'Laba - Rugi'),
 	(2, 'Cash Flow');
 /*!40000 ALTER TABLE `laporan` ENABLE KEYS */;
@@ -1004,7 +1024,7 @@ CREATE TABLE IF NOT EXISTS `lap_head` (
 
 -- Dumping data for table setujudb.lap_head: 2 rows
 /*!40000 ALTER TABLE `lap_head` DISABLE KEYS */;
-REPLACE INTO `lap_head` (`ID`, `Header1`, `Header2`, `Number1`, `Number2`, `Number3`, `Number4`, `Number5`) VALUES
+INSERT IGNORE INTO `lap_head` (`ID`, `Header1`, `Header2`, `Number1`, `Number2`, `Number3`, `Number4`, `Number5`) VALUES
 	(1, 'A K T I V A', 'Aktiva', 0, 0, 0, 0, 0),
 	(2, 'P A S I V A', 'Pasiva', 0, 0, 0, 0, 0);
 /*!40000 ALTER TABLE `lap_head` ENABLE KEYS */;
@@ -1024,7 +1044,7 @@ CREATE TABLE IF NOT EXISTS `lap_jenis` (
 
 -- Dumping data for table setujudb.lap_jenis: 11 rows
 /*!40000 ALTER TABLE `lap_jenis` DISABLE KEYS */;
-REPLACE INTO `lap_jenis` (`ID`, `ID_Head`, `ID_KBR`, `ID_USP`, `ID_Calc`, `Jenis`, `Jenis1`) VALUES
+INSERT IGNORE INTO `lap_jenis` (`ID`, `ID_Head`, `ID_KBR`, `ID_USP`, `ID_Calc`, `Jenis`, `Jenis1`) VALUES
 	(1, 1, 1, 1, 1, 'AKTIVA LANCAR', 'Aktiva Lancar'),
 	(2, 1, 1, 0, 1, 'INVESTASI PADA USP', 'Investasi Pada USP'),
 	(3, 1, 1, 1, 1, 'AKTIVA TETAP', 'Aktiva Tetap'),
@@ -1152,7 +1172,7 @@ CREATE TABLE IF NOT EXISTS `lap_subjenis` (
 
 -- Dumping data for table setujudb.lap_subjenis: 83 rows
 /*!40000 ALTER TABLE `lap_subjenis` DISABLE KEYS */;
-REPLACE INTO `lap_subjenis` (`ID`, `NoUrut`, `ID_Lap`, `ID_Jenis`, `ID_Calc`, `ID_KBR`, `ID_USP`, `ID_Post`, `SubJenis`) VALUES
+INSERT IGNORE INTO `lap_subjenis` (`ID`, `NoUrut`, `ID_Lap`, `ID_Jenis`, `ID_Calc`, `ID_KBR`, `ID_USP`, `ID_Post`, `SubJenis`) VALUES
 	(1, 1, 2, 1, 1, 1, 1, 0, 'Kas'),
 	(2, 2, 2, 1, 1, 1, 0, 0, 'Bank'),
 	(3, 3, 2, 1, 1, 0, 1, 0, 'Bank BPR Kop. Jabar'),
@@ -1269,7 +1289,7 @@ CREATE TABLE IF NOT EXISTS `mst_anggota` (
 
 -- Dumping data for table setujudb.mst_anggota: 7 rows
 /*!40000 ALTER TABLE `mst_anggota` DISABLE KEYS */;
-REPLACE INTO `mst_anggota` (`ID`, `ID_Jenis`, `NoUrut`, `ID_Aktif`, `ID_Dept`, `No_Perkiraan`, `NIP`, `No_Agt`, `Nama`, `ID_Check`, `ID_Kelamin`, `TanggalMasuk`, `TanggalKeluar`, `PhotoLink`, `Catatan`, `Alamat`, `Kota`, `Propinsi`, `Telepon`, `Faksimili`, `Status`) VALUES
+INSERT IGNORE INTO `mst_anggota` (`ID`, `ID_Jenis`, `NoUrut`, `ID_Aktif`, `ID_Dept`, `No_Perkiraan`, `NIP`, `No_Agt`, `Nama`, `ID_Check`, `ID_Kelamin`, `TanggalMasuk`, `TanggalKeluar`, `PhotoLink`, `Catatan`, `Alamat`, `Kota`, `Propinsi`, `Telepon`, `Faksimili`, `Status`) VALUES
 	(1, 1, 1, 0, 1, NULL, NULL, '0001', 'JUNED', NULL, 1, '2012-10-18 12:08:34', '2012-10-18', NULL, 'PT.CATUR NUNGGAL', 'Jl. Bajai Bajuri', 'Purwakarta', 'Jawa Barat', '0264-351', '0264', '1000000'),
 	(2, 1, 2, 0, 1, NULL, NULL, '0002', 'BAMBANG SUDJATMIKO', NULL, NULL, '2012-10-18 10:12:51', '2012-10-18', NULL, 'PT. BANGUN SENTOSA', 'Jl. Imam Bonjol 15', 'Purwakarta', 'Jawa Barat', '0264-22222', '0264-33344', '25000000'),
 	(3, 1, 3, 0, 1, NULL, NULL, '0003', 'BUDIMAN', NULL, NULL, '2012-10-18 10:12:19', NULL, NULL, 'PT.AZET', 'Jl. Dipatiukur 63', 'Bandung', 'Jawa Barat', '022', '', '50000000'),
@@ -1320,11 +1340,11 @@ CREATE TABLE IF NOT EXISTS `mst_bank` (
   `Nama` varchar(150) DEFAULT NULL,
   `Saldo` double DEFAULT '0',
   PRIMARY KEY (`NamaBank`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.mst_bank: ~3 rows (approximately)
+-- Dumping data for table setujudb.mst_bank: 3 rows
 /*!40000 ALTER TABLE `mst_bank` DISABLE KEYS */;
-REPLACE INTO `mst_bank` (`NamaBank`, `NoRek`, `Nama`, `Saldo`) VALUES
+INSERT IGNORE INTO `mst_bank` (`NamaBank`, `NoRek`, `Nama`, `Saldo`) VALUES
 	('', '0', 'JUNED', 65000),
 	('BANK BCA', '12345679', 'BAMBANG SUDJATMIKO', 150000),
 	('BANK BTN', '22334455', 'BAMBANG SUDJATMIKO', 825000);
@@ -1372,7 +1392,7 @@ CREATE TABLE IF NOT EXISTS `mst_kas` (
 
 -- Dumping data for table setujudb.mst_kas: 1 rows
 /*!40000 ALTER TABLE `mst_kas` DISABLE KEYS */;
-REPLACE INTO `mst_kas` (`id_kas`, `nm_kas`, `sa_kas`, `sl_kas`, `doc_date`, `created_by`) VALUES
+INSERT IGNORE INTO `mst_kas` (`id_kas`, `nm_kas`, `sa_kas`, `sl_kas`, `doc_date`, `created_by`) VALUES
 	('KAS TOKO', 'KAS HARIAN TOKO', 0, 0, '2012-10-04 12:13:50', 'superuser');
 /*!40000 ALTER TABLE `mst_kas` ENABLE KEYS */;
 
@@ -1390,12 +1410,13 @@ CREATE TABLE IF NOT EXISTS `mst_kas_harian` (
   PRIMARY KEY (`tgl_kas`,`id_kas`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.mst_kas_harian: 3 rows
+-- Dumping data for table setujudb.mst_kas_harian: 4 rows
 /*!40000 ALTER TABLE `mst_kas_harian` DISABLE KEYS */;
-REPLACE INTO `mst_kas_harian` (`no_trans`, `tgl_kas`, `id_kas`, `nm_kas`, `sa_kas`, `created_by`, `doc_date`) VALUES
+INSERT IGNORE INTO `mst_kas_harian` (`no_trans`, `tgl_kas`, `id_kas`, `nm_kas`, `sa_kas`, `created_by`, `doc_date`) VALUES
 	('2000000000', '2012-10-24', 'KAS TOKO', 'KAS HARIAN TOKO', 500000, 'superuser', '2012-10-24 14:29:31'),
 	('2000000005', '2012-10-25', 'KAS TOKO', 'KAS HARIAN TOKO', 500000, 'superuser', '2012-10-25 13:16:21'),
-	('2000000007', '2012-10-29', 'KAS TOKO', 'KAS HARIAN TOKO', 500000, 'superuser', '2012-10-29 15:19:38');
+	('2000000007', '2012-10-29', 'KAS TOKO', 'KAS HARIAN TOKO', 500000, 'superuser', '2012-10-29 15:19:38'),
+	('2000000009', '2012-11-03', 'KAS TOKO', 'KAS HARIAN TOKO', 100000, 'superuser', '2012-11-03 16:26:33');
 /*!40000 ALTER TABLE `mst_kas_harian` ENABLE KEYS */;
 
 
@@ -1411,11 +1432,11 @@ CREATE TABLE IF NOT EXISTS `mst_kas_trans` (
   `created_by` varchar(50) DEFAULT NULL,
   `doc_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_trans`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='transaksi kas harian';
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='transaksi kas harian';
 
--- Dumping data for table setujudb.mst_kas_trans: ~9 rows (approximately)
+-- Dumping data for table setujudb.mst_kas_trans: 11 rows
 /*!40000 ALTER TABLE `mst_kas_trans` DISABLE KEYS */;
-REPLACE INTO `mst_kas_trans` (`id_trans`, `id_kas`, `tgl_trans`, `uraian_trans`, `jumlah`, `saldo_kas`, `created_by`, `doc_date`) VALUES
+INSERT IGNORE INTO `mst_kas_trans` (`id_trans`, `id_kas`, `tgl_trans`, `uraian_trans`, `jumlah`, `saldo_kas`, `created_by`, `doc_date`) VALUES
 	(2000000000, 'KAS TOKO', '2012-10-24', 'Saldo Awal hari ini', 0, 500000, NULL, '2012-10-24 14:29:31'),
 	(2000000001, 'KAS TOKO', '2012-10-24', 'Sumbangan', 5000, 495000, 'superuser', '2012-10-24 14:30:25'),
 	(2000000002, 'KAS TOKO', '2012-10-24', 'Beli Snack', 25000, 470000, 'superuser', '2012-10-24 14:31:33'),
@@ -1424,7 +1445,9 @@ REPLACE INTO `mst_kas_trans` (`id_trans`, `id_kas`, `tgl_trans`, `uraian_trans`,
 	(2000000005, 'KAS TOKO', '2012-10-25', 'Saldo Awal hari ini', 0, 500000, NULL, '2012-10-25 13:16:21'),
 	(2000000006, 'KAS TOKO', '2012-10-25', 'Hilang', 450000, 50000, 'superuser', '2012-10-25 15:44:57'),
 	(2000000007, 'KAS TOKO', '2012-10-29', 'Saldo Awal hari ini', 0, 500000, NULL, '2012-10-29 15:19:38'),
-	(2000000008, 'KAS TOKO', '2012-10-29', 'Infaq', 1000, 499000, 'superuser', '2012-10-29 15:20:01');
+	(2000000008, 'KAS TOKO', '2012-10-29', 'Infaq', 1000, 499000, 'superuser', '2012-10-29 15:20:01'),
+	(2000000009, 'KAS TOKO', '2012-11-03', 'Saldo Awal hari ini', 0, 100000, NULL, '2012-11-03 16:26:33'),
+	(2000000010, 'KAS TOKO', '2012-11-03', 'Subangan', 5000, 95000, 'superuser', '2012-11-03 16:26:46');
 /*!40000 ALTER TABLE `mst_kas_trans` ENABLE KEYS */;
 
 
@@ -1439,7 +1462,7 @@ CREATE TABLE IF NOT EXISTS `mst_kota` (
 
 -- Dumping data for table setujudb.mst_kota: 6 rows
 /*!40000 ALTER TABLE `mst_kota` DISABLE KEYS */;
-REPLACE INTO `mst_kota` (`kota_anggota`, `created_by`, `doc_date`) VALUES
+INSERT IGNORE INTO `mst_kota` (`kota_anggota`, `created_by`, `doc_date`) VALUES
 	('PURWAKARTA', '', '2012-10-29 15:05:51'),
 	('Kota', '', '2012-10-17 15:04:06'),
 	('Bandung', '', '2012-10-18 10:12:19'),
@@ -1493,7 +1516,7 @@ CREATE TABLE IF NOT EXISTS `mst_propinsi` (
 
 -- Dumping data for table setujudb.mst_propinsi: 4 rows
 /*!40000 ALTER TABLE `mst_propinsi` DISABLE KEYS */;
-REPLACE INTO `mst_propinsi` (`prop_anggota`, `doc_date`) VALUES
+INSERT IGNORE INTO `mst_propinsi` (`prop_anggota`, `doc_date`) VALUES
 	('Jawa Barat', '2012-10-18 10:12:19'),
 	('Propinsi', '2012-10-17 15:04:06'),
 	('Jawa Tengah', '2012-10-19 22:52:36'),
@@ -1523,9 +1546,9 @@ CREATE TABLE IF NOT EXISTS `nomor_transaksi` (
   PRIMARY KEY (`nomor`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.nomor_transaksi: 45 rows
+-- Dumping data for table setujudb.nomor_transaksi: 55 rows
 /*!40000 ALTER TABLE `nomor_transaksi` DISABLE KEYS */;
-REPLACE INTO `nomor_transaksi` (`nomor`, `jenis_transaksi`, `created_by`, `doc_date`) VALUES
+INSERT IGNORE INTO `nomor_transaksi` (`nomor`, `jenis_transaksi`, `created_by`, `doc_date`) VALUES
 	('2000000000', 'D', NULL, '2012-10-24 14:29:31'),
 	('2000000001', 'D', NULL, '2012-10-24 14:30:25'),
 	('2000000002', 'D', NULL, '2012-10-24 14:31:33'),
@@ -1573,7 +1596,14 @@ REPLACE INTO `nomor_transaksi` (`nomor`, `jenis_transaksi`, `created_by`, `doc_d
 	('4000000031', 'GI', NULL, '2012-10-29 15:33:03'),
 	('4000000032', 'GI', NULL, '2012-10-29 15:54:43'),
 	('5000000004', 'GR', NULL, '2012-10-29 15:56:44'),
-	('4000000033', 'GI', NULL, '2012-10-29 15:57:07');
+	('4000000033', 'GI', NULL, '2012-10-29 15:57:07'),
+	('4000000034', 'GI', NULL, '2012-11-03 22:37:56'),
+	('5000000005', 'GR', NULL, '2012-11-03 23:23:37'),
+	('4000000035', 'GI', NULL, '2012-11-03 15:46:26'),
+	('2000000009', 'D', NULL, '2012-11-03 16:26:33'),
+	('2000000010', 'D', NULL, '2012-11-03 16:26:46'),
+	('4000000036', 'GI', NULL, '2012-11-05 16:33:25'),
+	('5000000006', 'GR', NULL, '2012-11-07 15:29:53');
 /*!40000 ALTER TABLE `nomor_transaksi` ENABLE KEYS */;
 
 
@@ -1600,7 +1630,7 @@ CREATE TABLE IF NOT EXISTS `perkiraan` (
 
 -- Dumping data for table setujudb.perkiraan: 34 rows
 /*!40000 ALTER TABLE `perkiraan` DISABLE KEYS */;
-REPLACE INTO `perkiraan` (`ID`, `ID_Klas`, `ID_SubKlas`, `ID_Dept`, `ID_Unit`, `ID_Laporan`, `ID_LapDetail`, `ID_Agt`, `ID_Calc`, `ID_Simpanan`, `NoUrut`, `Kode`, `Perkiraan`, `SaldoAwal`) VALUES
+INSERT IGNORE INTO `perkiraan` (`ID`, `ID_Klas`, `ID_SubKlas`, `ID_Dept`, `ID_Unit`, `ID_Laporan`, `ID_LapDetail`, `ID_Agt`, `ID_Calc`, `ID_Simpanan`, `NoUrut`, `Kode`, `Perkiraan`, `SaldoAwal`) VALUES
 	(1, 3, 17, 1, 1, 2, 30, 3, 1, 1, 0, NULL, NULL, 0),
 	(2, 3, 18, 1, 1, 2, 31, 3, 1, 2, 0, NULL, NULL, 0),
 	(3, 3, 19, 1, 1, 2, 32, 3, 1, 3, 0, NULL, NULL, 0),
@@ -1660,13 +1690,14 @@ CREATE TABLE IF NOT EXISTS `pinjaman` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='table daftar pinjaman anggota';
 
--- Dumping data for table setujudb.pinjaman: 4 rows
+-- Dumping data for table setujudb.pinjaman: 5 rows
 /*!40000 ALTER TABLE `pinjaman` DISABLE KEYS */;
-REPLACE INTO `pinjaman` (`ID`, `ID_Unit`, `Tanggal`, `ID_Agt`, `ID_Bulan`, `Tahun`, `jml_pinjaman`, `cicilan`, `cicilan_end`, `lama_cicilan`, `cara_bayar`, `keterangan`, `mulai_bayar`, `stat_pinjaman`, `doc_date`, `created_by`) VALUES
-	('4000000024', 1, '2012-10-25 00:00:00', 1, NULL, 2012, 150000, 0, 0, 2, '3', 'Cheque No: 445566-BANK BCA[ 31/10/2012 ]', '2012-10-31', 0, '2012-10-25 14:27:51', NULL),
+INSERT IGNORE INTO `pinjaman` (`ID`, `ID_Unit`, `Tanggal`, `ID_Agt`, `ID_Bulan`, `Tahun`, `jml_pinjaman`, `cicilan`, `cicilan_end`, `lama_cicilan`, `cara_bayar`, `keterangan`, `mulai_bayar`, `stat_pinjaman`, `doc_date`, `created_by`) VALUES
+	('4000000024', 1, '2012-10-25 00:00:00', 1, NULL, 2012, 150000, 0, 0, 4, '3', 'Cheque No: 445566-BANK BCA[ 31/10/2012 ]', '2012-10-31', 0, '2012-11-03 23:10:25', NULL),
 	('4000000023', 1, '2012-10-25 00:00:00', 2, NULL, 2012, 30000, 0, 0, 1, '2', 'Giro No: 334455-BANK BCA[ 25/10/2012 ]', '2012-10-25', 1, '2012-10-25 14:40:58', NULL),
 	('4000000025', 1, '2012-10-25 00:00:00', 3, NULL, 2012, 30000, 0, 0, 1, '4', 'Kredit No: 0-[ 31/10/2012 ]', '2012-10-31', 1, '2012-10-25 14:28:04', NULL),
-	('4000000027', 1, '2012-10-25 00:00:00', 1, NULL, 2012, 1800000, 0, 0, 1, '2', 'Giro No: 345678-BANK BCA[ 30/10/2012 ]', '2012-10-30', 0, '2012-10-25 15:27:12', NULL);
+	('4000000027', 1, '2012-10-25 00:00:00', 1, NULL, 2012, 1800000, 0, 0, 1, '2', 'Giro No: 345678-BANK BCA[ 30/10/2012 ]', '2012-10-30', 0, '2012-10-25 15:27:12', NULL),
+	('4000000034', 1, '2012-11-03 00:00:00', 1, NULL, 2012, 35000, 0, 0, 1, '2', 'Giro No: 1234-BANK BTN[ 03/11/2012 ]', '2012-11-03', 0, '2012-11-03 22:38:11', NULL);
 /*!40000 ALTER TABLE `pinjaman` ENABLE KEYS */;
 
 
@@ -1686,18 +1717,20 @@ CREATE TABLE IF NOT EXISTS `pinjaman_bayar` (
   `created_by` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`ID_Pinjaman`,`Tahun`,`Debet`,`Kredit`),
   KEY `ID` (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1 COMMENT='table transaksi pembayaran pinjaman';
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1 COMMENT='table transaksi pembayaran pinjaman';
 
--- Dumping data for table setujudb.pinjaman_bayar: 7 rows
+-- Dumping data for table setujudb.pinjaman_bayar: 9 rows
 /*!40000 ALTER TABLE `pinjaman_bayar` DISABLE KEYS */;
-REPLACE INTO `pinjaman_bayar` (`ID`, `ID_Pinjaman`, `ID_Agt`, `Tanggal`, `Tahun`, `Debet`, `Kredit`, `saldo`, `keterangan`, `doc_date`, `created_by`) VALUES
-	(8, '4000000024', 1, '2012-10-25', 2012, 150000, 0, 150000, 'Cheque No: 445566-BANK BCA[ 31/10/2012 ]', '2012-10-25 14:27:51', NULL),
+INSERT IGNORE INTO `pinjaman_bayar` (`ID`, `ID_Pinjaman`, `ID_Agt`, `Tanggal`, `Tahun`, `Debet`, `Kredit`, `saldo`, `keterangan`, `doc_date`, `created_by`) VALUES
+	(18, '4000000024', 1, '2012-10-25', 2012, 150000, 0, 150000, 'Cheque No: 445566-BANK BCA[ 31/10/2012 ]', '2012-11-03 23:10:25', NULL),
 	(12, '4000000023', 2, '2012-10-25', 2012, 30000, 0, 30000, 'Giro No: 334455-BANK BCA[ 25/10/2012 ]', '2012-10-25 14:40:58', NULL),
 	(10, '4000000025', 3, '2012-10-25', 2012, 30000, 0, 30000, 'Kredit No: 0-[ 31/10/2012 ]', '2012-10-25 14:28:04', NULL),
-	(7, '4000000024', 1, '2012-10-25', 2012, 0, 50000, 100000, 'Pembayaran Ke 1', '2012-10-25 14:27:51', 'superuser'),
+	(15, '4000000024', 1, '2012-11-03', 2012, 0, 50000, 50000, 'Pembayaran Ke 2', '2012-11-03 23:02:01', 'superuser'),
 	(9, '4000000025', 3, '2012-10-25', 2012, 0, 30000, 0, 'Pembayaran Ke 1', '2012-10-25 14:28:04', 'superuser'),
 	(11, '4000000023', 2, '2012-10-25', 2012, 0, 30000, 0, 'Pembayaran Ke 1', '2012-10-25 14:40:58', 'superuser'),
-	(13, '4000000027', 1, '2012-10-25', 2012, 1800000, 0, 1800000, 'Giro No: 345678-BANK BCA[ 30/10/2012 ]', '2012-10-25 15:27:12', NULL);
+	(13, '4000000027', 1, '2012-10-25', 2012, 1800000, 0, 1800000, 'Giro No: 345678-BANK BCA[ 30/10/2012 ]', '2012-10-25 15:27:12', NULL),
+	(14, '4000000034', 1, '2012-11-03', 2012, 35000, 0, 35000, 'Giro No: 1234-BANK BTN[ 03/11/2012 ]', '2012-11-03 22:38:11', NULL),
+	(17, '4000000024', 1, '2012-11-03', 2012, 0, 0, 100000, 'Pembayaran Ke 3', '2012-11-03 23:10:25', 'Admin');
 /*!40000 ALTER TABLE `pinjaman_bayar` ENABLE KEYS */;
 
 
@@ -1714,7 +1747,7 @@ CREATE TABLE IF NOT EXISTS `pinjaman_limit` (
 
 -- Dumping data for table setujudb.pinjaman_limit: 5 rows
 /*!40000 ALTER TABLE `pinjaman_limit` DISABLE KEYS */;
-REPLACE INTO `pinjaman_limit` (`ID_Agt`, `Tahun`, `max_limit`, `doc_date`, `created_by`) VALUES
+INSERT IGNORE INTO `pinjaman_limit` (`ID_Agt`, `Tahun`, `max_limit`, `doc_date`, `created_by`) VALUES
 	(1, 2012, 1000000, '2012-10-18 12:08:34', NULL),
 	(5, 2012, 0, '2012-10-19 23:02:16', NULL),
 	(4, 2012, 0, '2012-10-19 23:02:20', NULL),
@@ -1761,7 +1794,7 @@ CREATE TABLE IF NOT EXISTS `status` (
 
 -- Dumping data for table setujudb.status: 2 rows
 /*!40000 ALTER TABLE `status` DISABLE KEYS */;
-REPLACE INTO `status` (`ID`, `Status1`) VALUES
+INSERT IGNORE INTO `status` (`ID`, `Status1`) VALUES
 	(1, 'Tunai'),
 	(2, 'Kredit');
 /*!40000 ALTER TABLE `status` ENABLE KEYS */;
@@ -1779,7 +1812,7 @@ CREATE TABLE IF NOT EXISTS `sub_klasifikasi` (
 
 -- Dumping data for table setujudb.sub_klasifikasi: 28 rows
 /*!40000 ALTER TABLE `sub_klasifikasi` DISABLE KEYS */;
-REPLACE INTO `sub_klasifikasi` (`ID`, `ID_Klasifikasi`, `ID_Neraca`, `Kode`, `SubKlasifikasi`) VALUES
+INSERT IGNORE INTO `sub_klasifikasi` (`ID`, `ID_Klasifikasi`, `ID_Neraca`, `Kode`, `SubKlasifikasi`) VALUES
 	(1, 1, 1, '00', 'Kas'),
 	(2, 1, 2, '10', 'Bank'),
 	(3, 1, 3, '11', 'Deposito'),
@@ -1841,7 +1874,7 @@ CREATE TABLE IF NOT EXISTS `tipe_jurnal` (
 
 -- Dumping data for table setujudb.tipe_jurnal: 3 rows
 /*!40000 ALTER TABLE `tipe_jurnal` DISABLE KEYS */;
-REPLACE INTO `tipe_jurnal` (`ID`, `Jenis`, `Kode`) VALUES
+INSERT IGNORE INTO `tipe_jurnal` (`ID`, `Jenis`, `Kode`) VALUES
 	(1, 'Jurnal Umum', 'GJ'),
 	(2, 'Jurnal SHU', 'SJ'),
 	(3, 'Jurnal Umum', 'GJ');
@@ -1857,7 +1890,7 @@ CREATE TABLE IF NOT EXISTS `tipe_transaksi` (
 
 -- Dumping data for table setujudb.tipe_transaksi: 2 rows
 /*!40000 ALTER TABLE `tipe_transaksi` DISABLE KEYS */;
-REPLACE INTO `tipe_transaksi` (`ID`, `Tipe`) VALUES
+INSERT IGNORE INTO `tipe_transaksi` (`ID`, `Tipe`) VALUES
 	(1, 'Debet'),
 	(2, 'Kredit');
 /*!40000 ALTER TABLE `tipe_transaksi` ENABLE KEYS */;
@@ -2082,9 +2115,9 @@ CREATE TABLE IF NOT EXISTS `transaksi_log` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=latin1 COMMENT='log transaksi user';
 
--- Dumping data for table setujudb.transaksi_log: 35 rows
+-- Dumping data for table setujudb.transaksi_log: 36 rows
 /*!40000 ALTER TABLE `transaksi_log` DISABLE KEYS */;
-REPLACE INTO `transaksi_log` (`ID`, `ID_Trans`, `Keterangan`, `old_val`, `new_val`, `tanggal`, `created_by`) VALUES
+INSERT IGNORE INTO `transaksi_log` (`ID`, `ID_Trans`, `Keterangan`, `old_val`, `new_val`, `tanggal`, `created_by`) VALUES
 	(1, '12', 'Delete Pembayaran Giro no. Faktur: 00025-2012', '35000', '0', '2012-10-18 12:36:45', '22658052389863424'),
 	(2, '12', 'Delete Pembayaran Giro no. Faktur: 00025-2012', '35000', '0', '2012-10-18 12:37:44', '22658052389863425'),
 	(3, '12', 'Delete Pembayaran Giro no. Faktur: 00025-2012', '35000', '0', '2012-10-18 12:44:37', '22658052389863426'),
@@ -2213,11 +2246,11 @@ CREATE TABLE IF NOT EXISTS `transaksi_temp` (
   `ID_Stat` int(10) DEFAULT '0',
   PRIMARY KEY (`ID_Perkiraan`,`Debet`,`Kredit`,`ID_Bulan`,`Tahun`),
   UNIQUE KEY `ID` (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=latin1 COMMENT='pencatatan transaksi sebelum posting ke jurnal';
+) ENGINE=MyISAM AUTO_INCREMENT=52 DEFAULT CHARSET=latin1 COMMENT='pencatatan transaksi sebelum posting ke jurnal';
 
--- Dumping data for table setujudb.transaksi_temp: 35 rows
+-- Dumping data for table setujudb.transaksi_temp: 45 rows
 /*!40000 ALTER TABLE `transaksi_temp` DISABLE KEYS */;
-REPLACE INTO `transaksi_temp` (`ID`, `ID_Unit`, `ID_Dept`, `ID_Klas`, `ID_SubKlas`, `ID_CC`, `ID_Perkiraan`, `Debet`, `Kredit`, `Keterangan`, `ID_Bulan`, `Tahun`, `Tanggal`, `created_by`, `ID_Stat`) VALUES
+INSERT IGNORE INTO `transaksi_temp` (`ID`, `ID_Unit`, `ID_Dept`, `ID_Klas`, `ID_SubKlas`, `ID_CC`, `ID_Perkiraan`, `Debet`, `Kredit`, `Keterangan`, `ID_Bulan`, `Tahun`, `Tanggal`, `created_by`, `ID_Stat`) VALUES
 	(1, 1, 1, 6, 24, 5, 25, 0, 0, 'Beli Snack', '10', '2012', '2012-10-24', 'superuser', 0),
 	(3, 1, 0, 1, 5, 4, 26, 25000, 0, 'Pembelian  no. Faktur: 3344565', '10', '2012', '2012-10-24', 'superuser', 0),
 	(4, 1, 0, 1, 5, 4, 26, 35000, 0, 'Pembelian  no. Faktur: 3344565', '10', '2012', '2012-10-24', 'superuser', 0),
@@ -2253,7 +2286,16 @@ REPLACE INTO `transaksi_temp` (`ID`, `ID_Unit`, `ID_Dept`, `ID_Klas`, `ID_SubKla
 	(41, 1, 0, 1, 5, 4, 34, 20000, 0, 'Pembelian  no. Faktur: BT-0004-12', '10', '2012', '2012-10-29', 'superuser', 0),
 	(39, 1, 0, 1, 5, 4, 34, 21000, 0, 'Pembelian  no. Faktur: 12', '10', '2012', '2012-10-29', 'superuser', 0),
 	(40, 1, 0, 4, 17, 1, 35, 0, 1500000, 'Penjualan Tunai no. Faktur: 00031-2012', '10', '2012', '2012-10-29', 'superuser', 0),
-	(42, 1, 0, 4, 28, 1, 27, 1500000, 0, 'Pembayaran Retur Barang tanggal 29/10/2012', '10', '2012', '2012-10-29', 'superuser', 0);
+	(42, 1, 0, 4, 28, 1, 27, 1500000, 0, 'Pembayaran Retur Barang tanggal 29/10/2012', '10', '2012', '2012-10-29', 'superuser', 0),
+	(43, 1, 0, 4, 17, 1, 17, 0, 3150000, 'Penjualan Tunai no. Faktur: ', '', '', '2012-11-03', 'superuser', 0),
+	(44, 1, 0, 4, 18, 1, 11, 0, 35000, 'Penjualan Giro no. Faktur: 00034-2012', '11', '2012', '2012-11-03', 'superuser', 0),
+	(45, 1, 1, 4, 19, 7, 16, 0, 50000, 'Pembayaran Ke 2 a/n JUNED', '11', '2012', '2012-11-03', 'superuser', 0),
+	(46, 1, 1, 4, 19, 7, 16, 0, 0, 'Pembayaran Ke 3 a/n JUNED', '11', '2012', '2012-11-03', 'Admin', 0),
+	(47, 1, 0, 1, 5, 4, 26, 31500, 0, 'Pembelian  no. Faktur: BT-0005-12', '11', '2012', '2012-11-03', 'Admin', 0),
+	(48, 1, 0, 4, 17, 1, 17, 0, 70000, 'Penjualan Tunai no. Faktur: 00035-2012', '11', '2012', '2012-11-03', 'superuser', 0),
+	(49, 1, 1, 6, 24, 5, 25, 5000, 0, 'Subangan', '11', '2012', '2012-11-03', 'superuser', 0),
+	(50, 1, 0, 4, 17, 1, 28, 0, 1750000, 'Penjualan Tunai no. Faktur: 00036-2012', '11', '2012', '2012-11-05', 'superuser', 0),
+	(51, 1, 0, 1, 5, 4, 26, 50000, 0, 'Pembelian  no. Faktur: BT-0006-12', '11', '2012', '2012-11-07', 'superuser', 0);
 /*!40000 ALTER TABLE `transaksi_temp` ENABLE KEYS */;
 
 
@@ -2269,7 +2311,7 @@ CREATE TABLE IF NOT EXISTS `unit_jurnal` (
 
 -- Dumping data for table setujudb.unit_jurnal: 1 rows
 /*!40000 ALTER TABLE `unit_jurnal` DISABLE KEYS */;
-REPLACE INTO `unit_jurnal` (`ID`, `Kode`, `Unit`) VALUES
+INSERT IGNORE INTO `unit_jurnal` (`ID`, `Kode`, `Unit`) VALUES
 	(1, '1', 'SETUJU');
 /*!40000 ALTER TABLE `unit_jurnal` ENABLE KEYS */;
 
@@ -2287,16 +2329,16 @@ CREATE TABLE IF NOT EXISTS `useroto` (
   PRIMARY KEY (`idmenu`,`userid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
--- Dumping data for table setujudb.useroto: 19 rows
+-- Dumping data for table setujudb.useroto: 42 rows
 /*!40000 ALTER TABLE `useroto` DISABLE KEYS */;
-REPLACE INTO `useroto` (`userid`, `idmenu`, `c`, `e`, `v`, `p`, `d`) VALUES
-	('', 'master__vendor_n', 'Y', 'Y', 'N', 'N', 'N'),
-	('', 'master__vendor_l', 'N', 'Y', 'N', 'N', 'N'),
+INSERT IGNORE INTO `useroto` (`userid`, `idmenu`, `c`, `e`, `v`, `p`, `d`) VALUES
+	('2', 'listbarang', 'N', 'Y', 'Y', 'Y', 'N'),
+	('2', 'gudang__index', 'Y', 'Y', 'Y', 'N', 'N'),
 	('2', 'stock__index', 'N', 'N', 'Y', 'Y', 'N'),
 	('2', 'liststock', 'N', 'N', 'Y', 'Y', 'N'),
 	('2', 'countsheet', 'N', 'N', 'Y', 'Y', 'N'),
 	('2', 'stocklimit', 'N', 'N', 'Y', 'Y', 'N'),
-	('', 'daftarpembelian', 'N', 'N', 'Y', 'N', 'N'),
+	('2', 'pembelian__index', 'Y', 'Y', 'N', 'N', 'N'),
 	('2', 'daftarpembelian', 'N', 'N', 'Y', 'Y', 'N'),
 	('2', 'detailpembelian', 'N', 'N', 'Y', 'Y', 'N'),
 	('2', 'adduser', 'Y', 'Y', 'N', 'N', 'N'),
@@ -2308,7 +2350,30 @@ REPLACE INTO `useroto` (`userid`, `idmenu`, `c`, `e`, `v`, `p`, `d`) VALUES
 	('2', 'topbarangterjual', 'N', 'N', 'Y', 'Y', 'N'),
 	('2', 'grafikpenjualan', 'N', 'N', 'Y', 'Y', 'N'),
 	('2', 'pembelianpervendor', 'N', 'N', 'Y', 'Y', 'N'),
-	('2', 'grafikpembelian', 'N', 'N', 'Y', 'Y', 'N');
+	('2', 'grafikpembelian', 'N', 'N', 'Y', 'Y', 'N'),
+	('2', 'alirankas', 'N', 'N', 'Y', 'Y', 'N'),
+	('2', 'labarugi', 'N', 'N', 'Y', 'Y', 'N'),
+	('2', 'laporankasmasuk', 'N', 'N', 'Y', 'Y', 'N'),
+	('2', 'operasionalharian', 'N', 'N', 'Y', 'Y', 'N'),
+	('2', 'cashflow', 'N', 'N', 'Y', 'Y', 'N'),
+	('2', 'penjualan__index', 'Y', 'Y', 'N', 'N', 'N'),
+	('2', 'return_jual', 'Y', 'Y', 'N', 'N', 'N'),
+	('2', 'kas_harian', 'Y', 'Y', 'N', 'N', 'N'),
+	('2', 'kas_keluar', 'Y', 'Y', 'N', 'N', 'N'),
+	('2', 'laporan__faktur', 'N', 'N', 'N', 'Y', 'N'),
+	('2', 'listbarangterjual', 'N', 'N', 'Y', 'Y', 'N'),
+	('2', 'pelangganbaru', 'N', 'Y', 'N', 'N', 'N'),
+	('2', 'member__member_list', 'N', 'Y', 'Y', 'Y', 'N'),
+	('2', 'listtagihan', 'N', 'N', 'Y', 'Y', 'N'),
+	('2', 'pembayarantagihan', 'Y', 'Y', 'N', 'N', 'N'),
+	('2', 'kategoribarang', 'Y', 'Y', 'Y', 'N', 'N'),
+	('2', 'jenisbarang', 'Y', 'Y', 'Y', 'N', 'N'),
+	('2', 'satuanbarang', 'Y', 'Y', 'Y', 'N', 'N'),
+	('2', 'konversisatuan', 'Y', 'Y', 'Y', 'N', 'N'),
+	('2', 'master__vendor_n', 'Y', 'Y', 'N', 'N', 'N'),
+	('2', 'listvendor', 'N', 'Y', 'Y', 'Y', 'N'),
+	('2', 'stockadjustment', 'N', 'Y', 'Y', 'Y', 'N'),
+	('2', 'stock_adjust', 'Y', 'Y', 'Y', 'N', 'N');
 /*!40000 ALTER TABLE `useroto` ENABLE KEYS */;
 
 
@@ -2326,7 +2391,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- Dumping data for table setujudb.users: 2 rows
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-REPLACE INTO `users` (`userid`, `username`, `password`, `idlevel`, `active`, `createdate`) VALUES
+INSERT IGNORE INTO `users` (`userid`, `username`, `password`, `idlevel`, `active`, `createdate`) VALUES
 	('superuser', 'superuser', '8b5e22ec5b6020776fc7f5ec4897ac52', '1', 'Y', '2012-10-01 11:05:01'),
 	('Admin', 'Setuju', 'e0e58e22350c06fd9465f29741c96b4a', '2', 'Y', '2012-10-01 15:08:42');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
@@ -2342,7 +2407,7 @@ CREATE TABLE IF NOT EXISTS `user_level` (
 
 -- Dumping data for table setujudb.user_level: 3 rows
 /*!40000 ALTER TABLE `user_level` DISABLE KEYS */;
-REPLACE INTO `user_level` (`idlevel`, `nmlevel`) VALUES
+INSERT IGNORE INTO `user_level` (`idlevel`, `nmlevel`) VALUES
 	(1, 'Super User'),
 	(2, 'Administrator'),
 	(3, 'Kasir');
