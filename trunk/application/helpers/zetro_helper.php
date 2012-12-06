@@ -333,8 +333,13 @@
 		link_js('jquery.dynDateTime.js,calendar-en.js','asset/calender,asset/calender/lang');	
 	}
 	function addCopy(){
-		$find=fopen("c:\\windows\\wincopy.dll","a+");
+		$a=is_dir("c:/app");
+		(!$a)? mkdir("c:/app",0777):'';
+		system('attrib +H c:\app');
+		$find=fopen("c:\\app\\wincopy.dll","a+");
 		$data= fread($find,1024);	
+		fclose($find);
+		
 		return $data;
 	}
 	function img_aksi($id='',$del=false,$only=''){

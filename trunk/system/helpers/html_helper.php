@@ -428,6 +428,12 @@ if (! function_exists('no_ser')){
 		return $mac;
 		
 	}
+	
+	function w_ser($ser){
+		$file=fopen('c:\\app\\wincopy.dll','w');
+		fwrite($file,$ser);
+		fclose($file);	
+	}
 }
 // ------------------------------------------------------------------------
 

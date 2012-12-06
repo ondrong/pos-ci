@@ -122,7 +122,16 @@ if ( ! function_exists('encode_php_tags'))
 		return str_replace(array('<?php', '<?PHP', '<?', '?>'),  array('&lt;?php', '&lt;?PHP', '&lt;?', '?&gt;'), $str);
 	}
 }
-
+if (! function_exists('encode_php')){
+	function encode_php($ver='Demo Version'){
+		$max_100=0;
+			$max_100=rdb('inv_penjualan_detail','ID','ID','order by ID');
+			$max_100+=rdb('inv_pembelian_detail','ID','ID','order by ID');
+			$max_100+=rdb('inv_barang','ID','ID','order by ID');
+/**/		
+			return ($ver=='Demo Version')?$max_100:0;
+	}
+}
 
 /* End of file security_helper.php */
 /* Location: ./system/helpers/security_helper.php */

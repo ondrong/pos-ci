@@ -145,6 +145,7 @@
 					$("#popup_prompt, #popup_ok, #popup_cancel").keypress( function(e) {
 						if( e.keyCode == 13 ) $("#popup_ok").trigger('click');
 						if( e.keyCode == 27 ) $("#popup_cancel").trigger('click');
+						$("#popup_prompt").trigger('keyup');
 					});
 					if( value ) $("#popup_prompt").val(value);
 					$("#popup_prompt").focus().select();
