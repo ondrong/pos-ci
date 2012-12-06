@@ -24,5 +24,7 @@
 <tr><td align='center'><img src='<?=base_url();?>asset/img/icon_zetro_z.png' /><?=nbs(2);?><a style='color:#00F;' href='http://zetrosoft.com'>www.zetrosoft.com</a> | Contact : HP: 081213290809 , email :contact@smarthome-kanz.com |</td>
 </table>
 
-</td></tr></table>
+</td></tr>
+</table>
+
 </div>

@@ -6,7 +6,7 @@ dbname|setujudb1
 
 [WebPage]
 Title|TOKOKU V.2.2
-subtitle| PD SETUJU
+subtitle| KANZ CCTV
 
 [Path]
 z_menu|asset/bin/zetro_menu.dll
@@ -16,13 +16,13 @@ z_form|asset/bin/form.cfg
 localhost|http://localhost/kbr
 
 [InfoCo]
-Name|PD SETUJU
-subtitle| Toko Besi
-Address|Jl. RE. Martadinata No.103
+Name|Kanz CCTV
+subtitle| Digital Security
+Address|Jl. Veteran 169
 Kota|Purwakarta 41152
 Propinsi| Jawa Barat
-Telp|Telp :(0264) 201043
-Fax |Fax :(0264) 206749
+Telp|Telp :(0264)
+Fax |Fax :(0264) 
 BH|Badan Hukum: 
 NPWP|NPWP  :
 NPPKP|NPPKP:

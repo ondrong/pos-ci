@@ -8,7 +8,6 @@
 	$zz= new zetro_manager;
 	$file='asset/bin/zetro_menu.dll';
 	$z_config='asset/bin/zetro_config.dll';
-
 link_css('portal-style.css,zetro_css.css','asset/css,asset/css');
 link_js('jquery.1.7.1.min.js,zetro_number.js,dropdown.js','asset/js,asset/js,asset/js');
 ?>
@@ -29,18 +28,19 @@ link_js('jquery.1.7.1.min.js,zetro_number.js,dropdown.js','asset/js,asset/js,ass
 	 })
 	
     });
-</script><!--background:url(<?=base_url();?>asset/img/logo1.png) no-repeat left;-->
+</script>
 <title><?=$zz->rContent("WebPage","Title",$z_config)."-".$zz->rContent("WebPage","subtitle",$z_config);?></title>
 </head>
 <body>
 <?
 	$menul=$this->session->userdata('menus');
+	$verses=(addCopy()=='')?$this->session->userdata('version'):'';
 	$menune=empty($menul)?'':base64_decode($menul);
 ?>
 <div id="menu-atas" style='z-index:9990'>
 	<div class='logo' style=" vertical-align:middle">
     <?=empty($menul)?$zz->rContent("InfoCo","Name",$z_config):'Modul '.base64_decode($menul);?>
-    </div>
+    </div><?="<b><strong>".$verses."</strong></b>";?>
     <div class="menu">
     <? 
 	if($this->session->userdata('login')==true){
