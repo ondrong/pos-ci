@@ -31,7 +31,7 @@ $(document).ready(function(e) {
 				case 'saved-jenis':
 				$.post(path+'inventory/simpan_jenis',{'nm_jenis':$('#frm1 input#JenisBarang').val(),'induk':'frm1'},
 				function(result){
-					_show_list('Jenis');
+					_show_list('Jenis','inv_barang_jenis','JenisBarang');
 					$('#frm1 input#JenisBarang').val('')
 				})
 			break;
