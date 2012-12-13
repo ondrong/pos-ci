@@ -23,7 +23,7 @@ $(document).ready(function(e) {
 				$('span:not(#v_'+id+')').hide();
 				$('#prs').val(id);
 	})
-	$('#frm1 #No_Agt').attr('readonly','readonly');
+	//$('#frm1 #No_Agt').attr('readonly','readonly');
 	$('#frm1 #ID_Aktif').attr('disabled','disabled');
 	$('#frm2 #NIP')
 		.attr('readonly','readonly')
