@@ -10,6 +10,7 @@ class Zetro_auth extends CI_model
 		$this->load->model('Admin_model');
 		$this->load->model('control_model');
 		$this->userid=$this->session->userdata('idlevel');
+		$this->usernm=$this->session->userdata('userid');
 	}
 
 	function menu_id($menuid){
@@ -83,7 +84,12 @@ class Zetro_auth extends CI_model
 		return $data;
 	// print_r($data);
 	}
-
+	function user_area($userid=''){
+		($userid=='')?
+		$this->control_model->userid=$this->usernm:
+		$this->control_model->userid=$userid;
+		$this->control_model->user_area();	
+	}
 // get data read variable form zetro_*.frm
    public function get_data_field($section,$table){
 		$data=array();
@@ -127,5 +133,5 @@ class Zetro_auth extends CI_model
 		$data["created_by"]=$this->session->userdata("userid");
 		$this->Admin_model->replace_data($table,$data);
 	}
-
+ 
 }

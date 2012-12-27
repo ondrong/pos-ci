@@ -43,5 +43,15 @@ class Control_model extends CI_Model{
 		$this->db->where($field,$isi);
 		$this->db->delete($tabel);	
 	}
-
+	function user_area(){
+		$data=array();$area='';
+		$sql=($this->session->userdata('idlevel')=='1')?
+		"select * from user_area order by ID":
+		"select * from user_area where userid='".$this->userid."'";
+		$data=$this->db->query($sql);
+		foreach($data as $r){
+			$area .="'".$r->ID."'";
+		}
+		return $area;
+	}
 }	
