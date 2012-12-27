@@ -21,11 +21,11 @@
 		  $n=0;$harga=0;$hgb=0;$hargaj=0;$terima=0;
 		  foreach($temp_rec as $r)
 		  {
-			$n++;
+			$n++;$dibayar=0;$tobayar=0;
 			$des=($r->Deskripsi!='')?" No.: ".$r->ID_Post." ".$r->Deskripsi." [ ". tglfromSql($r->Tgl_Cicilan)." ]":'';
 			$dibayar=rdb('inv_pembayaran','jml_dibayar','sum(jml_dibayar) as jml_dibayar',"where /*no_transaksi='".$r->NoUrut."' and*/ date(doc_date)='".$r->Tanggal."' and ID_Jenis='".$r->ID_Jenis."' group by concat(ID_Jenis,date(doc_date))");
 			$tobayar=rdb('inv_pembayaran','total_bayar','sum(total_bayar) as total_bayar',"where /*no_transaksi='".$r->NoUrut."' and*/ date(doc_date)='".$r->Tanggal."' and ID_Jenis='".$r->ID_Jenis."' group by concat(ID_Jenis,date(doc_date))");
-			$terima=(($dibayar-$tobayar)>0)?$tobayar:$dibayar;
+			$terima=(($dibayar-$tobayar)>0)?(int)$tobayar:(int)$dibayar;
 			$a->Row(array($n,$r->Nomor, tglfromSql($r->Tanggal),
 				number_format($r->tHarga,2),
 				number_format($terima,2),
