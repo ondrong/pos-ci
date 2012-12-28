@@ -1,5 +1,4 @@
 <?
-
 class zetro_slip{
 	public $path;
 	function __construct($path=''){
