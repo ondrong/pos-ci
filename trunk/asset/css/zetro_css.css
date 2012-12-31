@@ -26,7 +26,8 @@ html, body { height:98%;}
 		.border_r{border-right:1.5px inset #EEE;}
 		.xx:hover {cursor:pointer; background:#99FF99;}
 		.xy:hover {cursor:pointer; background:#F30;}
-		.list_genap{ background-color:#6699FF;}
+		.list_genap{ cursor:pointer; background-color:#6699FF;}
+		.list_ganjil{cursor:pointer; background-color:#9966FF;}
 		.pn_content { background:#DDDDDD;
 					  width:99%;
 					  height:300px;
