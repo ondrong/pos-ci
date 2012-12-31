@@ -219,7 +219,7 @@ function __show_data(id){
 	$.post('list_kas_harian',{'tanggal':''},
 	function(result){
 		$('#v_setupsaldokas table#ListTable tbody').html(result);
-       	$('#v_setupsaldokas table#ListTable').fixedHeader({width:(screen.width-100), height:150})
+       	$('#v_setupsaldokas table#ListTable').fixedHeader({width:(screen.width-100), height:230})
 	})
 }
 function __show_data_trans(id){
