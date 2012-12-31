@@ -147,7 +147,8 @@ class Master extends CI_Controller {
 			//update database perkiraan
 			$this->_update_perkiraan($id_anggota,$this->id_jenis);	
 		}
-*/		$data['ID_Perkiraan']	='25';//rdb('perkiraan','ID','ID',"where ID_Agt='$id_anggota' and ID_Simpanan='".$this->id_jenis."'");
+*/		
+		$data['ID_Perkiraan']	='25';//rdb('perkiraan','ID','ID',"where ID_Agt='$id_anggota' and ID_Simpanan='".$this->id_jenis."'");
 		$data['ID_Unit']		=rdb('jenis_simpanan','ID_Unit','ID_Unit',"where ID='".$this->id_jenis."'");
 		$data['ID_Klas']		=rdb('jenis_simpanan','ID_Klasifikasi','ID_Klasifikasi',"where ID='".$this->id_jenis."'");
 		$data['ID_SubKlas']		=rdb('jenis_simpanan','ID_SubKlas','ID_SubKlas',"where ID='".$this->id_jenis."'");
@@ -219,16 +220,18 @@ class Master extends CI_Controller {
 	}
 	function list_kas_harian(){
 		$data=array();	
-		$data=array();$n=0;
-		$data=$this->Admin_model->show_list('mst_kas_harian',"where month(tgl_kas)='".date('m')."' and year(tgl_kas)='".date('Y')."' order by id_kas");
+		$data=array();$n=0;$total=0;
+		$data=$this->Admin_model->show_list('mst_kas_harian',"where month(tgl_kas)='".date('m')."' and year(tgl_kas)='".date('Y')."' group by tgl_kas order by id_kas");
 		foreach($data as $r){
 			$n++;
-			echo tr().td($n,'center').td($r->no_trans,'center').
+			echo tr(($r->tgl_kas==date('Y-m-d'))?'list_ganjil':'').td($n,'center').td($r->no_trans,'center').
 				 td(tglfromSql($r->tgl_kas),'center').
 				 td($r->id_kas).td($r->nm_kas).td(number_format($r->sa_kas,2),'right').
-				 //td("<img src='".base_url()."asset/images/no.png' onclick=\"image_click('".$r->no_trans."','del');\" >",'center').
+				//td(rdb('user_lokasi','lokasi','lokasi',"where ID='".$r->id_lokasi."'")).
 				 _tr();
+			$total=($total+$r->sa_kas);
 		}
+		echo tr('list_genap').td('<b>Total</b>','right\' colspan=\'5').td('<b>'.number_format($total,2),'right')._tr();
 	}
 	function list_kas_trans(){
 		$data=array();	
