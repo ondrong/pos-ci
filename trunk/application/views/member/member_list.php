@@ -38,7 +38,7 @@ terbilang();
 ?>
 <input type='hidden' id='ordby' value='' class='w100'/>
 <input type='hidden' id='totdata' value='<?=(!empty($list))?count($list):0;?>' />
-<input type='hidden' id='otor' value='<?=$all_daftaranggota;?>' />
+<input type='hidden' id='otor' value='<?=$all_member__member_list;?>' />
 <script language="javascript">
 	$(document).ready(function(e) {
 		$('#dept').html("<option value='all'>Semua</option>");
