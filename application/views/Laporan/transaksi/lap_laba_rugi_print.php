@@ -23,7 +23,7 @@
 		  $hargaj=0;$ppn=0;
 		  $tppn=0;$opr=0;$lab=0;
 		  $kotor=0;
-		  print_r($temp_rec);
+		 // print_r($temp_rec);
 		  foreach($temp_rec as $r)
 		  {
 			$n++;
