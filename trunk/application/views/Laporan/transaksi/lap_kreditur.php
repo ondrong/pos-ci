@@ -12,7 +12,7 @@ panel_multi('rekappenjualankredit','block',false);
 if($all_rekappenjualankredit!=''){
 	echo "<form id='frm1' name='frm1' method='post' action=''>";
 	addText(array('Periode :',' s/d ','Departemen','Cicilan',''),
-	array("<input type='text' id='dari_tgl' name='dari_tgl' value=''>",
+	array("<input type='text' id='dari_tgl' name='dari_tgl' value='".date('d/m/Y')."'>",
 		  "<input type='text' id='sampai_tgl' name='sampai_tgl' value=''>",
 		  "<select id='departemen' name='departemen'></select>",
 		  "<select id='cicilan' name='cicilan'></select>",

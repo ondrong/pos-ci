@@ -13,7 +13,7 @@ panel_multi('listbarangterjual','block',false);
 if($all_listbarangterjual!=''){
 	echo "<form id='frm1' name='frm1' method='post' action=''>";
 	addText(array('Periode  :',' s/d ','Kategori','Status Pembayaran',''),
-	array("<input type='text' id='dari_tgl' name='dari_tgl' value=''>",
+	array("<input type='text' id='dari_tgl' name='dari_tgl' value='".date('d/m/Y')."'>",
 		  "<input type='text' id='sampai_tgl' name='sampai_tgl' value=''>",
 		  "<select id='kategori' name='kategori'></select>",
 		  "<select id='id_jenis' name='id_jenis'></select>",

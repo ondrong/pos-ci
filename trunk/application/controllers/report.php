@@ -67,8 +67,8 @@ class Report extends CI_Controller
 		$where=empty($_POST['sampai_tgl'])?
 			   "where p.Tanggal='".tglToSql($_POST['dari_tgl'])."'":
 			   "where p.Tanggal between '".tglToSql($_POST['dari_tgl'])."' and '".tglToSql($_POST['sampai_tgl'])."'";
-		$where.=($this->input->post('jenis_beli')=='')?" and p.ID_Pemasok!='0' and a.ID_Jenis='2'":
-				" and p.ID_Jenis='".$this->input->post('jenis_beli')."' and p.ID_Pemasok!='0' and a.ID_Jenis='2'";
+		$where.=($this->input->post('jenis_beli')=='')?" /*and p.ID_Pemasok!='0' and a.ID_Jenis='2'*/":
+				" and p.ID_Jenis='".$this->input->post('jenis_beli')."' /*and p.ID_Pemasok!='0' and a.ID_Jenis='2'*/";
 		$group="group by /*p.Tanggal,*/a.Nama";
 		$orderby="order by ".$this->input->post('orderby');
 		$orderby.=($this->input->post('urutan')=='')?'':' '.$this->input->post('urutan');

@@ -29,13 +29,13 @@
 		  ($orient=='P')?
 			$a->Row(array($n,
 						  rdb('inv_barang','Kode','Kode',"where ID='".$r->ID_Barang."'"),
-						  ucwords(strtolower(rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$r->ID_Barang."'"))),
+						  ucwords((rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$r->ID_Barang."'"))),
 						  number_format($r->Jumlah,2),
 						  rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".rdb('inv_barang','ID_Satuan','ID_Satuan',"where ID='".$r->ID_Barang."'")."'"),
 						  number_format($r->Harga,2),
 						  number_format(($r->Jumlah*$r->Harga),2)
 						  )):
-			$a->Row(array($n,ucwords(strtolower($r->Nama_Barang)),number_format($r->Jumlah,2),
+			$a->Row(array($n,ucwords(($r->Nama_Barang)),number_format($r->Jumlah,2),
 						  $r->Satuan,number_format($r->Harga,2),
 						  number_format(($r->Jumlah*$r->Harga),2),
 						  $r->Nama,

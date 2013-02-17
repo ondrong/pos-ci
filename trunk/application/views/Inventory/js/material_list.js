@@ -159,7 +159,8 @@ $(document).ready(function(e) {
 				 'nm_jenis'		:$('#frm9 input#nm_jenis').val(),
 				 'nm_kategori'	:$('#frm9 input#nm_kategori').val(),
 				 'nm_satuan'	:$('#frm9 input#nm_satuan').val(),
-				 'linked'		:''
+				 'linked'		:'',
+				 'ID'			:$('#frm9 input#ID').val()
 				 },
 				function(result){
 					keluar();
@@ -483,6 +484,7 @@ $(document).ready(function(e) {
 							  $('#id_kategori').val(obj.ID_Kategori);
 							  $('#id_jenis').val(obj.ID_Jenis);
 							  $('#id_satuan').val(obj.ID_Satuan);
+							  $('#frm9 input#ID').val(obj.ID);
 							})
 						$('#lock').show();
 						$('#pp-edit_barang').show('slow');

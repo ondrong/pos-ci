@@ -38,7 +38,7 @@ class Pembelian extends CI_Controller{
 	//tampilan awal ketika menu input pembelian di klik
 	function index(){
 		$data=array();
-		$this->zetro_auth->menu_id(array('pembelian__index','pembelian__list_beli'));
+		$this->zetro_auth->menu_id(array('pembelian__index','listpembelian'));
 		$this->list_data($this->zetro_auth->auth());
 		$this->View('pembelian/material_income');
 	}
@@ -74,11 +74,12 @@ class Pembelian extends CI_Controller{
 		}else if($_POST['cbayar']==3){
 			$jenis='RK';
 		}
+		$data['ID']			=empty($_POST['id_beli'])?'0':$_POST['id_beli'];
 		$data['NoUrut']		=$_POST['no_trans'];
 		$data['Tanggal']	=tgltoSql($_POST['tanggal']);
-		$data['ID_Jenis']	=$_POST['cbayar'];	
+		$data['ID_Jenis']	=empty($_POST['cbayar'])?'1':$_POST['cbayar'];	
 		$data['ID_Pemasok']	=empty($_POST['id_pemasok'])?0:$_POST['id_pemasok'];	
-		$data['Nomor']		=empty($_POST['faktur'])? $jenis.'-'.substr($_POST['no_trans'],6,4).'-'.date('y'):$_POST['faktur'];	
+		$data['Nomor']		=empty($_POST['faktur'])? $jenis.'-'.date('ymd').'-'.substr($_POST['no_trans'],6,4):$_POST['faktur'];	
 		$data['Bulan']		=substr($_POST['tanggal'],3,2);	
 		$data['Tahun']		=substr($_POST['tanggal'],6,4);	
 		$data['Deskripsi']	=addslashes($_POST['pemasok']);	
@@ -106,7 +107,7 @@ class Pembelian extends CI_Controller{
 		$data['Jumlah']		=$_POST['jumlah'];
 		$data['Harga_Beli']	=$_POST['harga_beli'];
 		$data['ID_Satuan']	=$_POST['id_satuan'];
-		$data['batch']		=($find_batch=='' || $find_batch==NULL)?date('yz').'-'.rand(0,9):$find_batch;
+		$data['batch']		=($find_batch=='' || $find_batch==NULL)?date('ymdz').'-'.date('i'):$find_batch;
 		$data['Keterangan']	=$_POST['keterangan'];
 		$data['Bulan']		=substr($_POST['tanggal'],3,2);	
 		$data['Tahun']		=substr($_POST['tanggal'],6,4);	
@@ -114,6 +115,7 @@ class Pembelian extends CI_Controller{
 		$this->Admin_model->upd_data('inv_pembelian',"set ID_Bayar='".($tot_bel+$_POST['keterangan'])."'","where NoUrut='".$_POST['no_trans']."' and Tanggal='".tgltoSql($_POST['tanggal'])."'");
 		echo rdb('inv_pembelian_detail','ID','ID',"order by ID desc limit 1");
 		//process to jurnal temp
+		$ID_Jenis=empty($_POST['id_jenis'])?'1':$_POST['id_jenis'];
 		$TotalHg=$_POST['harga_beli'];
 		$this->no_transaksi($_POST['no_trans']);
 		$this->tanggal(($_POST['tanggal']));
@@ -162,7 +164,7 @@ class Pembelian extends CI_Controller{
 		$data['nm_barang']	=addslashes($_POST['nm_barang']);
 		$data['batch']		=$find_batch;
 		$data['stock']		=$stock_akhir;
-		$data['harga_beli']	=$_POST['harga_beli'];
+		$data['harga_beli']	=round(($_POST['harga_beli']/$hasil_konv),-2);
 		$data['created_by']	=$this->session->userdata('userid');
 		$this->Admin_model->replace_data('inv_material_stok',$data);
 	}
@@ -171,8 +173,9 @@ class Pembelian extends CI_Controller{
 		$jtran=$_POST['no_transaksi'];
 		$tanggal=tgltoSql($_POST['tanggal']);
 		$id_beli=rdb('inv_pembelian','ID','ID',"where NoUrut='".$_POST['no_transaksi']."' and Tanggal='$tanggal'");
-		if($id_beli){//!=''|| $id_beli!=0){
-			$data=$this->Admin_model->show_list('inv_pembelian_detail',"where ID_Beli='$id_beli' order by ID");
+		if($id_beli){
+			//!=''|| $id_beli!=0){
+			$data=$this->Admin_model->show_list('inv_pembelian_detail',"where ID_Beli='$id_beli' and ID_Barang <>'0' order by ID");
 			foreach ($data as $r){
 				$n++;
 				echo tr().td($n,'center').
@@ -202,8 +205,8 @@ class Pembelian extends CI_Controller{
 	//process filter
 	$data=array();$where='';$datax=array();$n=0;
 	empty($_POST['smp_tanggal'])?
-		$where="where Tanggal='".tgltoSql($_POST['dari_tanggal'])."'":
-		$where="where (Tanggal between '".tgltoSql($_POST['dari_tanggal'])."' and '".tgltoSql($_POST['smp_tanggal'])."')"; 
+		$where="where Tanggal='".tgltoSql($_POST['dari_tanggal'])."' and ID_Bayar IS NOT NULL":
+		$where="where (Tanggal between '".tgltoSql($_POST['dari_tanggal'])."' and '".tgltoSql($_POST['smp_tanggal'])."')  and ID_Bayar IS NOT NULL"; 
 		//echo $where;
 		$data=$this->Admin_model->show_list('inv_pembelian',$where." order by NoUrut");
 		foreach($data as $r){

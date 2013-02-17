@@ -5,6 +5,8 @@ $(document).ready(function(e) {
 	tglNow('#dari_tanggal');
 	$('#dari_tanggal').dynDateTime();
 	$('#smp_tanggal').dynDateTime();
+		_show_data()
+
     $('#okelah').click(function(){
 		_show_data()
 	})
@@ -17,7 +19,7 @@ function _show_data(){
 		'smp_tanggal'	:$('#smp_tanggal').val()
 	},function(result){
 		$('table#newTable tbody').html(result);
-		$('table#newTable').fixedHeader({width:(screen.width-30),height:(screen.height-320)});
+		$('table#newTable').fixedHeader({width:(screen.width-30),height:(screen.height-335)});
 	})
 		
 }

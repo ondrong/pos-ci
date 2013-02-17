@@ -31,7 +31,7 @@ if($c_pembelian__index!=''){
 }
 panel_multi_end();
 panel_multi('listpembelian','none',false);
-if($all_pembelian__list_beli!=''){
+if($all_listpembelian!=''){
 addText(array('Periode Dari','Sampai',''),
 		array("<input type='text' id='dari_tanggal' value='' class='w100'>",
 			  "<input type='text' id='smp_tanggal' value='' class='w100'>",

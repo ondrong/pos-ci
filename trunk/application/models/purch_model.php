@@ -68,6 +68,7 @@ class Purch_model extends CI_Model {
 		$trr=mysql_query("select distinct(month(Tanggal)) as Bulan from inv_pembelian where year(Tanggal)='".$thn."' order by month(Tanggal)");
 		while($th=mysql_fetch_object($trr)){
 		$sql="select(sum(Jumlah*Harga_Beli)) as Total from inv_pembelian_detail where month(Tanggal)='".$th->Bulan."' and year(Tanggal)='$thn' group by month(Tanggal) order by month(Tanggal)";
+		//fwrite($xml,$sql);
 			$rs=mysql_query($sql) or die($sql.mysql_error());
 			while($rw=mysql_fetch_object($rs)){
 				fwrite($xml,"<set name='".nBulan($th->Bulan)."' value='".$rw->Total."'/>\r\n");
@@ -97,7 +98,7 @@ class Purch_model extends CI_Model {
 			fwrite($xml,"<dataset seriesName='".$rw1->Jenis_Jual."' color='".$color[$rw1->ID]."'>\r\n");
 			for($x=1;$x<=$t_days;$x++){
 				$ii=(strlen($x)==1)?"0".$x:$x;
-				$val=rdb('inv_penjualan','Total',"sum(Total) as Total","where ID_Jenis='".$rw1->ID."' and Tanggal='".$thn.$bln.$ii."' order by Tanggal");	
+				$val=rdb('inv_penjualan','Total',"sum(Total) as Total","where ID_Jenis='".$rw1->ID."' and Tanggal='".$thn.'-'.$bln.'-'.$ii."' order by Tanggal");	
 				$val=($val=='')?'0':$val;
 				fwrite($xml,"<set name='".$ii."'  value='".$val."'/>\r\n");
 			$ii='';
@@ -129,10 +130,10 @@ class Purch_model extends CI_Model {
 					from transaksi_temp as t
 					left join kas_sub as k
 					on k.ID_CC=t.ID_CC
-					where t.Tanggal='".$thn.$bln.$ii."'
+					where t.Tanggal='".$thn.'-'.$bln.'-'.$ii."'
 					group by Tanggal";
 				echo $cat1;
-				$val=rdb('mst_kas_harian','sa_kas',"sa_kas","where tgl_kas='".$thn.$bln.$ii."' order by tgl_kas");	
+				$val=rdb('mst_kas_harian','sa_kas',"sa_kas","where tgl_kas='".$thn.'-'.$bln.'-'.$ii."' order by tgl_kas");	
 				$rcat1=mysql_query($cat1) or die(mysql_error());
 				while($rw1=mysql_fetch_object($rcat1)){
 						$valu=($val=='' && $rw1->Total=='')? '':($rw1->Total+$val);
@@ -166,10 +167,10 @@ class Purch_model extends CI_Model {
 						from inv_penjualan_detail as dt
 						left join inv_material_stok as b
 						on b.id_barang=dt.ID_Barang and b.batch=dt.Batch
-						where Tanggal ='".$thn.$bln.$ii."' and ID_Jenis!='5'
+						where Tanggal ='".$thn.'-'.$bln.'-'.$ii."' and ID_Jenis!='5'
 						group by concat(dt.Tanggal)
 						order by dt.Tanggal";
-				$val=rdb('mst_kas_trans','jumlah',"sum(jumlah) as jumlah","where tgl_trans='".$thn.$bln.$ii."' group by tgl_trans order by tgl_trans");	
+				$val=rdb('mst_kas_trans','jumlah',"sum(jumlah) as jumlah","where tgl_trans='".$thn.'-'.$bln.'-'.$ii."' group by tgl_trans order by tgl_trans");	
 				$rcat1=mysql_query($cat1) or die(mysql_error());
 				while($rw1=mysql_fetch_object($rcat1)){
 					$laba=($rw1->Jual-$rw1->Harga_Beli);

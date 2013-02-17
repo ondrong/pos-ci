@@ -6,7 +6,7 @@
 		  $a->setKriteria("transkip");
 		  $a->setNama("PENJUALAN PER PERLANGGAN");
 		  $a->setSection("detailbeli");
-		  $a->setFilter(array($dari ." s/d ".$sampai,$vendor));
+		  $a->setFilter(array(empty($dari)?'All':$dari ." s/d ".$sampai,empty($vendor)?'All':$vendor));
 		  $a->setReferer(array('Periode','Nama Pelanggan'));
 		  $a->setFilename($nfile);
 		  $a->AliasNbPages();
@@ -69,8 +69,7 @@
 
 //show pdf output in frame
 $path='application/views/laporan';
-$img=" <img src='".base_url()."asset/images/back.png' onclick='js:window.history.back();' style='cursor:pointer' title='click for select other filter data'>";
-//link_js('auto_sugest.js,lap_beli.js,jquery.fixedheader.js','asset/js,'.$path.'/js,asset/js');
+$img=" <img src='".base_url()."asset/images/back.png' onclick='js:window.back();' style='cursor:pointer' title='click for select other filter data'>";
 panel_begin('Print Preview','','Back'.$img);
 ?>
 		  <iframe src="<?=base_url();?>application/logs/<?=$this->session->userdata('userid');?>_detail_penjualan.pdf" height="100%" width="100%" frameborder="0" allowtransparency="1"></iframe>

@@ -1,0 +1,18 @@
+[16-02-2013]
+1. Update stock overview alter table inv_material_stok dengan id_lokasi varchar default 1
+2. Update inventory/hapus_inv :
+	Jika nama barang dihapus dari daftar barang makan akan menghapus data di inv_barang dan
+	serta inv_material stock
+	Namun jika hapus stock nya aja inv_barang tidak kehapus hanya stock dan batch aja yang dihapus.
+
+3. Nama barang jadi show huruf besar di list stock
+4. Bug Fixed pada perhitungan harga beli penerimaan barang jika satuan menggunakan satuan konversi
+   harga juga harus dikonversi
+   controller pembelian/update_stock
+   
+   
+5. Update stock dan transaksi pembelian
+6. Change id_barang ID jadi primnary
+
+7. Update semua laporan
+   

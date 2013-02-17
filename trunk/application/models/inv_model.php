@@ -108,7 +108,7 @@ class Inv_model extends CI_Model {
 	function get_nm_material($str,$limit,$fld,$dest=''){
 		$data=array();
 		$where=($dest=='')?'':$dest;
-		$sql="select * from inv_barang where $fld like '".$str."%' $where order by nama_barang limit $limit";	
+		$sql="select * from inv_barang where $fld like '".$str."%' $where order by kode,nama_barang limit $limit";	
 		//echo $sql;
 		($dest=='')?$dest='Nama_Barang':$dest=$dest;
 		$rw= mysql_query($sql) or die(mysql_error());
@@ -119,7 +119,7 @@ class Inv_model extends CI_Model {
 							  'kategori'	=>$row->ID_Kategori,
 							  'satuan'		=>$row->ID_Satuan,
 							  'nm_satuan'	=>rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".$row->ID_Satuan."'"),
-							  'nm_jenis'	=>rdb('inv_barang_jenis','JenisBarang','JenisBarang',"where ID='".$row->ID_Satuan."'"),
+							  'nm_jenis'	=>rdb('inv_barang_jenis','JenisBarang','JenisBarang',"where ID='".$row->ID_Jenis."'"),
 							  'status'		=>$row->Status,
 							  'kode'		=>$row->Kode,
 							  'pemasok'		=>$row->ID_Pemasok."-".rdb('inv_pemasok','Pemasok','Pemasok',"where ID='".$row->ID_Pemasok."'"),
@@ -227,10 +227,10 @@ class Inv_model extends CI_Model {
 		return $data->result();
 	}
 	
-	function get_detail_stock($nm_barang,$sort=''){
+	function get_detail_stock($nm_barang,$sort='',$lokasi='1'){
 		$sql="select batch, sum(stock) as stock, sum(blokstok) as blokstok,
 			   expired,nm_satuan,harga_beli from inv_material_stok where nm_barang='$nm_barang'
-			   and stock <>'0' group by batch order by batch $sort";
+			   and stock <>'0' and id_lokasi='$lokasi' group by batch order by batch $sort";
 		$data=$this->db->query($sql);
 		return $data->result();
 	}

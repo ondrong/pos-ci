@@ -219,7 +219,7 @@ $(document).ready(function(e) {
 		var prs=(cb==1)?'pembayaran':'kredited';
 		var t_pos=(cb==1)?'25%':'17%';
 		(ppn==0)?unlock('#ppn'):lock('#ppn');
-		(cb==2 || cb==3)? lock('#frm5 #dibayar'): unlock('#frm5 #dibayar')
+		(cb==2 || cb==3)? unlock('#frm5 #dibayar'): unlock('#frm5 #dibayar')
 				$('#stat_sim').val(frm);
 				$('#nama').val(prs);
 				$('#pp-'+prs).css({'left':'28%','top':t_pos});
@@ -434,7 +434,11 @@ $(document).ready(function(e) {
 /*			($('#ppne').is(':checked'))?
 				$('#ppne').removeAttr('checked'):
 				$('#ppne').attr('checked','checked');
-*/			return false
+			return false
+*/			$.post('re_print',{'id':''},
+			function(result){
+				$('#result').show().html(result).fadeOut(10000)
+			})
 			//tidak di fungsikan
 			var id=focusID.split('__')
 			if($('#frm2 input#'+id[0]+'__nm_barang').val()=='RESEP DOKTER'){;
