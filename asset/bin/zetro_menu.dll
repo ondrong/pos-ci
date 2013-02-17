@@ -39,8 +39,10 @@
 		1|Return Jual|return_jual|y|zce
 
 	[Inventori]
-	1|List Stock|stock/stock_barang||
-	2|List Barang Terjual|report/penjualan||
+	1|Stock Overview|stock/index|y|zvp
+	2|<hr>|x||
+	3|List Stock|stock/stock_barang||
+	4|List Barang Terjual|report/penjualan||
 		
 		[List Barang Terjual]
 		1|List Barang Terjual|listbarangterjual|y|zvp
@@ -95,6 +97,7 @@
 			
 		[Penerimaan Barang]
 		1|Input Pembelian|pembelian/index|y|zce
+		2|List Pembelian|listpembelian|y|zevp
 		
 		[Return Pembelian]
 		1|Return pembelian|pembelian/return_beli|y|zce

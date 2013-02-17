@@ -66,7 +66,8 @@ class Stock extends CI_Controller{
 	function get_bacth(){
 		$data=array();
 		$id=$_POST['id_barang'];
-		$data=$this->inv_model->get_detail_stocked($id,'desc');	
+		$lokasi=empty($_POST['lokasi'])?'1':$_POST['lokasi'];
+		$data=$this->inv_model->get_detail_stocked($id,'desc',$lokasi);	
 		echo (count($data)>0)?json_encode($data[0]):'{"batch":""}';
 	}
 	function list_filtered(){
@@ -107,6 +108,7 @@ class Stock extends CI_Controller{
 	function get_material_stock(){
 		$data=array();$stok=0;$sat='';
 		$id_material=$_POST['id_material'];
+		$lokasi		=empty($_POST['lokasi'])?'1':$_POST['lokasi'];
 		$data=$this->inv_model->get_total_stock($id_material);
 		foreach($data as $r){
 			$stok	=$r->stock;
@@ -159,7 +161,7 @@ class Stock extends CI_Controller{
 			$n++;
 			echo tr().td($n,'center').
 					  td(strtoupper($r->Kode)).
-					  td(ucwords(strtolower($r->Nama_Barang))).
+					  td((strtoupper($r->Nama_Barang))).
 					  td(rdb('inv_barang_kategori','Kategori','Kategori',"where ID='".$r->ID_Kategori."'")).
 					  td(number_format($r->stock,2),'right').
 					  td(rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".$r->ID_Satuan."'")).

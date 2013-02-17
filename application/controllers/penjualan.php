@@ -142,7 +142,7 @@ class Penjualan extends CI_Controller{
 		//get ID from header trans
 		$data['Keterangan']	=$_POST['no_trans'];
 		$data['ID_Jual']	=rdb('inv_penjualan','ID','ID',"where NoUrut='".$_POST['no_trans']."' and Tanggal='".tgltoSql($_POST['tanggal'])."'");
-		$data['ID_Barang']	=rdb('inv_barang','ID','ID',"where Nama_Barang='".$_POST['nm_barang']."'");
+		$data['ID_Barang']	=rdb('inv_barang','ID','ID',"where Nama_Barang='".addslashes($_POST['nm_barang'])."'");
 		$data['ID_Jenis']	=$_POST['cbayar'];
 		$data['Jumlah']		=$_POST['jml_trans'];
 		$data['Harga']		=$_POST['harga_jual'];
@@ -150,7 +150,7 @@ class Penjualan extends CI_Controller{
 		$data['Bulan']		=$_POST['no_id'];
 		$data['ID_Post']	=$_POST['id_post'];
 		$data['batch']		=empty($_POST['batch'])?'0':$_POST['batch'];
-		$data['ID_Satuan']	=rdb('inv_barang','ID_Satuan','ID_Satuan',"where Nama_Barang='".$_POST['nm_barang']."'");
+		$data['ID_Satuan']	=rdb('inv_barang','ID_Satuan','ID_Satuan',"where Nama_Barang='".addslashes($_POST['nm_barang'])."'");
 		$countdata=rdb('inv_penjualan_detail','ID','ID',"where Bulan='".$_POST['no_id']."' and Keterangan='".$_POST['no_trans']."' and Tanggal='".tgltoSql($_POST['tanggal'])."'");
 		//$this->inv_model->total_record('inv_penjualan_detail',"where ID_Jual='$id_jual'",'id_jual');
 		if($countdata==''){
@@ -201,7 +201,7 @@ class Penjualan extends CI_Controller{
 			$end_stock=($first_stock-abs($jumlah));
 			$end_stock=($end_stock<0)? 0:$end_stock;
 			$datax['id_barang']	=$r->ID_Barang;
-			$datax['nm_barang']	=rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$r->ID_Barang."'");
+			$datax['nm_barang']	=addslashes(rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$r->ID_Barang."'"));
 			$datax['batch']		=$bt;
 			$datax['stock']		=$end_stock;
 			$datax['harga_beli']=empty($hgb)?'0':$hgb;
@@ -223,7 +223,7 @@ class Penjualan extends CI_Controller{
 			$first_stock=rdb('inv_material_stok','stock','stock',"where id_barang='".$r->ID_Barang."' and batch='".$r->Batch."'");
 			$end_stock=($first_stock+(abs($r->Jumlah)));
 			$datax['id_barang']	=$r->ID_Barang;
-			$datax['nm_barang']	=rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$r->ID_Barang."'");
+			$datax['nm_barang']	=addslashes(rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$r->ID_Barang."'"));
 			$datax['batch']		=$r->Batch;
 			$datax['stock']		=$end_stock;
 			$datax['harga_beli']=empty($hgb)?'0':$hgb;
@@ -251,7 +251,7 @@ class Penjualan extends CI_Controller{
 	}
 	//adjust stock barang di table inv_material
 	function update_adjust(){
-		$nm_barang=$_POST['nm_barang'];
+		$nm_barang=addslashes($_POST['nm_barang']);
 		$stock=$_POST['stock'];
 		$this->Admin_model->upd_data('inv_material','stock',"where nm_barang='".$nm_barang."'");
 	}
@@ -293,7 +293,7 @@ class Penjualan extends CI_Controller{
 	function print_slip(){
 		$this->zetro_slip->path=$this->session->userdata('userid');
 		$this->zetro_slip->modele('wb');
-		$this->zetro_slip->newline();
+		//$this->zetro_slip->newline();
 		$this->no_transaksi($_POST['no_transaksi']);
 		$this->tanggal(tgltoSql($_POST['tanggal']));
 		$this->zetro_slip->content($this->struk_header());
@@ -341,7 +341,8 @@ class Penjualan extends CI_Controller{
 			 $satuan=rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".
 			 		 rdb('inv_barang','ID_Satuan','ID_Satuan',"where ID='".$row->ID_Barang."'")."'");
 			$nama_barang=rdb('inv_barang','Nama_Barang','Nama_Barang',"where ID='".$row->ID_Barang."'");
-			$content .=sepasi(((6-strlen($n))/2)).$n.sepasi(3).substr(ucwords(strtolower($nama_barang)),0,31).sepasi((32-strlen($nama_barang))).
+			$content .=sepasi(((6-strlen($n))/2)).$n.sepasi(3).substr(ucwords(strtolower($nama_barang)),0,31).
+					 sepasi((32-strlen($nama_barang))).
 					 sepasi((11-strlen($row->Jumlah)-strlen($satuan))).round($row->Jumlah,0).sepasi(1).$satuan.
 					 sepasi((13-strlen(number_format($row->Harga)))).number_format($row->Harga).
 					 sepasi((16-strlen(number_format(($row->Jumlah *$row->Harga),2)))).number_format(($row->Jumlah *$row->Harga),2).newline();
@@ -356,26 +357,23 @@ class Penjualan extends CI_Controller{
 		$data=array();$bawah="";
 		$nama=rdb('mst_anggota','Nama','Nama',"where ID='".rdb('inv_penjualan','ID_Anggota','ID_Anggota',"where NoUrut='".$this->no_trans."' and Tanggal='".$this->tgl."'")."'");
 		$urut=rdb('mst_anggota','NoUrut','NoUrut',"where ID='".rdb('inv_penjualan','ID_Anggota','ID_Anggota',"where NoUrut='".$this->no_trans."' and Tanggal='".$this->tgl."'")."'");
-		$alm =rdb('mst_departemen','Departemen','Departemen',"where ID='".
-				rdb('mst_anggota','Nama','Nama',"where ID='".
-				rdb('inv_penjualan','ID_Anggota','ID_Anggota',"where NoUrut='".$this->no_trans."' and Tanggal='".$this->tgl."'")."'")."'");
+		$alm =rdb('mst_anggota','Catatan','Catatan',"where ID='".
+				rdb('inv_penjualan','ID_Anggota','ID_Anggota',"where NoUrut='".$this->no_trans."' and Tanggal='".$this->tgl."'")."'");
 		$this->inv_model->tabel('inv_pembayaran');
 		$data=$this->inv_model->show_list_1where('no_transaksi',$this->no_trans);
 			foreach($data->result() as $row){
 				$bawah=str_repeat('-',79).newline().
-				sepasi((61-strlen('Sub Total'))).'Sub Total :'.sepasi((14-strlen(number_format($row->total_belanja,2)))).number_format($row->total_belanja,2).newline(2).
+				sepasi((61-strlen('Sub Total'))).'Sub Total :'.sepasi((14-strlen(number_format($row->total_belanja,2)))).number_format($row->total_belanja,2).newline().
 				sepasi((61-strlen('Corting'))).'Corting :'.sepasi((14-strlen(number_format($row->ppn,2)))).number_format($row->ppn,2).newline().
 				sepasi(61).str_repeat('-',18).'+'.newline().
-				sepasi((61-strlen('Total'))).'Total :'.sepasi((14-strlen(number_format($row->total_bayar,2)))).number_format($row->total_bayar,2).newline(2).
-				sepasi((61-strlen('Cash'))).'Cash :'.sepasi((14-strlen(number_format($row->jml_dibayar,2)))).number_format($row->jml_dibayar,2).newline(2).
+				sepasi((61-strlen('Total'))).'Total :'.sepasi((14-strlen(number_format($row->total_bayar,2)))).number_format($row->total_bayar,2).newline().
+				sepasi((61-strlen('Cash'))).'Cash :'.sepasi((14-strlen(number_format($row->jml_dibayar,2)))).number_format($row->jml_dibayar,2).newline().
 				sepasi(61).str_repeat('-',17).'-'.newline().
-				sepasi((61-strlen('Kembali'))).'Kembali :'.sepasi((14-strlen(number_format($row->kembalian,2)))).number_format($row->kembalian,2).newline(2).
-				str_repeat('-',79).newline().'Terima Kasih.'.newline();
-				
-/*				'No. Anggota'.sepasi((14-strlen('No.Anggota'))).':'.$urut.newline().
-				'Nama Anggota'.sepasi((14-strlen('Nama Anggota'))).':'.$nama.newline().
-				'Departemen'.sepasi((16-strlen('Departemen'))).':'.$alm.newline(2);
-*/			}
+				sepasi((61-strlen('Kembali'))).'Kembali :'.sepasi((14-strlen(number_format($row->kembalian,2)))).number_format($row->kembalian,2).newline().
+				str_repeat('-',79).newline().'Terima Kasih.'.newline().
+				'Pelanggan'.sepasi((14-strlen('Pelanggan'))).':'.$nama.newline().
+				'Alamat'.sepasi((14-strlen('Alamat'))).':'.$alm;
+/*	*/			}
 		return $bawah;
 	}
 	function struk_data_footer_kredit(){
@@ -392,13 +390,13 @@ class Penjualan extends CI_Controller{
 		$data=$this->inv_model->show_list_1where('no_transaksi',$this->no_trans);
 			foreach($data->result() as $row){
 				$bawah=str_repeat('-',79).newline().
-				sepasi((61-strlen('Sub Total'))).'Sub Total :'.sepasi((14-strlen(number_format($row->total_belanja,2)))).number_format($row->total_belanja,2).newline(2).
+				sepasi((61-strlen('Sub Total'))).'Sub Total :'.sepasi((14-strlen(number_format($row->total_belanja,2)))).number_format($row->total_belanja,2).newline().
 				sepasi((61-strlen('Corting'))).'Corting :'.sepasi((14-strlen(number_format($row->ppn,2)))).number_format($row->ppn,2).newline().
 				sepasi(61).str_repeat('-',18).'+'.newline().
-				sepasi((61-strlen('Total'))).'Total :'.sepasi((14-strlen(number_format($row->total_bayar,2)))).number_format($row->total_bayar,2).newline(2).
-				sepasi((61-strlen('Uang Muka'))).'Uang Muka :'.sepasi((14-strlen(number_format($row->jml_dibayar,2)))).number_format($row->jml_dibayar,2).newline(2).
+				sepasi((61-strlen('Total'))).'Total :'.sepasi((14-strlen(number_format($row->total_bayar,2)))).number_format($row->total_bayar,2).newline().
+				sepasi((61-strlen('Uang Muka'))).'Uang Muka :'.sepasi((14-strlen(number_format($row->jml_dibayar,2)))).number_format($row->jml_dibayar,2).newline().
 				sepasi(61).str_repeat('-',17).'-'.newline().
-				sepasi((61-strlen('Sisa'))).'Sisa :'.sepasi((14-strlen(number_format($row->kembalian,2)))).number_format($row->kembalian,2).newline(2).
+				sepasi((61-strlen('Sisa'))).'Sisa :'.sepasi((14-strlen(number_format($row->kembalian,2)))).number_format($row->kembalian,2).newline().
 				str_repeat('-',79).newline().
 				'Pembayaran '.sepasi((15-strlen('Pembayaran :'))).':'.$ncby.' No.:'.$rek.' '.$bank .' [ '.tglfromSql($tgir).' ]'.newline().
 				'Nama Konsumen'.sepasi((15-strlen('Nama Konsumen :'))).' :'.$nama.'[ '.$urut.' ]'.newline().

@@ -1,7 +1,7 @@
 // JavaScript Document
 $(document).ready(function(e) {
 	var path=$('#path').val();
-	$('#frm2').hide();
+	//$('#frm2').hide();
 	$('#dt-1').hide();
 	if($('#trans_new').val()==''){
 		_generate_nomor('GR','#frm1 input#no_transaksi');
@@ -19,8 +19,8 @@ $(document).ready(function(e) {
 	// Pengaturan tab panel yang aktif
 	var prs=$('#prs').val();
 	$('table#panel tr td.flt').hide()
-    $('#listpembelian').removeClass('tab_button');
-	$('#listpembelian').addClass('tab_select');
+    $('#inputpembelian').removeClass('tab_button');
+	$('#inputpembelian').addClass('tab_select');
 	$('table#panel tr td.plt').hide();
 	$('table#panel tr td#p-0').addClass('bg_print');
 	$('table#panel tr td').click(function(){
@@ -188,7 +188,7 @@ function _simpan_header_pembelian(){
 		'id_pemasok':$('#id_pemasoke').val(),
 		'total'		:$('#total_beli').val()
 	},function(result){
-		
+		_simpan_detail_pembelian();
 	})
 }
 /*
@@ -243,7 +243,7 @@ function image_click(id,cl){
 	switch(cl){
 		case 'simpan':
 		_simpan_header_pembelian();
-		_simpan_detail_pembelian();
+		//_simpan_detail_pembelian();
 		//_update_stock('');
 		//_kosongkan_field();
 		

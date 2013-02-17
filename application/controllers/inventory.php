@@ -46,7 +46,7 @@ class Inventory extends CI_Controller {
 	}
 	function show_konversi(){
 	$data=array(); $n=0;
-	$id=$_POST['nm_barang'];
+	$id=addslashes($_POST['nm_barang']);
 	
 	$data=$this->Admin_model->show_list('inv_konversi',"where nm_barang='".$id."'");
 	
@@ -64,7 +64,7 @@ class Inventory extends CI_Controller {
 	
 	function simpan_jenis(){
 		$data=array();$n=0;
-		$nm_jenis=ucwords($_POST['nm_jenis']);
+		$nm_jenis=ucwords(addslashes($_POST['nm_jenis']));
 		$induk=$_POST['induk'];
 		$data['JenisBarang']=strtoupper($nm_jenis);
 		//$data['created_by']=$this->session->userdata("userid");
@@ -108,7 +108,7 @@ class Inventory extends CI_Controller {
 	}
 	function simpan_kategori(){
 		$data=array();
-		$nm_jenis=($_POST['nm_kategori']);
+		$nm_jenis=addslashes($_POST['nm_kategori']);
 		$induk=$_POST['induk'];
 		$data['Kategori']=strtoupper($nm_jenis);
 		//$data['created_by']=$this->session->userdata("userid");
@@ -127,7 +127,7 @@ class Inventory extends CI_Controller {
 	}
 	function simpan_golongan(){
 		$data=array();
-		$nm_jenis=strtoupper($_POST['nm_golongan']);
+		$nm_jenis=strtoupper(addslashes($_POST['nm_golongan']));
 		$induk=$_POST['induk'];
 		$data['nm_golongan']=strtoupper($nm_jenis);
 		//$data['created_by']=$this->session->userdata("userid");
@@ -146,7 +146,7 @@ class Inventory extends CI_Controller {
 	}
 	function simpan_satuan(){
 		$data=array();
-		$nm_jenis=strtoupper($_POST['nm_satuan']);
+		$nm_jenis=strtoupper(addslashes($_POST['nm_satuan']));
 		$linked=$_POST['linked'];
 		$induk=$_POST['induk'];
 		$data['Satuan']=$nm_jenis;
@@ -163,6 +163,7 @@ class Inventory extends CI_Controller {
 	}
 	function simpan_barang(){
 		$data=array();$kat=array();$jen=array();$sat=array();
+		$data['ID']			=empty($_POST['ID'])?'0':$_POST['ID'];
 		$data['ID_Jenis']	=empty($_POST['id_jenis'])?'':$_POST['id_jenis'];
 		$data['Kode']		=empty($_POST['id_barang'])?rand(1000,9999):strtoupper($_POST['id_barang']);
 		$data['ID_Kategori']=empty($_POST['id_kategori'])?'':$_POST['id_kategori'];
@@ -172,16 +173,16 @@ class Inventory extends CI_Controller {
 		$data['Harga_Beli']	=$_POST['stokmin'];
 		$data['Harga_Jual']	=$_POST['stokmax'];
 		$data['minstok']	=$_POST['minstok'];
-		$kat['Kategori']	=empty($_POST['nm_kategori'])?'':strtoupper($_POST['nm_kategori']);
-		$jen['JenisBarang']	=empty($_POST['nm_kategori'])?'':strtoupper($_POST['nm_jenis']);
-		$sat['Satuan']		=empty($_POST['nm_kategori'])?'':strtoupper($_POST['nm_satuan']);
-		if(rdb('inv_barang_kategori','Kategori','Kategori',"where Kategori='".strtoupper($_POST['nm_kategori'])."'")==''){
+		$kat['Kategori']	=empty($_POST['nm_kategori'])?'':strtoupper(addslashes($_POST['nm_kategori']));
+		$jen['JenisBarang']	=empty($_POST['nm_kategori'])?'':strtoupper(addslashes($_POST['nm_jenis']));
+		$sat['Satuan']		=empty($_POST['nm_kategori'])?'':strtoupper(addslashes($_POST['nm_satuan']));
+		if(rdb('inv_barang_kategori','Kategori','Kategori',"where Kategori='".strtoupper(addslashes($_POST['nm_kategori']))."'")==''){
 			$this->Admin_model->replace_data('inv_barang_kategori',$kat);
 		}
-		if(rdb('inv_barang_jenis','JenisBarang','JenisBarang',"where JenisBarang='".strtoupper($_POST['nm_jenis'])."'")==''){
+		if(rdb('inv_barang_jenis','JenisBarang','JenisBarang',"where JenisBarang='".strtoupper(addslashes($_POST['nm_jenis']))."'")==''){
 			$this->Admin_model->replace_data('inv_barang_jenis',$jen);
 		}
-		if(rdb('inv_barang_satuan','Satuan','Satuan',"where Satuan='".strtoupper($_POST['nm_satuan'])."'")==''){
+		if(rdb('inv_barang_satuan','Satuan','Satuan',"where Satuan='".strtoupper(addslashes($_POST['nm_satuan']))."'")==''){
 			$this->Admin_model->replace_data('inv_barang_satuan',$sat);
 		}
 		$this->Admin_model->replace_data('inv_barang',$data);
@@ -189,14 +190,14 @@ class Inventory extends CI_Controller {
 	}
 	function data_hgb(){
 		$data=array();
-		$nm_barang=$_POST['nm_barang'];
+		$nm_barang=addslashes($_POST['nm_barang']);
 		$this->zetro_auth->frm_filename('asset/bin/zetro_inv.frm');
 		$data=$this->zetro_auth->show_data_field('Harga Beli','inv_harga_beli',"where nm_barang='$nm_barang'");
 		echo json_encode($data);	
 	}
 	function data_konversi(){
 		$data=array();
-		$nm_barang=$_POST['nm_barang'];
+		$nm_barang=addslashes($_POST['nm_barang']);
 		$this->zetro_auth->frm_filename('asset/bin/zetro_inv.frm');
 		$data=$this->zetro_auth->show_data_field('Barang','inv_material',"where nm_barang='$nm_barang'");
 		echo json_encode($data);	
@@ -204,7 +205,7 @@ class Inventory extends CI_Controller {
 	function list_hgb(){
 	 	$this->_filename();
 		$this->zetro_buildlist->section('Harga Beli');
-		$sql2="select * from inv_barang where Nama_Barang='".strtoupper($_POST['nm_barang'])."' order by nm_barang";
+		$sql2="select * from inv_barang where Nama_Barang='".strtoupper(addslashes($_POST['nm_barang']))."' order by nm_barang";
 		$this->zetro_buildlist->query($sql2);
 		$this->zetro_buildlist->list_data('Harga Beli');
 		$this->zetro_buildlist->BuildListData('Pemasok');
@@ -220,33 +221,33 @@ class Inventory extends CI_Controller {
 		 on s.ID=k.nm_satuan
 		 left join inv_barang_satuan as sb
 		 on sb.ID=k.sat_beli
-		 where nm_barang='".strtoupper($_POST['nm_barang'])."' order by nm_barang";
+		 where nm_barang='".strtoupper(addslashes($_POST['nm_barang']))."' order by nm_barang";
 		$this->zetro_buildlist->query($sql2);
 		$this->zetro_buildlist->list_data('Konversi');
 		$this->zetro_buildlist->BuildListData('sat_beli');
 	}
 	function simpan_hgb(){
 		$data=array();$datax=array();
-		$data['nm_barang']   =strtoupper($_POST['nm_barang']);
-		$data['nm_produsen'] =strtoupper($_POST['nm_produsen']);
+		$data['nm_barang']   =strtoupper(addslashes($_POST['nm_barang']));
+		$data['nm_produsen'] =strtoupper(addslashes($_POST['nm_produsen']));
 		$data['hg_beli']     =$_POST['hg_beli'];
 		$data['sat_beli']    =$_POST['sat_beli'];
 		//$data['created_by']  =$this->session->userdata("userid");
-		$datax['nm_produsen']=strtoupper($_POST['nm_produsen']);
+		$datax['nm_produsen']=strtoupper(addslashes($_POST['nm_produsen']));
 		$this->Admin_model->replace_data('inv_harga_beli',$data);
 		$this->Admin_model->replace_data('mst_produsen',$datax);
 		//generate list table
 	 	$this->_filename();
 		$this->zetro_buildlist->section('Harga Beli');
-		$sql2="select * from inv_harga_beli where nm_barang='".strtoupper($_POST['nm_barang'])."' order by nm_barang";
+		$sql2="select * from inv_harga_beli where nm_barang='".strtoupper(addslashes($_POST['nm_barang']))."' order by nm_barang";
 		$this->zetro_buildlist->query($sql2);
 		$this->zetro_buildlist->list_data('Harga Beli');
 		$this->zetro_buildlist->BuildListData('nm_produsen');
 	}
 	function simpan_konversi(){
 		$data=array();$datax=array();
-		$data['id_barang']	 =rdb('inv_barang','ID','ID',"where Nama_Barang='".$_POST['nm_barang']."'");
-		$data['nm_barang']   =strtoupper($_POST['nm_barang']);
+		$data['id_barang']	 =rdb('inv_barang','ID','ID',"where Nama_Barang='".addslashes($_POST['nm_barang'])."'");
+		$data['nm_barang']   =strtoupper(addslashes($_POST['nm_barang']));
 		$data['nm_satuan']   =$_POST['nm_satuan'];
 		$data['isi_konversi']=$_POST['isi_konversi'];
 		$data['sat_beli']    =$_POST['sat_beli'];
@@ -294,13 +295,13 @@ class Inventory extends CI_Controller {
 		$group		="group by ms.batch,b.ID";
 		$withoutZero='';//" and ms.Stock <>'0'";
 		if($id!='' && $id_jenis!=''){
-			 $where="where ID_Kategori='$id' $id_jenis $stat $cari $withoutZero $group order by ID_Jenis,nama_barang";
+			 $where="where ID_Kategori='$id' $id_jenis $stat $cari $withoutZero $group order by Kode,nama_barang";
 		}else if ($id=='' && $id_jenis!=''){
-			 $where="where id_jenis='".$_POST['id_jenis']."' $stat $withoutZero $cari $group order by ID_Jenis,nama_barang";
+			 $where="where id_jenis='".$_POST['id_jenis']."' $stat $withoutZero $cari $group order by Kode,nama_barang";
 		}else if ($id=='' && $id_jenis==''){
-		 	 $where="where Nama_Barang like '".$_POST['cari']."%' $withoutZero $stat $group order by ID_Jenis,nama_barang";
+		 	 $where="where Nama_Barang like '".$_POST['cari']."%' $withoutZero $stat $group order by Kode,nama_barang";
 		}else if ($id!='' && $id_jenis==''){
-			 $where="where ID_Kategori='$id' $stat $withoutZero $cari $group order by ID_Jenis,nama_barang";
+			 $where="where ID_Kategori='$id' $stat $withoutZero $cari $group order by Kode,nama_barang";
 		}
 		/* echo $id.'='. $where; //for debug only*/
 		$data=$this->inv_model->list_barang($where);
@@ -310,7 +311,7 @@ class Inventory extends CI_Controller {
 			echo tr('xx','nm-'.$r->ID).td($n,'center').td($r->Kategori,'kotak\' nowrap=\'nowrap' ).td($r->JenisBarang). td(strtoupper($r->Kode)).
 				 td(strtoupper($r->Nama_Barang)).td($r->Satuan).
 				 td(number_format($r->stock,2),'right').
-				 td(number_format($r->harga_beli,2),'right').
+				 td(number_format(($r->harga_beli=='' || $r->harga_beli=='0')?$r->Harga_Beli:$r->harga_beli,2),'right').
 				 td(number_format($r->Harga_Jual,2),'right').td($r->minstok,'center');
 			echo ($this->zetro_auth->cek_oto('e','list')!='')?
 				($this->session->userdata('menus')=='QWNjb3VudGluZw==')?'':
@@ -323,7 +324,7 @@ class Inventory extends CI_Controller {
 	//edit section
 	function get_unit_konv(){
 		$data=array();
-		$nm_barang=$_POST['nm_barang'];
+		$nm_barang=addslashes($_POST['nm_barang']);
 		$data=$this->inv_model->get_unit_konv($nm_barang);
 		foreach($data as $r){
 			echo "<option value='".$r->sat_beli."'>".rdb('inv_barang_satuan','Satuan','Satuan',"where ID='".$r->sat_beli."'")."</option>";	
@@ -331,7 +332,7 @@ class Inventory extends CI_Controller {
 	}
 	function edit_material(){
 		$data=array();
-		$nm_barang=str_replace('_',' ',$_POST['nm_barang']);
+		$nm_barang=str_replace('_',' ',addslashes($_POST['nm_barang']));
 		//$this->zetro_auth->frm_filename('asset/bin/zetro_inv.frm');
 		//$data=$this->zetro_auth->show_data_field('Barang','inv_barang',"where nama_barang='$nm_barang'");
 		$data=$this->inv_model->update_barang($nm_barang);
@@ -342,9 +343,10 @@ class Inventory extends CI_Controller {
 /*		$fld=$_POST['fld'];
 		$tbl=$_POST['tbl'];
 		$where=str_replace('_',' ',$_POST['id']);
-		$this->Admin_model->hapus_table($tbl,$fld,$where);
-*/		$this->Admin_model->hps_data('inv_material_stok',"where ID_Barang='".$_POST['id']."' and batch='".$_POST['batch']."'");
-		echo $_POST['id'];
+*/
+		$this->Admin_model->hps_data('inv_material_stok',"where ID_Barang='".$_POST['id']."' and batch='".$_POST['batch']."'");
+		empty($_POST['batch'])?$this->Admin_model->hps_data('inv_barang',"where ID='".$_POST['id']."'"):'';
+		//echo $_POST['id'];
 	}
 	function hapus_konversi(){
 		$fld=$_POST['fld'];

@@ -11,7 +11,7 @@ class Kasir_model extends CI_Model {
 		$sql="select dt.* from inv_penjualan as p
 			 left join inv_penjualan_detail as dt
 			 on dt.ID_Jual=p.ID
-			 where p.NoUrut='$no_trans' and p.Tanggal='$tanggal' order by dt.ID";
+			 where p.NoUrut='$no_trans' and p.Tanggal='$tanggal' and dt.id_barang<>'0'order by dt.ID";
 		$data=$this->db->query($sql);
 		return $data->result();
 	}
@@ -33,7 +33,7 @@ class Kasir_model extends CI_Model {
 			 left join inv_pembelian_jenis as pj
 			 on pj.ID=p.ID_Jenis
 			 $where $group $order";
-		//	echo $sql;//debug only
+			echo $sql;//debug only
 		$data=$this->db->query($sql);
 		return $data->result();
 	}

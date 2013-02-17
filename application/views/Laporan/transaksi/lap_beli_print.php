@@ -7,7 +7,7 @@
 		  $a->setKriteria("transkip");
 		  $a->setNama("LAPORAN PEMBELIAN BARANG");
 		  $a->setSection(($detail=='')?'rekapbeli':'detailbeli');
-		  $a->setFilter(array($dari ." s/d ".$sampai,$id_jenis));
+		  $a->setFilter(array(empty($sampai)?$dari:$dari ." s/d ".$sampai,empty($id_jenis)?'':$id_jenis));
 		  $a->setReferer(array('Periode','Jenis Pembayaran'));
 		  $a->setFilename($nfile);
 		  $a->AliasNbPages();
@@ -22,10 +22,10 @@
 		  $a->SetFont('Arial','B',10);
 		  $a->SetFont('Arial','',9);
 		  $dataz=array();
-		  $n=0;$harga=0;$hargaj=0;$jml=0;
+		  $n=0;$harga=0;$hargaj=0;$jml=0;$hgb=0;
 		  foreach($temp_rec as $r)
 		  {
-			$n++;$nn=0;$hgb=0;
+			$n++;$nn=0;
 			if($detail==''){
 			$a->Row(array($n, tglfromSql($r->Tanggal),$r->Nomor,
 						  ucwords($r->Nama),
@@ -33,6 +33,7 @@
 						  $r->Jenis_Beli
 						  )) ;
 			}else if($detail=='detail'){
+			//laproan detail pembelian
 			$a->SetFont('Arial','B',9);
 			$a->SetFillColor(210,210,010);	
 			$a->Cell(10,8,$n,1,0,'C',true);
@@ -45,7 +46,7 @@
 				foreach($dataz as $r2){
 					$nn++;
 					$a->Row(array($nn,tglfromSql($r2->Tanggal),$r2->Nomor,
-								  ucwords(strtolower($r2->Nama_Barang)),
+								  ucwords(($r2->Nama_Barang)),
 								  number_format($r2->Jumlah,2),
 								  $r2->Satuan,
 								  number_format(($r2->Harga_Beli),2),
@@ -60,7 +61,7 @@
 			  $a->Cell(27,8,number_format($hgb,2),1,1,'R',true);
 			}
 			  //grand total
-				$harga =($harga+($hgb));
+				$harga =($harga+($r->Harga_Beli));
 			
 		  }
 		  $a->SetFont('Arial','B',9);

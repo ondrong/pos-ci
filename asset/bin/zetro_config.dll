@@ -1,8 +1,8 @@
 [Server]
-hostname|localhost
+hostname|192.168.1.115
 username|root
 password|
-dbname|setujudb1
+dbname|setujudb
 
 [WebPage]
 Title|TOKOKU V.2.2
