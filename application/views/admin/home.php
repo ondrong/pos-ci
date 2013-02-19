@@ -53,7 +53,7 @@
 <div id='xxx' align="right">
  <img src='<?=base_url();?>asset/img/logout.png' onclick="logout();" width="50" height="50" style='cursor:pointer' />
 </div>
-<? //echo (no_ser()=='6953b843f6cb0cd37e11d1cc485d2d79')?
+<? $serial=$this->session->userdata('version');
 	?>
 <input type='hidden' id='lcs' value='<?=empty($serial)?'x2cdg':$serial;?>' />
 <input type='hidden' id='vers' value="<?=encode_php();?>" class='w100'/>
