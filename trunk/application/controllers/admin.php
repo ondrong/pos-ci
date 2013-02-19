@@ -8,10 +8,17 @@ class Admin extends CI_Controller {
 		$this->zm='asset/bin/zetro_menu.dll';
 	}
     function index() {
+	 if($this->session->userdata('login')!=TRUE){
 		addCopy();
 		$data=array('menus'=>0);
 		$this->session->unset_userdata($data);
 		$this->cek_db_user();
+	 }else{
+		$data['login']=$this->session->userdata('login');
+				$this->load->view('admin/header');
+				$this->load->view('admin/home',$data);
+				$this->load->view('admin/footer');
+	 }
 	}
 	function about(){
 		$data['serial']=(no_ser()==addCopy())? 
@@ -166,8 +173,8 @@ class Admin extends CI_Controller {
 		}else{
 		$data=array();
 		$data['login']=$this->session->userdata('login');
-		$data['serial']=(no_ser()==addCopy())? 
-		  substr(chunk_split(strtoupper(no_ser()),4,'-'),0,-1):"Demo Version";
+		//$data['serial']=(no_ser()==addCopy())? 
+		  //substr(chunk_split(strtoupper(no_ser()),4,'-'),0,-1):"Demo Version";
 			if($this->session->userdata('login')==true){
 				$this->Admin_model->create_useroto();
 				$this->load->view('admin/header');

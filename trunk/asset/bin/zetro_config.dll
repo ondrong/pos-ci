@@ -1,6 +1,6 @@
 [Server]
 hostname|192.168.1.115
-username|root
+username|
 password|
 dbname|setujudb
 
