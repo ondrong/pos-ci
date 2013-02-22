@@ -313,7 +313,7 @@ class Inventory extends CI_Controller {
 				 td(number_format($r->stock,2),'right').
 				 td(number_format(($r->harga_beli=='' || $r->harga_beli=='0')?$r->Harga_Beli:$r->harga_beli,2),'right').
 				 td(number_format($r->Harga_Jual,2),'right').td($r->minstok,'center');
-			echo ($this->zetro_auth->cek_oto('e','list')!='')?
+			echo ($this->zetro_auth->cek_oto('e','listbarang')!='')?
 				($this->session->userdata('menus')=='QWNjb3VudGluZw==')?'':
 				 td(aksi('asset/images/editor.png','edit','Click for edit',"upd_barang('".$r->ID."');").'&nbsp;'.
 				 	aksi('asset/images/no.png','del','Click for delete',"delet_barang('".$r->ID."','".$r->batch."');"),'center'):'';
