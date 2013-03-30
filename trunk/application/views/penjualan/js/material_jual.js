@@ -552,7 +552,8 @@ $(document).ready(function(e) {
 			'id_anggota':$('#id_member').val(),
 			'nogiro'	:$('#nogiro').val(),
 			'n_bank'	:$('#n_bank').val(),
-			'tgl_giro'	:$('#tgl_giro').val()
+			'tgl_giro'	:$('#tgl_giro').val(),
+			'dibayar'	:$(frm+' #dibayar').val()
 		},function(result){
 		})
 	}
@@ -577,6 +578,7 @@ $(document).ready(function(e) {
 			'kembalian'		:to_number(kembalian),
 			'terbilang'		:terbilang,
 			'cbayar'		:jenis_bayar,
+			'id_anggota'	:$('#id_member').val(),
 			'tanggal'		:$('#tgl_transaksi').val()
 		},function(result){
 			_update_stock($('#no_transaksi').val(),$('#tgl_transaksi').val());//print struk pembayaran

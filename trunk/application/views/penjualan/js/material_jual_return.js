@@ -87,15 +87,15 @@ $(document).ready(function(e) {
 											'id_material'	:result.id_barang},
 											function(data){
 												var jm=$.parseJSON(data);
-												if($.trim(jm.stock)=='0'||jm.stock==null){
+												/*if($.trim(jm.stock)=='0'||jm.stock==null){
 													if(confirm('Stock '+result.data+' = 0 (Kosong)\nTransaksi akan dilanjutkan?')){
 														$('table#inform tr td#ist').html((jm.satuan==null)?'0 '+result.nm_satuan:'0 '+jm.satuan)
 													}else{
 														_kosongkan_field(id[0]);
 													}
-												}else{
+												}else{*/
 												$('table#inform tr td#ist').html(jm.stock+'  '+jm.satuan)
-												}
+												//}
 												$.post(path+'stock/get_bacth',{
 													'id_barang':result.id_barang},
 													function(res){
