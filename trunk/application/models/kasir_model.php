@@ -129,6 +129,7 @@ class Kasir_model extends CI_Model {
 			$where
 			group by id_jenis,p.Tanggal
 			$orderby ";
+		//echo $sql;
 		$data=$this->db->query($sql);
 		return $data->result();
 	}

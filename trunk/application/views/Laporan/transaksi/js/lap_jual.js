@@ -142,6 +142,9 @@ $(document).ready(function(e) {
 				$('#ID_Anggota').val(result.ID);
 			}
 		})
+		.keyup(function(){
+			$('#okedechya').removeAttr('disabled');
+		})
 })
 
 
