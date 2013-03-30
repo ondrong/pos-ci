@@ -12,6 +12,7 @@ $(document).ready(function(e) {
 		$('span#v_anggotabaru').hide();
 		$('span#v_uploadphoto').show();
 	}
+	_generate_n_kredit();
 	_generate_nomor('#No_Agt');
 	$('table#panel tr td').click(function(){
 		var id=$(this).attr('id');
@@ -23,11 +24,20 @@ $(document).ready(function(e) {
 				$('span:not(#v_'+id+')').hide();
 				$('#prs').val(id);
 	})
+	$('#tp_plg').change(function(){
+		if($(this).val()=='Tunai')
+		{
+			$('#NIP').val('').attr('readonly','readonly');
+		}else{
+			$('#NIP').removeAttr('readonly');
+			_generate_n_kredit();
+		}
+	})
+	$('#tp_plg').val('Kredit').select();
 	//$('#frm1 #No_Agt').attr('readonly','readonly');
 	$('#frm1 #ID_Aktif').attr('disabled','disabled');
-	$('#frm2 #NIP')
-		.attr('readonly','readonly')
-		.val($('#nipe').val());
+	($('#tp_plg').val()=='Kredit')?
+	$('#frm2 #NIP')	.attr('readonly'):'';
 	$('#frm2 #Nama')
 		.val($('#namane').val());
 		
@@ -143,7 +153,14 @@ $(document).ready(function(e) {
 	})
 	
 })
+function _generate_n_kredit()
+{
+	$.post('get_nomor_anggota',{'id':'kredit'},
+		function(result){
+			$('#NIP').val(result);
+		})
 
+}
 function upload_img(){
 	
 }
