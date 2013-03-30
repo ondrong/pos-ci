@@ -90,8 +90,9 @@ $(document).ready(function(e) {
 													}else{
 														_kosongkan_field(id[0]);
 													}
-*/												alert('Stock '+result.data+' kosong (nol). tidak bisa dilakukan trasaksi\nSilahkan update dulu stocknya');
+*/												//alert('Stock '+result.data+' kosong (nol). tidak bisa dilakukan transaksi\nSilahkan update dulu stocknya');
 												_kosongkan_field(id[0]);
+
 												}else{
 												$('#frm2 input#'+id[0]+'__jml_transaksi')
 													.val('1')
@@ -463,6 +464,7 @@ $(document).ready(function(e) {
 		   return false
 		}else if(e.keyCode==27){
 			//button Esc
+			$('#suggestions_holder').hide();
 			switch($('#nama').val()){
 				case 'viewstock':
 					$('#frm4 input').val('');
@@ -661,6 +663,7 @@ $(document).ready(function(e) {
 		$('#frm2 input#'+id+'__nm_barang')
 			.val('')
 			.focus().select();
+			$('#suggestions_holder').hide();
 		$('#frm2 input#'+id+'__nm_satuan').val('');
 		$('#frm2 input#'+id+'__jml_transaksi').val('')
 		$('#frm2 input#'+id+'__harga_jual').val('')
