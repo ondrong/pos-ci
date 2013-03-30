@@ -15,7 +15,7 @@ if($all_penjualanperpelanggan!=''){
 	array("<input type='text' id='nm_anggota' name='nm_anggota' value='' class='cari w100'>",
 		  "<input type='text' id='dari_tgl' name='dari_tgl' value=''>",
 		  "<input type='text' id='sampai_tgl' name='sampai_tgl' value=''>",
-		  "<input type='button' value='OK' id='okedechya'>
+		  "<input type='button' value='OK' id='okedechya' disabled>
 		  <input type='hidden' id='ID_Anggota' name='ID_Anggota' value=''"));
 /*	addText(array('Order by :','Sort by','',''),
 			array("<select id='orderby' name='orderby'>".selectTxt('susunanbeli',false,'asset/bin/zetro_member.frm')."</select>",
