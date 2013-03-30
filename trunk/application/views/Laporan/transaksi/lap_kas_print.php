@@ -21,20 +21,20 @@
 		  $n=0;$harga=0;$hgb=0;$hargaj=0;$terima=0;
 		  foreach($temp_rec as $r)
 		  {
-			$n++;$dibayar=0;$tobayar=0;
+			$n++;$dibayar=0;$tobayar=0;$terima=0;
 			$des=($r->Deskripsi!='')?" No.: ".$r->ID_Post." ".$r->Deskripsi." [ ". tglfromSql($r->Tgl_Cicilan)." ]":'';
-			$dibayar=rdb('inv_pembayaran','jml_dibayar','sum(jml_dibayar) as jml_dibayar',"where /*no_transaksi='".$r->NoUrut."' and*/ date(doc_date)='".$r->Tanggal."' and ID_Jenis='".$r->ID_Jenis."' group by concat(ID_Jenis,date(doc_date))");
-			$tobayar=rdb('inv_pembayaran','total_bayar','sum(total_bayar) as total_bayar',"where /*no_transaksi='".$r->NoUrut."' and*/ date(doc_date)='".$r->Tanggal."' and ID_Jenis='".$r->ID_Jenis."' group by concat(ID_Jenis,date(doc_date))");
-			$terima=(($dibayar-$tobayar)>0)?(int)$tobayar:(int)$dibayar;
+			$terima=rdb('pinjaman_bayar','totalbayar','sum(kredit) as totalbayar',"where id_pinjaman='".$r->NoUrut."' and year(tanggal)='".substr($r->Tanggal,0,4)."'");
+			//$tobayar=rdb('inv_pembayaran','total_bayar','sum(total_bayar) as total_bayar',"where /*no_transaksi='".$r->NoUrut."' and*/ date(doc_date)='".$r->Tanggal."' and ID_Jenis='".$r->ID_Jenis."' group by concat(ID_Jenis,date(doc_date))");
+			//$terima=(($dibayar-$tobayar)>0)?(int)$dibayar:(int)$tobayar;
 			$a->Row(array($n,$r->Nomor, tglfromSql($r->Tanggal),
-				number_format($r->tHarga,2),
-				number_format($terima,2),
+				number_format($r->tBayar,2),
+				number_format(($r->diBayar+$terima),2),
 				rdb('inv_penjualan_jenis','Jenis_Jual','Jenis_Jual',"where ID='".$r->ID_Jenis."'").$des,
 				
 				));
 			//sub tlot
-			$harga =($harga+($r->tHarga));
-			$hargaj =($hargaj+$terima);
+			$harga =($harga+($r->tBayar));
+			$hargaj =($hargaj+($r->diBayar+$terima));
 		  }
 		  $a->SetFont('Arial','B',10);
 		  $a->SetFillColor(225,225,225);

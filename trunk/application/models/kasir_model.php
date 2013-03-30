@@ -33,7 +33,7 @@ class Kasir_model extends CI_Model {
 			 left join inv_pembelian_jenis as pj
 			 on pj.ID=p.ID_Jenis
 			 $where $group $order";
-			echo $sql;//debug only
+		//	echo $sql;//debug only
 		$data=$this->db->query($sql);
 		return $data->result();
 	}
@@ -123,9 +123,12 @@ class Kasir_model extends CI_Model {
 		return mysql_num_rows($rs);	
 	}
 	function kas_masuk($where,$orderby='order by ID_Jenis,p.Tanggal'){
-		$sql="select p.ID_Jenis,sum(total) as tHarga,p.Tanggal,p.Nomor,p.NoUrut,
+		$sql="select p.ID_Jenis,sum(total) as tHarga,sum(total_bayar) as tBayar,
+			sum(jml_dibayar) as diBayar,p.Tanggal,p.Nomor,p.NoUrut,
 			p.Deskripsi,p.Tgl_Cicilan,p.ID_Post
-			from inv_penjualan as p 
+			from inv_penjualan as p
+			left join inv_pembayaran as b
+			on b.no_transaksi=p.noUrut
 			$where
 			group by id_jenis,p.Tanggal
 			$orderby ";

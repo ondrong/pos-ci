@@ -15,7 +15,7 @@
 		  $a->SetFont('Arial','',10);
 		  //echo $a->getColWidth();
 		  // set lebar tiap kolom tabel transaksi
-		  		$a->SetWidths(array(10,20,20,50,20,15,25,30));
+		  		$a->SetWidths(array(10,20,20,50,20,18,25,30));
 				//$a->SetWidths();
 		  // set align tiap kolom tabel transaksi
 		  		$a->SetAligns(array("C","C","C","L","R","L","R","R"));
