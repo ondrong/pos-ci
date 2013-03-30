@@ -348,4 +348,10 @@ class Master extends CI_Controller {
 		}
 		echo tr().td('<b>Total</b>','right\' colspan=\'6','kotak list_genap').td('<b>'.number_format($total,2).'</b>','right')._tr();
 	}
+	
+	function hapus_vendor()
+	{
+		$id=$_POST['ID'];
+		$this->admin_model->hps_data('mst_anggota',"where id='".$id."'");
+	}
 }
