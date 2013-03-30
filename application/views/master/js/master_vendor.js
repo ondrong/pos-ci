@@ -64,11 +64,18 @@ function _simpan_data(){
 }
 
 function images_click(id,aksi){
-	if(confirm('Yakin data ini akan dihapus?')){
-		$.post('hapus_vendor',{'ID':id},
-		function(result){
-			_show_data();
-		})
+	switch(aksi)
+	{
+		case 'del':
+			if(confirm('Yakin data ini akan dihapus?')){
+				$.post('hapus_vendor',{'ID':id},
+				function(result){
+					_show_data();
+				})
+			}
+		break;
+		case 'edit':
+		break;
 	}
 }
 
