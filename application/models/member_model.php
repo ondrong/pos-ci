@@ -17,9 +17,11 @@ class Member_model extends CI_Model{
 		$this->userid=$userid;	
 	}
 	
-	function nomor_anggota(){
+	function nomor_anggota($id='non'){
 		$nom=0;$data=array();
-		$sql="select NoUrut from mst_anggota order by NoUrut desc limit 1";
+		$sql=($id=='non')?
+			"select NoUrut from mst_anggota order by NoUrut desc limit 1":
+			"select NIP as NoUrut from mst_anggota order by NIP desc limit 1";
 		$data=$this->db->query($sql);
 		foreach ($data->result() as $rst){
 			$nom=$rst->NoUrut;
@@ -214,7 +216,7 @@ class Member_model extends CI_Model{
 		$data=array();
 		$sql="select p.*,sum(Debet) as Debet,sum(Kredit) as Kredit,
 			 (sum(Debet)-sum(Kredit)) as Saldo,
-			  a.Nama,a.Alamat,a.Kota,a.Catatan
+			  a.Nama,a.Alamat,a.Kota,a.Catatan,a.NIP
 				from pinjaman_bayar as pb 
 				left join pinjaman as p
 				on p.ID=pb.ID_pinjaman

@@ -13,6 +13,7 @@ tab_select($panel);
 panel_begin('Pelanggan Baru');
 panel_multi('pelangganbaru','block');
 if($all_pelangganbaru!=''){
+	$zfm->Addinput("<input type='hidden' id='No_Agt' name='No_Agt' value=''/>");
 	$zfm->AddBarisKosong(true);
 	$zfm->Start_form(true,'frm1');
 	$zfm->BuildForm('registrasi',true,'50%');
@@ -57,4 +58,5 @@ panel_multi_end();
 panel_end();
 auto_sugest();
 terbilang();
+
 ?>

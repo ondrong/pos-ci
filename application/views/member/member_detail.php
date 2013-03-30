@@ -8,6 +8,7 @@ tab_head('Member Detail',"style='background:#333'");
 panel_multi('datapelanggan','block',false);
 echo "<table width='100%' border='0'>
 	<tr valign='top'><td width='45%'>";
+		//$zfm->Addinput("<input type='text' id='No_Agt' name='No_Agt' value='".$no_anggota."'/>");
 		$zfm->AddBarisKosong(false);
 		$zfm->Start_form(true,'frm1');
 		$zfm->BuildForm('registrasi',false,'100%');
@@ -64,9 +65,11 @@ addText(array('No. Anggota','Nama Lengkap','Department'),
 		<input type='button' id='keluar' value='Tutup'>
 		<input type='hidden' id='kunci' value='$kunci' />
 		<input type='hidden' id='kunci_cetak' value='' /></div>";
+
 panel_multi_end();
 tab_head_end();
 terbilang();
+echo "<input type='hidden' id='No_Agt' name='No_Agt' value='".$no_anggota."'/>";
 ?>
 <script language="javascript">
 $(document).ready(function(e) {
@@ -87,6 +90,7 @@ $(document).ready(function(e) {
 */    //show simpanan pokok detail
 	//get_detail_trans('1');
 	//create table scroll with header fix
+	//_generate_n_kredit();
 	$('#detail_tbl').fixedHeader({width:(screen.width-50),height:150})
 
 	$('#cetak').click(function(){
@@ -112,9 +116,15 @@ function get_biodata(){
 	$.post('member_biodata',{'no_anggota':$('#kunci').val()},
 		function(result){
 			var obj=$.parseJSON(result);
-				$('#frm1 #No_Agt')
-					.val(obj.No_Agt)
-					.attr('readonly','readonly')
+				$('#No_Agt').val(obj.No_Agt)
+				if(obj.NIP==null){
+					_generate_n_kredit();
+				}else{
+					$('#frm1 #NIP').val(obj.NIP);
+				}
+				
+				
+					//.attr('readonly','readonly')
 				$('#frm1 #Catatan').val(obj.Catatan).select();
 							//$('#frm1 #NIP').val(obj.NIP);
 				$('#frm1 #Nama').val(obj.Nama);
@@ -151,9 +161,10 @@ function(result){
 		})
 }
 	function update(){
-				var No_Agt		=$('#frm1 #No_Agt').val();
+				var No_Agt		=$('#No_Agt').val();
 				var ID_Dept		=$('#frm1 #Catatan').val();//nama perusahaan
-				var NIP			=$('#frm1 #Status').val();//limit kredit
+				var LKredit		=$('#frm1 #Status').val();//limit kredit
+				var NIP 		=$('#frm1 #NIP').val();
 /**/			var Nama		=$('#frm1 #Nama').val();
 /*				var ID_Kelamin	=$('#frm1 #ID_Kelamin').val();
 */				var Alamat		=$('#frm1 #Alamat').val();
@@ -165,10 +176,10 @@ function(result){
 				$.post('set_anggota',{
 					'No_Agt'	:No_Agt,
 					'Catatan'	:ID_Dept,
-					'Status'	:NIP,
-/**/				'Nama'		:Nama,
-/*					'ID_Kelamin':ID_Kelamin,
-*/					'Alamat'	:Alamat,
+					'Status'	:LKredit,
+ 					'Nama'		:Nama,
+ 					'NIP'		:NIP,
+ 					'Alamat'	:Alamat,
 					'Kota'		:Kota,
 					'Propinsi'	:Propinsi,
 					'Telepon'	:Telepon,
@@ -177,8 +188,17 @@ function(result){
 					},
 					function(result){
 						get_biodata();
-						document.location.reload();
+						//document.location.reload();
 						$('#keluar').click();
 					})
 	}
+function _generate_n_kredit()
+{
+	$.post('get_nomor_anggota',{'id':'kredit'},
+		function(result){
+			$('#NIP').val(result);
+		})
+
+}
+
 </script>

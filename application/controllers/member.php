@@ -72,6 +72,7 @@ class Member extends CI_Controller{
 	function set_anggota(){
 		//table mst_anggota
 		$data=array();
+		$data['NIP']		=empty($_POST['NIP'])?'':$_POST['NIP'];
 		$data['No_Agt']		=$_POST['No_Agt'];
 		$data['NoUrut']		=$_POST['No_Agt'];
 		$data['ID']			=$_POST['No_Agt'];
@@ -91,7 +92,8 @@ class Member extends CI_Controller{
 	}
 	
 	function get_nomor_anggota(){
-		echo $this->member_model->nomor_anggota();	
+		$id=empty($_POST['id'])?'non':'kredit';
+		echo $this->member_model->nomor_anggota($id);	
 	}
 	
 	function get_anggota(){
@@ -226,7 +228,7 @@ class Member extends CI_Controller{
 		foreach($data as $r){
 			$n++;
 			echo tr().td($n,'center').
-				 td($r->Nama.' [ <i> '.$r->Catatan.' </i> ]').
+				 td($r->Nama.' [ <i> '.$r->Catatan.' </i> ] - '.$r->NIP).
 				 td(number_format($r->Debet,2),'right').
 				 td(number_format($r->Kredit,2),'right').
 				 td(number_format($r->Saldo,2),'right').

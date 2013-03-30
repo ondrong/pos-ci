@@ -44,7 +44,7 @@ $(document).ready(function(e){
 					onSelected:function(result){
 						$('#frm1 #ID_Perkiraan').val(result.ID);
 						$('#frm1 #pinjaman').focus().select();
-							
+						$('#frm1 #NIP').val(result.NIP);
 					}
 	})
 	
