@@ -1,20 +1,25 @@
 [registrasi]
-1|No. ID,input,text n,No_Agt,w35 upper,,
+1|Tipe,select,text,tp_plg,s35,,,RS,TipeP
+2|No. ID,input,text n,NIP,w35 upper,,
 ;2|Departement,select,text n,ID_Dept,S70,,10%,RD,mst_departemen-ID-Departemen-,AB
 ;3|NIP/NIK,input,text n,NIP,w50,,
-2|Nama Lengkap,input,text n,Nama,w90 upper ,,
-3|Perusahaan,input,text n,Catatan,w90 upper ,,
+3|Nama Lengkap,input,text n,Nama,w90 upper ,,
+4|Perusahaan,input,text n,Catatan,w90 upper ,,
 ;5|Jenis Kelamin,select,text n,ID_Kelamin,s50,,5%,RS,Sex
-4|Alamat,textarea,text n,Alamat,t90,,
-5|Kota,input,text n,Kota,w70,,
-6|Propinsi,input,text n,Propinsi,w50,,
-7|Telepon,input,text n,Telepon,w50,,
-8|Fax,input,text n,Faksimili,w50,,
-9|Limit Kredit,input,text n,Status,w35 angka,,
+5|Alamat,textarea,text n,Alamat,t90,,
+6|Kota,input,text n,Kota,w70,,
+7|Propinsi,input,text n,Propinsi,w50,,
+8|Telepon,input,text n,Telepon,w50,,
+9|Fax,input,text n,Faksimili,w50,,
+10|Limit Kredit,input,text n,Status,w35 angka,,
 
 [biodata]
 1|Tanggal Terdaftar,input,text t,TanggalMasuk,w35,,
 ;2|Tanggal Keluar,input,text t,TanggalKeluar,w35,,
+
+[TipeP]
+1|Kredit,Kredit
+2|Tunai,Tunai
 
 [Sex]
 1|1,Laki-Laki
@@ -104,6 +109,7 @@
 ;5|Departemen,select,text n,ID_Dept,S90,,,RD,mst_departemen-ID-Kode+Departemen-order by Kode
 3|Nama Anggota,input,text n,ID_Agt,w90 cari,,
 4|Cara Pembayaran,select,text n,capem,S50,,,RS,cBayar
+5|ID Anggota,input,text,NIP,w35,,
 
 [cBayar]
 1|all,Semua
