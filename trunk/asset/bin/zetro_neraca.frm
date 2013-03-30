@@ -18,10 +18,10 @@
 1|Tanggal,,,,,,8%,,,20
 2|Nomor,,,,,,12%,,,20
 3|Nama Barang,,,,,,20%,,,50
-4|Jumlah,,,,,,10%,,,22
-5|Satuan,,,,,,10%,,,18
+4|Jumlah,,,,,,10%,,,20
+5|Satuan,,,,,,10%,,,15
 6|Harga,,,,,,10%,,,25
-7|Total Harga,,,,,,10%,,,27
+7|Total Harga,,,,,,10%,,,30
 ;8|Keterangan,,,,,,10%,,,30
 
 [detailbelijual]
