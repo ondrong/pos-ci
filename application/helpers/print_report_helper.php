@@ -104,7 +104,7 @@ function Header()
 	$fax	=$zn->rContent('InfoCo','Fax',$nfile);
 	$BH		=$zn->rContent('InfoCo','BH',$nfile);
 	   $this->Ln(2);
-	   $this->Image(base_url().'asset/img/about.jpg',10,6,50,15);
+	   //$this->Image(base_url().'asset/img/about.jpg',10,6,50,15);
 	   $this->Ln(2);
 	   //$this->SetFont('Arial','B',15);
 	  // $this->Cell(5);
